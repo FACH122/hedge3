@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAISON DE L'ÉTERNITÉ — Haute Parfumerie & Joaillerie</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold-primary: #d4af37;
+            --gold-light: #f7e7ad;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --bg-dark: #050608;
+            --bg-surface: rgba(18, 20, 26, 0.65);
+            --bg-light: #fbfbf9;
+            --text-dark: #121212;
+            --text-muted: #8a8a8a;
+            --border-gold: rgba(212, 175, 55, 0.25);
+            --border-light: rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-family: 'Amiri', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ----------------------------------------------------
+           LUXURY STOREFRONT
+        ---------------------------------------------------- */
+        #shop-container {
+            width: 100%;
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 15px 40px 60px;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .top-banner {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 12px 0;
+            color: #666;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-banner .gold-tag {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        header.shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 50px;
+        }
+
+        .shop-brand {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .shop-brand h1 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.9rem;
+            letter-spacing: 5px;
+            font-weight: 700;
+            color: #0d0d0d;
+        }
+
+        .shop-brand span {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 7px;
+            color: #999;
+            text-transform: uppercase;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .shop-nav {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .shop-nav a, .action-btn {
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .shop-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold-primary);
+            transition: width 0.3s ease;
+        }
+
+        .shop-nav a:hover::after {
+            width: 100%;
+        }
+
+        .shop-nav a:hover, .action-btn:hover {
+            color: #b38728;
+        }
+
+        .hero-banner {
+            position: relative;
+            height: 580px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 80px;
+            cursor: pointer;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+            background: #000;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.65;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-banner:hover .hero-bg {
+            transform: scale(1.05);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+        }
+
+        .hero-content h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.4rem;
+            font-weight: 400;
+            letter-spacing: 6px;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 35px;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: #0a0a0a;
+            padding: 18px 48px;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 55px;
+        }
+
+        .section-header span {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: #b38728;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .section-header h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            color: #111;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+            border-color: rgba(212, 175, 55, 0.35);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #0d0d0d;
+            color: var(--gold-light);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            padding: 6px 14px;
+            text-transform: uppercase;
+            z-index: 2;
+            border-radius: 20px;
+        }
+
+        .product-img-wrapper {
+            width: 100%;
+            height: 380px;
+            overflow: hidden;
+            position: relative;
+            background: #f8f7f5;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.07);
+        }
+
+        .product-info {
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        .product-category {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: #b38728;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 1.35rem;
+            margin-bottom: 12px;
+            color: #111;
+            font-weight: 700;
+        }
+
+        .product-price {
+            font-family: 'Montserrat', sans-serif;
+            color: #222;
+            font-weight: 500;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* ----------------------------------------------------
+           CINEMATIC LOADER OVERLAY
+        ---------------------------------------------------- */
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        #loader-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loader-emblem {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-top-color: var(--gold-primary);
+            animation: spin 1.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+        }
+
+        .loader-diamond {
+            font-size: 1.8rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.15); } }
+
+        .loader-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 6px;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .loader-subtext {
+            font-family: 'Amiri', serif;
+            font-size: 1.15rem;
+            color: #777;
+        }
+
+        /* ----------------------------------------------------
+           POEM CANVAS
+        ---------------------------------------------------- */
+        #poem-container {
+            display: none;
+            max-width: 800px;
+            width: 100%;
+            margin: 80px auto 100px;
+            padding: 0 25px;
+            opacity: 0;
+            transition: opacity 1.8s ease;
+        }
+
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.08) 0%, rgba(5, 6, 8, 0.98) 75%);
+            z-index: -1;
+            pointer-events: none;
+            display: none;
+        }
+
+        header.poem-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        header.poem-header h1 {
+            font-family: 'Aref Ruqaa', serif;
+            font-size: 3.8rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            font-weight: 400;
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.2));
+        }
+
+        .divider-ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            color: var(--gold-primary);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .divider-ornament::before, .divider-ornament::after {
+            content: '';
+            height: 1px;
+            width: 120px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+        }
+
+        .stanza {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-gold);
+            border-radius: 16px;
+            padding: 55px 45px;
+            margin-bottom: 50px;
+            text-align: center;
+            font-size: 1.6rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            color: #f3f3f3;
+            line-height: 2.4;
+            transition: transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+            position: relative;
+        }
+
+        .stanza:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 175, 55, 0.55);
+            box-shadow: 0 35px 70px rgba(212, 175, 55, 0.12);
+        }
+
+        .verse-line {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .highlight {
+            color: var(--gold-light);
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(247, 231, 173, 0.35);
+        }
+
+        .name-reveal {
+            font-family: 'Aref Ruqaa', serif;
+            font-size: 2.6rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            margin-top: 18px;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+        }
+
+        footer.poem-footer {
+            text-align: center;
+            margin-top: 70px;
+            color: #777;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 4px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        footer.poem-footer span {
+            color: var(--gold-light);
+            font-family: 'Aref Ruqaa', serif;
+            font-size: 1.4rem;
+            text-transform: none;
+            margin-right: 6px;
+        }
+
+        /* Return Button Styling */
+        .return-btn-container {
+            text-align: center;
+            margin-top: 55px;
+        }
+
+        .btn-return {
+            background: transparent;
+            color: var(--gold-light);
+            border: 1px solid var(--border-gold);
+            padding: 16px 40px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-return:hover {
+            background: var(--gold-gradient);
+            color: #050608;
+            border-color: transparent;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 900px) {
+            .product-grid { grid-template-columns: 1fr; }
+            .hero-content h2 { font-size: 2.4rem; }
+            header.poem-header h1 { font-size: 2.8rem; }
+            .stanza { font-size: 1.35rem; padding: 40px 25px; }
+            .shop-nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BOUTIQUE STOREFRONT -->
+    <div id="shop-container">
+        <div class="top-banner">
+            <div>PARIS • DUBAI • NEW YORK</div>
+            <div>توصيل خاص وحصري لكافة الطلبات <span class="gold-tag">✦ VIP</span></div>
+            <div>EUR € | DZD</div>
+        </div>
+        
+        <header class="shop-header">
+            <nav class="shop-nav">
+                <a class="trigger-click">المجموعات</a>
+                <a class="trigger-click">المجوهرات الراقيـة</a>
+            </nav>
+
+            <div class="shop-brand trigger-click">
+                <h1>Maison de L'Éternité</h1>
+                <span>Haute Parfumerie & Joaillerie</span>
+            </div>
+
+            <nav class="shop-nav">
+                <a class="trigger-click">العطور الملكية</a>
+                <div class="action-btn trigger-click">🛒 السلـة (0)</div>
+            </nav>
+        </header>
+
+        <section class="hero-banner trigger-click">
+            <img class="hero-bg" src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1600&auto=format&fit=crop" alt="Luxury Diamonds">
+            <div class="hero-content">
+                <h2>L'Élégance Éternelle</h2>
+                <p>مجموعة خريفية فاخرة مستوحاة من سحر اللحظات النادرة والتفاصيل الاستثنائية</p>
+                <button class="btn-gold">استكشفي السر</button>
+            </div>
+        </section>
+
+        <div class="section-header">
+            <span>Collection Privée</span>
+            <h3>قطع نادرة صُممت لشخصٍ استثنائي</h3>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card trigger-click">
+                <span class="product-badge">Sur Mesure</span>
+                <div class="product-img-wrapper">
+                    <img class="product-img" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800&auto=format&fit=crop" alt="Diamond Ring">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Haute Joaillerie</div>
+                    <div class="product-title">خاتم الألماس والأمل</div>
+                    <div class="product-price">480,000 DZD</div>
+                </div>
+            </div>
+
+            <div class="product-card trigger-click">
+                <span class="product-badge">Édition Limitée</span>
+                <div class="product-img-wrapper">
+                    <img class="product-img" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800&auto=format&fit=crop" alt="Gold Necklace">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Édition Limitée</div>
+                    <div class="product-title">قلادة الشمس الذهبية</div>
+                    <div class="product-price">620,000 DZD</div>
+                </div>
+            </div>
+
+            <div class="product-card trigger-click">
+                <span class="product-badge">Pièce Unique</span>
+                <div class="product-img-wrapper">
+                    <img class="product-img" src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop" alt="Luxury Pearl Earrings">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Collection Privée</div>
+                    <div class="product-title">أقراط اللؤلؤ الملكية</div>
+                    <div class="product-price">350,000 DZD</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CINEMATIC TRANSITION OVERLAY -->
+    <div id="loader-overlay">
+        <div class="loader-emblem">
+            <div class="loader-ring"></div>
+            <div class="loader-diamond">✦</div>
+        </div>
+        <div class="loader-text" id="loader-title-text">Maison de L'Éternité</div>
+        <div class="loader-subtext" id="loader-sub-text">جاري فتح سر صُنع لكِ خصيصًا...</div>
+    </div>
+
+    <!-- POEM CANVAS -->
+    <div class="ambient-bg" id="ambient-bg"></div>
+
+    <div id="poem-container">
+        <header class="poem-header">
+            <h1>حينَ تُغمِضينَ العالم</h1>
+            <div class="divider-ornament">✦ ✤ ✦</div>
+        </header>
+
+        <main>
+            <article class="stanza">
+                <span class="verse-line">حينَ تُغمِضينَ العالم</span>
+                <span class="verse-line">كلُّ مساءٍ...</span>
+                <span class="verse-line">تُعلِّمينَ العيونَ</span>
+                <span class="verse-line">كيف تُغمِضُ خوفَها،</span>
+                <span class="verse-line">ثم تعودينَ</span>
+                <span class="verse-line">وعيناكِ...</span>
+                <span class="verse-line">لا تعرفانِ النوم.</span>
+                <span class="verse-line">أفكِّرُ أحيانًا...</span>
+                <span class="verse-line">حينَ يسلِّمُ الناسُ</span>
+                <span class="verse-line">أحلامَهم</span>
+                <span class="verse-line">إلى يديكِ،</span>
+                <span class="verse-line">إلى مَن</span>
+                <span class="verse-line highlight">تُسلِّمينَ تعبَكِ؟</span>
+            </article>
+
+            <article class="stanza">
+                <span class="verse-line">رأيتُ المطرَ</span>
+                <span class="verse-line">يسقطُ ألفَ مرَّة،</span>
+                <span class="verse-line">لكنِّي</span>
+                <span class="verse-line">لم أرَهُ يومًا</span>
+                <span class="verse-line">يختارُ وردةً بعينِها.</span>
+                <span class="verse-line highlight">إلَّا قلبي...</span>
+                <span class="verse-line highlight">منذُ رآكِ.</span>
+            </article>
+
+            <article class="stanza">
+                <span class="verse-line">غريبٌ...</span>
+                <span class="verse-line">أنَّ امرأةً</span>
+                <span class="verse-line">تجعلُ الآخرينَ</span>
+                <span class="verse-line">ينسونَ الألم،</span>
+                <span class="verse-line">كانتْ</span>
+                <span class="verse-line highlight">أجملَ ألمٍ</span>
+                <span class="verse-line">عرفتُهُ أنا.</span>
+                <span class="verse-line">ليسَ لأنَّها أوجعتني...</span>
+                <span class="verse-line">بل لأنَّها</span>
+                <span class="verse-line">جعلتْ قلبي</span>
+                <span class="verse-line">يعرفُ</span>
+                <span class="verse-line">أنَّه كانَ نائمًا</span>
+                <span class="verse-line">قبلَها.</span>
+            </article>
+
+            <article class="stanza">
+                <span class="verse-line">لو سألوكِ يومًا:</span>
+                <span class="verse-line">كم حياةً أنقذتِ؟</span>
+                <span class="verse-line">ربَّما</span>
+                <span class="verse-line">لن تعرفي العدد.</span>
+                <span class="verse-line">أمَّا أنا...</span>
+                <span class="verse-line">فسأقولُ:</span>
+                <span class="verse-line highlight">واحدة.</span>
+                <span class="verse-line">حياتي...</span>
+                <span class="verse-line">حينَ دخلتِها</span>
+                <span class="verse-line highlight">دونَ أن تطرقي الباب...</span>
+                <span class="name-reveal">يا هاجَر</span>
+            </article>
+        </main>
+
+        <footer class="poem-footer">
+            <p>✦ Pour Toujours <span>حبيبتي هاجر</span> ✦</p>
+        </footer>
+
+        <!-- RETURN BUTTON -->
+        <div class="return-btn-container">
+            <button class="btn-return" id="return-btn">
+                <span>العودة إلى المتجر</span>
+                ✦
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function playChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                
+                const notes = [261.63, 329.63, 392.00, 523.25];
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    
+                    gain.gain.setValueAtTime(0, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 0.1 + (idx * 0.15));
+                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.5 + (idx * 0.2));
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.start(ctx.currentTime + (idx * 0.15));
+                    osc.stop(ctx.currentTime + 3.0);
+                });
+            } catch (e) {}
+        }
+
+        // Open Poem Canvas
+        document.querySelectorAll('.trigger-click, .product-card, .hero-banner').forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                playChime();
+
+                const shopContainer = document.getElementById('shop-container');
+                const loaderOverlay = document.getElementById('loader-overlay');
+                const poemContainer = document.getElementById('poem-container');
+                const ambientBg = document.getElementById('ambient-bg');
+                
+                document.getElementById('loader-sub-text').innerText = 'جاري فتح سر صُنع لكِ خصيصًا...';
+
+                loaderOverlay.classList.add('active');
+
+                setTimeout(() => {
+                    shopContainer.style.display = 'none';
+                    loaderOverlay.classList.remove('active');
+                    
+                    document.body.style.backgroundColor = 'var(--bg-dark)';
+                    
+                    ambientBg.style.display = 'block';
+                    poemContainer.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        poemContainer.style.opacity = '1';
+                    }, 50);
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 1800);
+            });
+        });
+
+        // Return to Store Action
+        document.getElementById('return-btn').addEventListener('click', function() {
+            playChime();
+
+            const shopContainer = document.getElementById('shop-container');
+            const loaderOverlay = document.getElementById('loader-overlay');
+            const poemContainer = document.getElementById('poem-container');
+            const ambientBg = document.getElementById('ambient-bg');
+
+            document.getElementById('loader-sub-text').innerText = 'جاري العودة إلى المتجر...';
+
+            poemContainer.style.opacity = '0';
+            loaderOverlay.classList.add('active');
+
+            setTimeout(() => {
+                poemContainer.style.display = 'none';
+                ambientBg.style.display = 'none';
+                loaderOverlay.classList.remove('active');
+                
+                document.body.style.backgroundColor = 'var(--bg-light)';
+                shopContainer.style.display = 'block';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
