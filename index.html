@@ -1351,8 +1351,10 @@
             return s.trim().replace(/[أإآ]/g, 'ا').replace(/[ةه]/g, 'ه').replace(/[\s\u064B-\u0652]/g, '').toLowerCase();
         }
 
+        const PUZZLE_TEST_MODE = location.search.includes('test');
+
         function isPuzzleTime() {
-            return new Date().getHours() >= PUZZLE_HOUR;
+            return PUZZLE_TEST_MODE || new Date().getHours() >= PUZZLE_HOUR;
         }
 
         function showOnly(id) {
