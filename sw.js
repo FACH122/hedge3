@@ -1,4 +1,4 @@
-const CACHE_NAME = 'maison-eternite-v32';
+const CACHE_NAME = 'maison-eternite-v33';
 const APP_SHELL = [
     './',
     './index.html',
