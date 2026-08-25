@@ -599,6 +599,15 @@
 
 
 
+        .reward-image {
+            max-width: min(320px, 90%);
+            border-radius: 14px;
+            margin: 0 auto 20px;
+            display: block;
+            border: 1px solid var(--border-gold);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
         .solved-badge {
             font-family: 'Cinzel', serif; font-size: 1.6rem; letter-spacing: 3px; margin-bottom: 22px;
             background: var(--gold-gradient);
@@ -750,6 +759,7 @@
                     </div>
                     <div id="puzzle-reward-view" style="display:none">
                         <div class="solved-badge">✦ إجابةٌ صحيحة! ✦</div>
+                        <img id="reward-image" class="reward-image" alt="" style="display:none">
                         <p class="puzzle-reward" id="puzzle-reward-text"></p>
                         <p class="puzzle-next-hint" id="puzzle-next-hint">اللغزُ التالي يظهرُ بعد لحظات...</p>
                     </div>
@@ -1264,7 +1274,7 @@
         applyName();
 
         // DAILY MESSAGE + MEMORY OF THE DAY
-        const dailyMessages = [
+        let dailyMessages = [
             'كلُّ يومٍ يمرُّ... ويبقى قلبي مكانًا لا يسكنه إلا أنتِ يا هاجر.',
             'إذا كانَ للحُبِّ عنوانٌ، فأنّا نعرفهُ حينَ أراكِ.',
             'بينَ آلافِ الوجوه... عيناي لا تعرفانِ سوى دربكِ.',
@@ -1273,9 +1283,8 @@
             'معكِ... حتى العادي يصيرُ احتفالًا، والانتظارُ حلوى.',
             'كلُّ مساءٍ أغمضُ عينيّ، فأجدُكِ أنتِ الحلمُ الذي لا أستيقظُ منه.'
         ];
-        document.getElementById('daily-text').innerText = dailyMessages[new Date().getDay()];
 
-        const memoriesOfDay = [
+        let memoriesOfDay = [
             'ذكرى اليوم: ضحكتِ من قلبك... وأنا نسيتُ العالم كله.',
             'ذكرى اليوم: أولُ رسالةٍ أرسلتِها لي... قرأتُها ألف مرّة.',
             'ذكرى اليوم: مشينا طويلًا ولا أذكري الطريق... كنتُ أنظر إليكِ.',
@@ -1284,8 +1293,6 @@
             'ذكرى اليوم: أمسكتِ يدي في الزحام... فصارَ الزحامُ سلامًا.',
             'ذكرى اليوم: نظرتِ إليّ نظرةً واحدة... وكتبتُ عنها هذا الموقع.'
         ];
-        document.getElementById('memory-text').innerText =
-            memoriesOfDay[new Date().getDate() % memoriesOfDay.length];
 
         // COUNTDOWN
         function nextSpecialDate() {
@@ -1307,7 +1314,7 @@
         }, 1000);
 
         // REASONS GENERATOR
-        const reasons = [
+        let reasons = [
             'لأنّكِ تبتسمين... فيصيرُ يومي الصعبُ أسهلَ ما يكون.',
             'لأنّ صوتكِ هو الموسيقى الوحيدةُ التي لا أتعَبُ منها.',
             'لأنّكِ تؤمنين بي أكثر ممّا أؤمنُ بنفسي.',
@@ -1323,6 +1330,14 @@
         const reasonBox = document.querySelector('.reason-box');
         let reasonIdx = new Date().getDate() % reasons.length;
         reasonText.innerText = reasons[reasonIdx];
+
+        function applyTexts() {
+            document.getElementById('daily-text').innerText = dailyMessages[new Date().getDay()];
+            document.getElementById('memory-text').innerText =
+                memoriesOfDay[new Date().getDate() % memoriesOfDay.length];
+            if (reasonIdx >= reasons.length) reasonIdx = reasonIdx % reasons.length;
+            reasonText.innerText = reasons[reasonIdx];
+        }
 
         document.getElementById('reason-btn').addEventListener('click', () => {
             reasonBox.classList.add('fade');
@@ -1492,7 +1507,7 @@
 
         // NIGHTLY PUZZLE
 
-        const puzzles = [
+        let puzzles = [
             { q: 'انظري إلى كلمة «باريس» جيدًا... ما هو الحرفُ الذي يقبعُ في وسطِها؟', a: ['حرف ر', 'حرف الراء', 'الراء', 'ر'], reward: 'أنتِ وسطُ عالمي... كلَّه.' },
             { q: 'يزنُ لا شيء، لكنّ أثقلَ الناسِ لا يستطيعون حملَه لمدة دقيقتين. ما هو؟', a: ['النفس', 'نفس'], reward: 'خذيف نفس... أنا معك دائمًا.' },
             { q: 'كلَّما أخذتَ منه كبر، ما هو؟', a: ['الحفرة', 'حفرة', 'الثقب', 'الدين'], reward: 'كلَّما عرفتُكِ أكثر... كبر حبّي لكِ.' },
@@ -1624,6 +1639,9 @@
 
             showOnly('puzzle-reward-view');
             document.getElementById('puzzle-reward-text').innerText = p.reward;
+            const rimg = document.getElementById('reward-image');
+            if (p.reward_image) { rimg.src = p.reward_image; rimg.style.display = 'block'; }
+            else { rimg.style.display = 'none'; }
             document.getElementById('puzzle-next-hint').style.display =
                 (puzzleProgress < puzzles.length && solvedTonight() < PUZZLES_PER_NIGHT) ? '' : 'none';
 
@@ -1648,7 +1666,39 @@
 
         renderPuzzle();
 
-// VOICE NOTE
+// LOAD CONTENT FROM SUPABASE (admin edits)
+        async function loadRemoteContent() {
+            const H = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
+            try {
+                const r = await fetch(`${SUPABASE_URL}/rest/v1/puzzles?select=*&order=position.asc,id.asc`, { headers: H });
+                if (r.ok) {
+                    const rows = await r.json();
+                    if (rows && rows.length) {
+                        puzzles = rows.map(row => ({
+                            q: row.question || '',
+                            a: String(row.answers || '').split('|').map(s => s.trim()).filter(Boolean),
+                            reward: row.reward_text || '',
+                            reward_image: row.reward_image || ''
+                        }));
+                        puzzleProgress = Math.min(puzzleProgress, puzzles.length);
+                    }
+                }
+                const s = await fetch(`${SUPABASE_URL}/rest/v1/settings?select=*`, { headers: H });
+                if (s.ok) {
+                    const rows = await s.json();
+                    rows.forEach(row => {
+                        if (!Array.isArray(row.value) || !row.value.length) return;
+                        if (row.key === 'dailyMessages') dailyMessages = row.value;
+                        else if (row.key === 'memoriesOfDay') memoriesOfDay = row.value;
+                        else if (row.key === 'reasons') reasons = row.value;
+                    });
+                }
+            } catch (e) {}
+            applyTexts();
+        }
+        loadRemoteContent();
+
+        // VOICE NOTE
         fetch(VOICE_NOTE_FILE, { method: 'HEAD' })
             .then(r => {
                 if (r.ok) {
