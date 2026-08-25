@@ -1,11 +1,12 @@
-const CACHE_NAME = 'maison-eternite-v10';
+const CACHE_NAME = 'maison-eternite-v11';
 const APP_SHELL = [
     './',
     './index.html',
     './manifest.webmanifest',
     './icons/icon-192.png',
     './icons/icon-512.png',
-    './icons/icon-maskable-512.png'
+    './icons/icon-maskable-512.png',
+    './admin.html'
 ];
 
 self.addEventListener('install', (event) => {
