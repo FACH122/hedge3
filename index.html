@@ -1711,10 +1711,19 @@
                     });
                 }
             } catch (e) {}
-            applyTexts();
-            renderPuzzle();
+            const sig = JSON.stringify([puzzles.map(p => [p.q, p.a, p.reward, p.reward_image]),
+                dailyMessages, memoriesOfDay, reasons]);
+            if (sig !== loadRemoteContent._lastSig) {
+                loadRemoteContent._lastSig = sig;
+                applyTexts();
+                renderPuzzle();
+            }
         }
         loadRemoteContent();
+        setInterval(loadRemoteContent, 60000);
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) loadRemoteContent();
+        });
 
         // VOICE NOTE
         fetch(VOICE_NOTE_FILE, { method: 'HEAD' })
