@@ -356,47 +356,66 @@ function pickImage(btn) {
     inp.click();
 }
 
-async function uploadImg(file, btn) {
+function uploadImg(file, btn) {
     const card = btn.closest('.card');
     const st = card.querySelector('.status');
 
     if (!file.type.startsWith('image/')) return setStatus(card, '✕ اختر ملف صورة فقط', false);
     if (file.size > 8 * 1024 * 1024) return setStatus(card, '✕ الصورة كبيرة جداً — الحد ٨ ميغا', false);
 
-    st.textContent = `...جاري رفع الصورة (${Math.round(file.size/1024)} KB)`; st.className = 'status ok';
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    const fname = `reward-${Date.now()}.${ext}`;
+    const url = `${SB_URL}/storage/v1/object/rewards/${fname}`;
+
     btn.disabled = true;
+    st.textContent = '...جاري الرفع 0%'; st.className = 'status ok';
 
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 45000);
+    const xhr = new XMLHttpRequest();
+    let done = false;
 
-    try {
-        const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-        const fname = `reward-${Date.now()}.${ext}`;
-        const r = await fetch(`${SB_URL}/storage/v1/object/rewards/${fname}`, {
-            method:'POST',
-            headers:{ Authorization:`Bearer ${SB_KEY}`, apikey:SB_KEY, 'Content-Type':file.type },
-            body: file,
-            signal: ctrl.signal
-        });
-        clearTimeout(timer);
-        if (!r.ok) {
-            const err = await r.json().catch(() => ({}));
-            throw new Error(err.message || ('HTTP ' + r.status));
-        }
-        const url = `${SB_URL}/storage/v1/object/public/rewards/${fname}`;
-        card.querySelector('.f-img').value = url;
-        const img = card.querySelector('.rimg');
-        img.src = url; img.style.display='block';
-        setStatus(card, '✔ رُفعت بنجاح — اضغط 💾 حفظ لتثبيتها', true);
-    } catch (e) {
-        clearTimeout(timer);
-        const msg = e.name === 'AbortError'
-            ? 'انتهت المهلة (٤٥ ثانية) — تحققي من الإنترنت أو جرّبي صورة أصغر'
-            : e.message;
-        setStatus(card, '✕ فشل الرفع: ' + msg, false);
-    } finally {
+    const failTimer = setTimeout(() => {
+        if (done) return;
+        done = true;
+        xhr.abort();
         btn.disabled = false;
-    }
+        setStatus(card, '✕ توقف الرفع — جرّبي صورة أصغر أو شبكة أخرى', false);
+    }, 40000);
+
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Authorization', `Bearer ${SB_KEY}`);
+    xhr.setRequestHeader('apikey', SB_KEY);
+    xhr.setRequestHeader('Content-Type', file.type);
+    xhr.upload.onprogress = e => {
+        if (e.lengthComputable) {
+            const pct = Math.round(e.loaded / e.total * 100);
+            st.textContent = `...جاري الرفع ${pct}%`;
+        }
+    };
+    xhr.onload = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(failTimer);
+        btn.disabled = false;
+        if (xhr.status >= 200 && xhr.status < 300) {
+            const publicUrl = `${SB_URL}/storage/v1/object/public/rewards/${fname}`;
+            card.querySelector('.f-img').value = publicUrl;
+            const img = card.querySelector('.rimg');
+            img.src = publicUrl; img.style.display = 'block';
+            setStatus(card, '✔ رُفعت بنجاح — اضغط 💾 حفظ لتثبيتها', true);
+        } else {
+            let msg = 'HTTP ' + xhr.status;
+            try { msg = JSON.parse(xhr.responseText).message || msg; } catch (_) {}
+            setStatus(card, '✕ فشل الرفع: ' + msg, false);
+        }
+    };
+    xhr.onerror = () => {
+        if (done) return;
+        done = true;
+        clearTimeout(failTimer);
+        btn.disabled = false;
+        setStatus(card, '✕ خطأ شبكة — تعطّل الإرسال', false);
+    };
+    xhr.send(file);
 }
 
 function clearImage(btn) {
