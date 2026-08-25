@@ -77,6 +77,7 @@
         <div class="tabs">
             <button class="tab-btn active" onclick="showTab('puzzles')">🧩 الألغاز والمكافآت</button>
             <button class="tab-btn" onclick="showTab('texts')">💬 النصوص اليومية</button>
+            <button class="tab-btn" onclick="showTab('voices')">🎙️ الرسائل الصوتية</button>
         </div>
 
         <div id="tab-puzzles">
@@ -86,6 +87,14 @@
                 <button class="tbtn" onclick="loadPuzzles()">↺ تحديث</button>
             </div>
             <div id="plist"></div>
+        </div>
+
+        <div id="tab-voices" style="display:none">
+            <div class="toolbar">
+                <span class="tbtn" id="voice-count" style="cursor:default;border:none;color:#77706a"></span>
+                <button class="tbtn" onclick="loadVoices()">↺ تحديث</button>
+            </div>
+            <div id="vlist"></div>
         </div>
 
         <div id="tab-texts" style="display:none">
@@ -166,10 +175,52 @@
         }
 
         function showTab(t) {
-            document.getElementById('tab-puzzles').style.display = t === 'puzzles' ? '' : 'none';
-            document.getElementById('tab-texts').style.display = t === 'texts' ? '' : 'none';
+            ['puzzles', 'texts', 'voices'].forEach(x => {
+                document.getElementById('tab-' + x).style.display = x === t ? '' : 'none';
+            });
             document.querySelectorAll('.tab-btn').forEach((b, i) =>
-                b.classList.toggle('active', (i === 0) === (t === 'puzzles')));
+                b.classList.toggle('active', ['puzzles', 'texts', 'voices'][i] === t));
+            if (t === 'voices') loadVoices();
+        }
+
+        // ===== VOICE RECORDINGS =====
+        function parseVoiceName(fname) {
+            const m = fname.match(/^puzzle-(\d+)-(.+)-(\d+)\./);
+            if (!m) return null;
+            return { riddle: parseInt(m[1]) + 1, who: m[2], ts: new Date(parseInt(m[3])) };
+        }
+
+        async function loadVoices() {
+            try {
+                const res = await fetch(`${SB_URL}/storage/v1/object/list/voices`, {
+                    method: 'POST',
+                    headers: { ...HEADERS },
+                    body: JSON.stringify({ prefix: '', limit: 200, sortBy: { column: 'created_at', order: 'desc' } })
+                });
+                const files = (await res.json()).filter(f => f.name !== 'test-upload.webm');
+                document.getElementById('voice-count').textContent = `${files.length} تسجيل`;
+                const el = document.getElementById('vlist');
+                if (!files.length) {
+                    el.innerHTML = '<div class="empty">لا توجد رسائل صوتية بعد 🎙️</div>';
+                    return;
+                }
+                el.innerHTML = files.map(f => {
+                    const info = parseVoiceName(f.name);
+                    const url = `${SB_URL}/storage/v1/object/public/voices/${encodeURIComponent(f.name)}`;
+                    const when = info && info.ts ? info.ts.toLocaleString('ar-DZ') : '';
+                    const label = info ? `${info.who} — لغز رقم ${info.riddle}` : f.name;
+                    return `<div class="pcard">
+                        <div class="meta" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+                            <span style="color:var(--gold-light);font-size:0.95rem">${label}</span>
+                            <span style="color:#77706a;font-size:0.78rem">${when} · <a href="${url}" target="_blank" style="color:#7da98c;text-decoration:none">تحميل ⬇</a></span>
+                        </div>
+                        <audio controls preload="none" src="${url}" style="width:100%;height:40px"></audio>
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                document.getElementById('vlist').innerHTML =
+                    `<div class="empty">تعذّر تحميل التسجيلات: ${e.message}</div>`;
+            }
         }
 
         // ===== PUZZLES =====
