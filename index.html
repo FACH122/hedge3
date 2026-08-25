@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAISON DE L'ÉTERNITÉ — Haute Parfumerie & Joaillerie</title>
 
-    <!-- PWA -->
     <link rel="manifest" href="manifest.webmanifest">
-    <meta name="theme-color" content="#050608">
+    <meta name="theme-color" content="#07080c">
     <meta name="description" content="Maison de L'Éternité — Haute Parfumerie & Joaillerie">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,379 +14,299 @@
     <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --gold-primary: #d4af37;
             --gold-light: #f7e7ad;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --bg-dark: #050608;
-            --bg-surface: rgba(18, 20, 26, 0.65);
-            --bg-light: #fbfbf9;
-            --text-dark: #121212;
-            --text-muted: #8a8a8a;
+            --bg-dark: #07080c;
+            --bg-surface: rgba(16, 18, 26, 0.72);
+            --bg-card: rgba(20, 22, 32, 0.55);
+            --text-light: #eceae4;
             --border-gold: rgba(212, 175, 55, 0.25);
-            --border-light: rgba(0, 0, 0, 0.06);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        html { scroll-behavior: smooth; }
 
         body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.07), transparent),
+                radial-gradient(ellipse 60% 40% at 90% 110%, rgba(179,135,40,0.05), transparent),
+                var(--bg-dark);
+            color: var(--text-light);
             font-family: 'Amiri', serif;
             min-height: 100vh;
             overflow-x: hidden;
-            transition: background-color 1.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ----------------------------------------------------
-           LUXURY STOREFRONT
-        ---------------------------------------------------- */
+        #fx-canvas { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+        .grain {
+            position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        main, header.shop-header, .top-banner { position: relative; z-index: 3; }
+
         #shop-container {
-            width: 100%;
-            max-width: 1360px;
-            margin: 0 auto;
-            padding: 15px 40px 60px;
+            width: 100%; max-width: 1320px; margin: 0 auto;
+            padding: 0 30px 80px;
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         .top-banner {
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.72rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            padding: 12px 0;
-            color: #666;
-            border-bottom: 1px solid var(--border-light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center; font-family: 'Montserrat', sans-serif; font-size: 0.68rem;
+            letter-spacing: 3px; text-transform: uppercase; padding: 13px 0; color: #77706a;
+            border-bottom: 1px solid rgba(212,175,55,0.12);
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         .top-banner .gold-tag {
             background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 600;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600;
         }
 
         header.shop-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 0;
-            border-bottom: 1px solid var(--border-light);
-            margin-bottom: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 28px 0; border-bottom: 1px solid rgba(212,175,55,0.14); margin-bottom: 60px;
         }
 
-        .shop-brand {
-            text-align: center;
-            cursor: pointer;
-        }
+        .shop-brand { text-align: center; cursor: pointer; user-select: none; }
 
         .shop-brand h1 {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.9rem;
-            letter-spacing: 5px;
-            font-weight: 700;
-            color: #0d0d0d;
+            font-family: 'Cinzel Decorative', serif; font-size: 1.85rem; letter-spacing: 5px; font-weight: 700;
+            background: linear-gradient(120deg, #fcf6ba, #d4af37, #fcf6ba); background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shimmer 6s linear infinite;
         }
 
+        @keyframes shimmer { to { background-position: 200% center; } }
+
         .shop-brand span {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.65rem;
-            letter-spacing: 7px;
-            color: #999;
-            text-transform: uppercase;
-            display: block;
-            margin-top: 4px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.62rem; letter-spacing: 7px;
+            color: #6e6862; text-transform: uppercase; display: block; margin-top: 5px;
         }
 
         .shop-nav {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.82rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            display: flex; gap: 36px; list-style: none;
+            font-family: 'Montserrat', sans-serif; font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase;
         }
 
         .shop-nav a, .action-btn {
-            color: #333;
-            text-decoration: none;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            position: relative;
+            color: #b5aea4; text-decoration: none; cursor: pointer; transition: color 0.3s ease; position: relative;
         }
 
         .shop-nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            right: 0;
-            width: 0;
-            height: 1px;
-            background: var(--gold-primary);
-            transition: width 0.3s ease;
+            content: ''; position: absolute; bottom: -6px; right: 0; width: 0; height: 1px;
+            background: var(--gold-primary); transition: width 0.3s ease;
         }
 
-        .shop-nav a:hover::after {
-            width: 100%;
-        }
-
-        .shop-nav a:hover, .action-btn:hover {
-            color: #b38728;
-        }
+        .shop-nav a:hover::after { width: 100%; }
+        .shop-nav a:hover, .action-btn:hover { color: var(--gold-light); }
 
         .hero-banner {
-            position: relative;
-            height: 580px;
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #fff;
-            margin-bottom: 80px;
-            cursor: pointer;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-            background: #000;
+            position: relative; height: 560px; border-radius: 18px; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            margin-bottom: 90px; box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            border: 1px solid rgba(212,175,55,0.15); cursor: pointer;
         }
 
         .hero-bg {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.65;
-            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5;
+            transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .hero-banner:hover .hero-bg {
-            transform: scale(1.05);
-        }
+        .hero-banner:hover .hero-bg { transform: scale(1.05); }
 
         .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 700px;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.25);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
+            position: relative; z-index: 2; max-width: 700px; padding: 44px;
+            background: rgba(5,6,10,0.45); backdrop-filter: blur(10px);
+            border: 1px solid rgba(212,175,55,0.22); border-radius: 14px;
         }
 
         .hero-content h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 3.4rem;
-            font-weight: 400;
-            letter-spacing: 6px;
-            margin-bottom: 15px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            font-family: 'Cinzel', serif; font-size: 3.3rem; font-weight: 400; letter-spacing: 6px; margin-bottom: 15px;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .hero-content p {
-            font-size: 1.2rem;
-            font-weight: 300;
-            margin-bottom: 35px;
-            opacity: 0.9;
-            line-height: 1.8;
-        }
+        .hero-content p { font-size: 1.2rem; font-weight: 300; margin-bottom: 35px; opacity: 0.85; line-height: 1.9; }
 
         .btn-gold {
-            background: var(--gold-gradient);
-            color: #0a0a0a;
-            padding: 18px 48px;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            background: var(--gold-gradient); color: #0a0a0a; padding: 17px 46px; border: none;
+            font-family: 'Montserrat', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 4px;
+            text-transform: uppercase; cursor: pointer; transition: all 0.4s ease; border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(212,175,55,0.25);
         }
 
-        .btn-gold:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(212,175,55,0.45); }
+
+        .daily-message {
+            max-width: 660px; margin: 0 auto 90px; text-align: center; padding: 38px 34px;
+            border-radius: 16px; border: 1px solid var(--border-gold);
+            background: var(--bg-card); backdrop-filter: blur(14px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35); position: relative;
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 55px;
+        .daily-message::before {
+            content: '✦'; position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            background: var(--bg-dark); padding: 0 16px; color: var(--gold-primary); font-size: 1.05rem;
         }
+
+        .dm-label {
+            display: block; font-family: 'Montserrat', sans-serif; font-size: 0.66rem; letter-spacing: 4px;
+            color: #b38728; text-transform: uppercase; margin-bottom: 16px;
+        }
+
+        #daily-text { font-size: 1.5rem; line-height: 2.1; color: var(--gold-light); }
+        #memory-text { margin-top: 14px; font-size: 1.05rem; color: #a89f92; }
+
+        .countdown-section { text-align: center; margin-bottom: 100px; }
+
+        .countdown-grid { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; margin-top: 34px; }
+
+        .cd-cell {
+            min-width: 108px; padding: 26px 18px; border-radius: 14px;
+            border: 1px solid var(--border-gold); background: var(--bg-card); backdrop-filter: blur(12px);
+        }
+
+        .cd-num {
+            font-family: 'Cinzel', serif; font-size: 2.6rem;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .cd-label {
+            font-family: 'Montserrat', sans-serif; font-size: 0.62rem; letter-spacing: 3px;
+            color: #8a8276; text-transform: uppercase; margin-top: 8px;
+        }
+
+        .section-header { text-align: center; margin-bottom: 55px; }
 
         .section-header span {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            color: #b38728;
-            text-transform: uppercase;
-            display: block;
-            margin-bottom: 10px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.72rem; letter-spacing: 4px;
+            color: #b38728; text-transform: uppercase; display: block; margin-bottom: 10px;
         }
 
         .section-header h3 {
-            font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
-            color: #111;
-            font-weight: 400;
-            letter-spacing: 2px;
+            font-family: 'Cinzel', serif; font-size: 2.1rem; font-weight: 400; letter-spacing: 2px;
+            background: linear-gradient(120deg, #f5edd0, #d4af37);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            margin-bottom: 80px;
-        }
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; margin-bottom: 100px; }
 
         .product-card {
-            background: #fff;
-            border: 1px solid var(--border-light);
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
+            background: var(--bg-card); border: 1px solid rgba(212,175,55,0.14); border-radius: 14px;
+            overflow: hidden; cursor: pointer; user-select: none; -webkit-user-select: none;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative;
         }
 
         .product-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
-            border-color: rgba(212, 175, 55, 0.35);
+            transform: translateY(-12px); box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            border-color: rgba(212,175,55,0.4);
         }
 
         .product-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #0d0d0d;
-            color: var(--gold-light);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            padding: 6px 14px;
-            text-transform: uppercase;
-            z-index: 2;
-            border-radius: 20px;
+            position: absolute; top: 18px; right: 18px; background: rgba(5,6,10,0.85);
+            color: var(--gold-light); font-family: 'Montserrat', sans-serif; font-size: 0.6rem;
+            letter-spacing: 2px; padding: 6px 14px; text-transform: uppercase; z-index: 2;
+            border-radius: 20px; border: 1px solid var(--border-gold);
         }
 
-        .product-img-wrapper {
-            width: 100%;
-            height: 380px;
-            overflow: hidden;
-            position: relative;
-            background: #f8f7f5;
+        .press-hint {
+            position: absolute; bottom: 150px; left: 50%; transform: translateX(-50%) scale(0.8);
+            background: rgba(5,6,10,0.92); border: 1px solid var(--border-gold); color: var(--gold-light);
+            font-size: 1rem; padding: 14px 22px; border-radius: 12px; white-space: nowrap; max-width: 88%;
+            opacity: 0; pointer-events: none; transition: all 0.35s ease; z-index: 5; line-height: 1.8;
         }
+
+        .press-hint.show { opacity: 1; transform: translateX(-50%) scale(1); }
+
+        .product-img-wrapper { width: 100%; height: 360px; overflow: hidden; background: #0c0d12; }
 
         .product-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 100%; height: 100%; object-fit: cover;
             transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .product-card:hover .product-img {
-            transform: scale(1.07);
-        }
+        .product-card:hover .product-img { transform: scale(1.07); }
 
-        .product-info {
-            padding: 30px 25px;
-            text-align: center;
-        }
+        .product-info { padding: 28px 24px; text-align: center; }
 
         .product-category {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: #b38728;
+            font-family: 'Montserrat', sans-serif; font-size: 0.66rem; letter-spacing: 3px;
+            color: #b38728; text-transform: uppercase; margin-bottom: 8px;
+        }
+
+        .product-title { font-size: 1.3rem; margin-bottom: 10px; color: var(--gold-light); }
+
+        .product-price { font-family: 'Montserrat', sans-serif; color: #b5aea4; font-size: 1rem; letter-spacing: 1px; }
+
+        .reasons-section { text-align: center; margin-bottom: 100px; }
+
+        .reason-box {
+            max-width: 620px; margin: 36px auto 26px; min-height: 130px;
+            display: flex; align-items: center; justify-content: center; padding: 34px;
+            border-radius: 16px; border: 1px dashed rgba(212,175,55,0.35);
+            background: rgba(212,175,55,0.04); font-size: 1.55rem; line-height: 2;
+            color: var(--gold-light); transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .reason-box.fade { opacity: 0; transform: translateY(8px); }
+
+        .scratch-section { text-align: center; margin-bottom: 100px; }
+
+        .scratch-wrap {
+            position: relative; width: min(520px, 100%); height: 240px; margin: 40px auto 0;
+            border-radius: 16px; overflow: hidden; border: 1px solid var(--border-gold);
+        }
+
+        .scratch-prize {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 10px;
+            background: radial-gradient(circle at 50% 40%, rgba(212,175,55,0.16), rgba(7,8,12,0.98));
+            font-size: 1.6rem; color: var(--gold-light); line-height: 1.9;
+        }
+
+        .scratch-prize small {
+            font-family: 'Montserrat', sans-serif; font-size: 0.66rem; letter-spacing: 4px;
+            color: #8a8276; text-transform: uppercase;
+        }
+
+        #scratch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+
+        footer.shop-footer {
+            text-align: center; border-top: 1px solid rgba(212,175,55,0.12); padding: 50px 0 0;
+            color: #6e6862; font-family: 'Montserrat', sans-serif; letter-spacing: 4px; font-size: 0.72rem;
             text-transform: uppercase;
-            margin-bottom: 8px;
         }
 
-        .product-title {
-            font-size: 1.35rem;
-            margin-bottom: 12px;
-            color: #111;
-            font-weight: 700;
-        }
-
-        .product-price {
-            font-family: 'Montserrat', sans-serif;
-            color: #222;
-            font-weight: 500;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-        }
-
-        /* ----------------------------------------------------
-           CINEMATIC LOADER OVERLAY
-        ---------------------------------------------------- */
         #loader-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-dark);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.8s ease;
+            position: fixed; inset: 0; background: var(--bg-dark);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.8s ease;
         }
 
-        #loader-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
+        #loader-overlay.active { opacity: 1; pointer-events: all; }
 
         .loader-emblem {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin-bottom: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: relative; width: 100px; height: 100px; margin-bottom: 35px;
+            display: flex; align-items: center; justify-content: center;
         }
 
         .loader-ring {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-top-color: var(--gold-primary);
-            animation: spin 1.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            position: absolute; inset: 0; border-radius: 50%;
+            border: 1px solid rgba(212,175,55,0.15); border-top-color: var(--gold-primary);
+            animation: spin 1.4s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;
         }
 
         .loader-diamond {
-            font-size: 1.8rem;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem; background: var(--gold-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: pulse 1.5s ease-in-out infinite alternate;
         }
 
@@ -395,271 +314,239 @@
         @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.15); } }
 
         .loader-text {
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            letter-spacing: 6px;
-            color: var(--gold-light);
-            margin-bottom: 8px;
-            text-transform: uppercase;
+            font-family: 'Cinzel', serif; font-size: 1.05rem; letter-spacing: 6px;
+            color: var(--gold-light); margin-bottom: 8px; text-transform: uppercase;
         }
 
-        .loader-subtext {
-            font-family: 'Amiri', serif;
-            font-size: 1.15rem;
-            color: #777;
-        }
+        .loader-subtext { font-size: 1.1rem; color: #77706a; }
 
-        /* ----------------------------------------------------
-           POEM CANVAS
-        ---------------------------------------------------- */
         #poem-container {
-            display: none;
-            max-width: 800px;
-            width: 100%;
-            margin: 80px auto 100px;
-            padding: 0 25px;
-            opacity: 0;
-            transition: opacity 1.8s ease;
+            display: none; max-width: 820px; width: 100%; margin: 0 auto;
+            padding: 90px 25px 110px; opacity: 0; transition: opacity 1.8s ease;
+            position: relative; z-index: 3;
         }
 
-        .ambient-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.08) 0%, rgba(5, 6, 8, 0.98) 75%);
-            z-index: -1;
-            pointer-events: none;
-            display: none;
-        }
-
-        header.poem-header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
+        header.poem-header { text-align: center; margin-bottom: 70px; position: relative; }
 
         header.poem-header h1 {
-            font-family: 'Aref Ruqaa', serif;
-            font-size: 3.8rem;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            font-weight: 400;
-            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.2));
+            font-family: 'Aref Ruqaa', serif; font-size: 3.6rem; font-weight: 400; margin-bottom: 20px;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 25px rgba(212,175,55,0.2));
         }
 
+        .rename-btn {
+            position: absolute; top: 8px; left: 0; background: transparent;
+            border: 1px solid var(--border-gold); color: #8a8276;
+            font-family: 'Montserrat', sans-serif; font-size: 0.62rem; letter-spacing: 2px;
+            padding: 7px 16px; border-radius: 20px; cursor: pointer; text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .rename-btn:hover { color: var(--gold-light); border-color: var(--gold-primary); }
+
         .divider-ornament {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            color: var(--gold-primary);
-            opacity: 0.7;
-            font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center; gap: 20px;
+            color: var(--gold-primary); opacity: 0.7; font-size: 0.9rem;
         }
 
         .divider-ornament::before, .divider-ornament::after {
-            content: '';
-            height: 1px;
-            width: 120px;
+            content: ''; height: 1px; width: 110px;
             background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
         }
 
+        .typed-letter {
+            background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 16px;
+            padding: 42px 38px; margin-bottom: 56px; backdrop-filter: blur(16px);
+            text-align: center; min-height: 120px;
+        }
+
+        .typed-letter .tl-label {
+            display: block; font-family: 'Montserrat', sans-serif; font-size: 0.64rem;
+            letter-spacing: 4px; color: #b38728; text-transform: uppercase; margin-bottom: 20px;
+        }
+
+        #typed-text {
+            font-size: 1.4rem; line-height: 2.2; color: var(--gold-light); white-space: pre-line;
+        }
+
+        #typed-text::after { content: '▎'; color: var(--gold-primary); animation: caret 0.9s steps(1) infinite; }
+        #typed-text.done::after { content: ''; }
+        @keyframes caret { 50% { opacity: 0; } }
+
         .stanza {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-gold);
-            border-radius: 16px;
-            padding: 55px 45px;
-            margin-bottom: 50px;
-            text-align: center;
-            font-size: 1.6rem;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            color: #f3f3f3;
-            line-height: 2.4;
+            background: var(--bg-surface); border: 1px solid var(--border-gold); border-radius: 16px;
+            padding: 52px 44px; margin-bottom: 48px; text-align: center; font-size: 1.55rem;
+            backdrop-filter: blur(20px); box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            color: #f3f3f3; line-height: 2.4;
             transition: transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
-            position: relative;
+            opacity: 0; transform: translateY(30px);
+        }
+
+        .stanza.revealed {
+            opacity: 1; transform: translateY(0);
+            transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.16,1,0.3,1),
+                        border-color 0.5s ease, box-shadow 0.5s ease;
         }
 
         .stanza:hover {
-            transform: translateY(-8px);
-            border-color: rgba(212, 175, 55, 0.55);
-            box-shadow: 0 35px 70px rgba(212, 175, 55, 0.12);
+            border-color: rgba(212,175,55,0.55); box-shadow: 0 35px 70px rgba(212,175,55,0.12);
         }
 
-        .verse-line {
-            display: block;
-            margin-bottom: 6px;
-        }
+        .verse-line { display: block; margin-bottom: 6px; }
 
-        .highlight {
-            color: var(--gold-light);
-            font-weight: 700;
-            text-shadow: 0 0 15px rgba(247, 231, 173, 0.35);
-        }
+        .highlight { color: var(--gold-light); font-weight: 700; text-shadow: 0 0 15px rgba(247,231,173,0.35); }
 
         .name-reveal {
-            font-family: 'Aref Ruqaa', serif;
-            font-size: 2.6rem;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-            margin-top: 18px;
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+            font-family: 'Aref Ruqaa', serif; font-size: 2.6rem;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: inline-block; margin-top: 18px;
+            filter: drop-shadow(0 0 20px rgba(212,175,55,0.4));
         }
 
         footer.poem-footer {
-            text-align: center;
-            margin-top: 70px;
-            color: #777;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 4px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
+            text-align: center; margin-top: 70px; color: #77706a;
+            font-family: 'Montserrat', sans-serif; letter-spacing: 4px; font-size: 0.82rem; text-transform: uppercase;
         }
 
         footer.poem-footer span {
-            color: var(--gold-light);
-            font-family: 'Aref Ruqaa', serif;
-            font-size: 1.4rem;
-            text-transform: none;
-            margin-right: 6px;
+            color: var(--gold-light); font-family: 'Aref Ruqaa', serif; font-size: 1.4rem;
+            text-transform: none; margin-right: 6px;
         }
 
-        /* Return Button Styling */
-        .return-btn-container {
-            text-align: center;
-            margin-top: 55px;
+        .voice-diamond {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 58px; height: 58px; margin: 26px auto 0; border-radius: 50%;
+            border: 1px solid var(--border-gold); background: rgba(212,175,55,0.06);
+            font-size: 1.3rem; cursor: pointer; transition: all 0.4s ease;
+            animation: pulse 2.4s ease-in-out infinite alternate;
         }
+
+        .voice-diamond:hover {
+            background: rgba(212,175,55,0.18); border-color: var(--gold-primary); transform: scale(1.1);
+        }
+
+        .voice-hint {
+            display: block; font-size: 0.95rem; color: #6e6862; margin-top: 10px;
+            text-transform: none; letter-spacing: 0;
+        }
+
+        .return-btn-container { text-align: center; margin-top: 55px; }
 
         .btn-return {
-            background: transparent;
-            color: var(--gold-light);
-            border: 1px solid var(--border-gold);
-            padding: 16px 40px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 30px;
-            transition: all 0.4s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
+            background: transparent; color: var(--gold-light); border: 1px solid var(--border-gold);
+            padding: 16px 40px; font-family: 'Montserrat', sans-serif; font-size: 0.78rem;
+            letter-spacing: 4px; text-transform: uppercase; cursor: pointer; border-radius: 30px;
+            transition: all 0.4s ease; display: inline-flex; align-items: center; gap: 12px;
             backdrop-filter: blur(10px);
         }
 
         .btn-return:hover {
-            background: var(--gold-gradient);
-            color: #050608;
-            border-color: transparent;
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-            transform: translateY(-3px);
+            background: var(--gold-gradient); color: #050608; border-color: transparent;
+            box-shadow: 0 10px 30px rgba(212,175,55,0.3); transform: translateY(-3px);
         }
 
-        /* Install App Button */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 1200; background: rgba(4,5,8,0.85);
+            backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 24px;
+        }
+
+        .modal-overlay.open { display: flex; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-card {
+            max-width: 600px; width: 100%; max-height: 82vh; overflow-y: auto;
+            background: #101218; border: 1px solid var(--border-gold); border-radius: 18px;
+            padding: 48px 42px; text-align: center; animation: riseIn 0.5s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        @keyframes riseIn { from { opacity: 0; transform: translateY(40px) scale(0.97); } to { opacity: 1; transform: none; } }
+
+        .modal-card h4 {
+            font-family: 'Aref Ruqaa', serif; font-size: 1.9rem; margin-bottom: 24px;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .modal-card p { font-size: 1.3rem; line-height: 2.2; color: #ded9cf; white-space: pre-line; }
+
+        .modal-close {
+            margin-top: 30px; background: transparent; border: 1px solid var(--border-gold);
+            color: var(--gold-light); font-family: 'Montserrat', sans-serif; font-size: 0.7rem;
+            letter-spacing: 3px; text-transform: uppercase; padding: 12px 34px; border-radius: 30px;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+
+        .modal-close:hover { background: rgba(212,175,55,0.12); }
+
+        #toast {
+            position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: #14161e; border: 1px solid var(--border-gold); color: var(--gold-light);
+            font-size: 1.05rem; padding: 14px 28px; border-radius: 30px; z-index: 1300;
+            opacity: 0; pointer-events: none; transition: all 0.4s ease;
+        }
+
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .music-btn {
+            position: fixed; bottom: 24px; right: 24px; z-index: 1100;
+            width: 52px; height: 52px; border-radius: 50%;
+            border: 1px solid var(--border-gold); background: rgba(10,11,16,0.85);
+            backdrop-filter: blur(8px); color: var(--gold-light); font-size: 1.15rem;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+
+        .music-btn:hover { border-color: var(--gold-primary); transform: scale(1.08); }
+        .music-btn.playing { animation: pulse 1.6s ease-in-out infinite alternate; border-color: var(--gold-primary); }
+
         #install-btn {
-            display: none;
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: var(--gold-gradient);
-            color: #0a0a0a;
-            border: none;
-            padding: 14px 32px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.45);
-            animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none; position: fixed; bottom: 24px; left: 50%;
+            transform: translateX(-50%); z-index: 1000;
+            background: var(--gold-gradient); color: #0a0a0a; border: none; padding: 14px 32px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.76rem; font-weight: 600; letter-spacing: 3px;
+            text-transform: uppercase; cursor: pointer; border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(212,175,55,0.45);
+            animation: float-in 0.8s cubic-bezier(0.16,1,0.3,1);
         }
 
-        #install-btn:hover {
-            transform: translateX(-50%) translateY(-3px);
-        }
+        #install-btn:hover { transform: translateX(-50%) translateY(-3px); }
 
         @keyframes float-in {
             from { opacity: 0; transform: translateX(-50%) translateY(30px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
-        /* Daily Message Card */
-        .daily-message {
-            max-width: 640px;
-            margin: 0 auto 70px;
-            text-align: center;
-            padding: 34px 30px;
-            border-radius: 14px;
-            border: 1px solid var(--border-gold);
-            background: linear-gradient(160deg, #fffdf5 0%, #fbf4e0 100%);
-            box-shadow: 0 15px 40px rgba(179, 135, 40, 0.10);
-            position: relative;
-        }
-
-        .daily-message::before {
-            content: '✦';
-            position: absolute;
-            top: -13px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fbfbf9;
-            padding: 0 14px;
-            color: #b38728;
-            font-size: 1rem;
-        }
-
-        .dm-label {
-            display: block;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.68rem;
-            letter-spacing: 4px;
-            color: #b38728;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        #daily-text {
-            font-size: 1.45rem;
-            line-height: 2;
-            color: #2a2a2a;
-        }
-
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: 1fr; }
-            .hero-content h2 { font-size: 2.4rem; }
-            header.poem-header h1 { font-size: 2.8rem; }
-            .stanza { font-size: 1.35rem; padding: 40px 25px; }
+            .hero-content h2 { font-size: 2.3rem; }
+            header.poem-header h1 { font-size: 2.7rem; }
+            .stanza { font-size: 1.3rem; padding: 38px 24px; }
             .shop-nav { display: none; }
+            .top-banner div:nth-child(1), .top-banner div:nth-child(3) { display: none; }
+            #daily-text { font-size: 1.25rem; }
+            .cd-cell { min-width: 76px; padding: 18px 10px; }
+            .cd-num { font-size: 1.9rem; }
+            #typed-text { font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- BOUTIQUE STOREFRONT -->
+    <canvas id="fx-canvas"></canvas>
+    <div class="grain"></div>
+
     <div id="shop-container">
         <div class="top-banner">
             <div>PARIS • DUBAI • NEW YORK</div>
             <div>توصيل خاص وحصري لكافة الطلبات <span class="gold-tag">✦ VIP</span></div>
             <div>EUR € | DZD</div>
         </div>
-        
+
         <header class="shop-header">
             <nav class="shop-nav">
                 <a class="trigger-click">المجموعات</a>
                 <a class="trigger-click">المجوهرات الراقيـة</a>
             </nav>
 
-            <div class="shop-brand trigger-click">
+            <div class="shop-brand trigger-click" id="brand-logo">
                 <h1>Maison de L'Éternité</h1>
                 <span>Haute Parfumerie & Joaillerie</span>
             </div>
@@ -670,65 +557,71 @@
             </nav>
         </header>
 
-        <section class="hero-banner trigger-click">
-            <img class="hero-bg" src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1600&auto=format&fit=crop" alt="Luxury Diamonds">
-            <div class="hero-content">
-                <h2>L'Élégance Éternelle</h2>
-                <p>مجموعة خريفية فاخرة مستوحاة من سحر اللحظات النادرة والتفاصيل الاستثنائية</p>
-                <button class="btn-gold">استكشفي السر</button>
-            </div>
-        </section>
-
-        <div class="daily-message">
-            <span class="dm-label">✦ Message du Jour ✦</span>
-            <p id="daily-text"></p>
-        </div>
-
-        <div class="section-header">
-            <span>Collection Privée</span>
-            <h3>قطع نادرة صُممت لشخصٍ استثنائي</h3>
-        </div>
-
-        <div class="product-grid">
-            <div class="product-card trigger-click">
-                <span class="product-badge">Sur Mesure</span>
-                <div class="product-img-wrapper">
-                    <img class="product-img" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800&auto=format&fit=crop" alt="Diamond Ring">
+        <main>
+            <section class="hero-banner trigger-click">
+                <img class="hero-bg" src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1600&auto=format&fit=crop" alt="Luxury Diamonds">
+                <div class="hero-content">
+                    <h2>L'Élégance Éternelle</h2>
+                    <p>مجموعة خريفية فاخرة مستوحاة من سحر اللحظات النادرة والتفاصيل الاستثنائية</p>
+                    <button class="btn-gold">استكشفي السر</button>
                 </div>
-                <div class="product-info">
-                    <div class="product-category">Haute Joaillerie</div>
-                    <div class="product-title">خاتم الألماس والأمل</div>
-                    <div class="product-price">480,000 DZD</div>
-                </div>
+            </section>
+
+            <div class="daily-message">
+                <span class="dm-label">✦ Message du Jour ✦</span>
+                <p id="daily-text"></p>
+                <p id="memory-text"></p>
             </div>
 
-            <div class="product-card trigger-click">
-                <span class="product-badge">Édition Limitée</span>
-                <div class="product-img-wrapper">
-                    <img class="product-img" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800&auto=format&fit=crop" alt="Gold Necklace">
+            <section class="countdown-section">
+                <div class="section-header">
+                    <span>Le Grand Jour</span>
+                    <h3>العدّ التنازلي ليومِنا</h3>
                 </div>
-                <div class="product-info">
-                    <div class="product-category">Édition Limitée</div>
-                    <div class="product-title">قلادة الشمس الذهبية</div>
-                    <div class="product-price">620,000 DZD</div>
+                <div class="countdown-grid">
+                    <div class="cd-cell"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Days</div></div>
+                    <div class="cd-cell"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Hours</div></div>
+                    <div class="cd-cell"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Minutes</div></div>
+                    <div class="cd-cell"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Seconds</div></div>
                 </div>
+            </section>
+
+            <div class="section-header">
+                <span>Collection Privée</span>
+                <h3>قطع نادرة صُممت لشخصٍ استثنائي</h3>
             </div>
 
-            <div class="product-card trigger-click">
-                <span class="product-badge">Pièce Unique</span>
-                <div class="product-img-wrapper">
-                    <img class="product-img" src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop" alt="Luxury Pearl Earrings">
+            <div class="product-grid" id="product-grid"></div>
+
+            <section class="reasons-section">
+                <div class="section-header">
+                    <span>Raisons de mon cœur</span>
+                    <h3>أسبابُ حبّي لكِ</h3>
                 </div>
-                <div class="product-info">
-                    <div class="product-category">Collection Privée</div>
-                    <div class="product-title">أقراط اللؤلؤ الملكية</div>
-                    <div class="product-price">350,000 DZD</div>
+                <div class="reason-box"><p id="reason-text"></p></div>
+                <button class="btn-gold" id="reason-btn">✦ أعطيني سببًا آخر ✦</button>
+            </section>
+
+            <section class="scratch-section">
+                <div class="section-header">
+                    <span>Carte à Gratter</span>
+                    <h3>بطاقةُ مفاجأة... اكتشفيها بيدكِ</h3>
                 </div>
-            </div>
-        </div>
+                <div class="scratch-wrap">
+                    <div class="scratch-prize">
+                        <small>Votre Surprise</small>
+                        <span id="prize-text">عشائةٌ تحت النجوم...<br>تاريخُها سرٌّ بيني وبينكِ ✦</span>
+                    </div>
+                    <canvas id="scratch-canvas"></canvas>
+                </div>
+            </section>
+        </main>
+
+        <footer class="shop-footer">
+            <p>✦ Maison de L'Éternité — Fait avec Amour ✦</p>
+        </footer>
     </div>
 
-    <!-- CINEMATIC TRANSITION OVERLAY -->
     <div id="loader-overlay">
         <div class="loader-emblem">
             <div class="loader-ring"></div>
@@ -738,78 +631,81 @@
         <div class="loader-subtext" id="loader-sub-text">جاري فتح سر صُنع لكِ خصيصًا...</div>
     </div>
 
-    <!-- POEM CANVAS -->
-    <div class="ambient-bg" id="ambient-bg"></div>
-
     <div id="poem-container">
         <header class="poem-header">
+            <button class="rename-btn" id="rename-btn">غيّري الاسم ✎</button>
             <h1>حينَ تُغمِضينَ العالم</h1>
             <div class="divider-ornament">✦ ✤ ✦</div>
         </header>
 
-        <main>
-            <article class="stanza">
-                <span class="verse-line">حينَ تُغمِضينَ العالم</span>
-                <span class="verse-line">كلُّ مساءٍ...</span>
-                <span class="verse-line">تُعلِّمينَ العيونَ</span>
-                <span class="verse-line">كيف تُغمِضُ خوفَها،</span>
-                <span class="verse-line">ثم تعودينَ</span>
-                <span class="verse-line">وعيناكِ...</span>
-                <span class="verse-line">لا تعرفانِ النوم.</span>
-                <span class="verse-line">أفكِّرُ أحيانًا...</span>
-                <span class="verse-line">حينَ يسلِّمُ الناسُ</span>
-                <span class="verse-line">أحلامَهم</span>
-                <span class="verse-line">إلى يديكِ،</span>
-                <span class="verse-line">إلى مَن</span>
-                <span class="verse-line highlight">تُسلِّمينَ تعبَكِ؟</span>
-            </article>
+        <div class="typed-letter">
+            <span class="tl-label">Lettre Typographiée</span>
+            <p id="typed-text"></p>
+        </div>
 
-            <article class="stanza">
-                <span class="verse-line">رأيتُ المطرَ</span>
-                <span class="verse-line">يسقطُ ألفَ مرَّة،</span>
-                <span class="verse-line">لكنِّي</span>
-                <span class="verse-line">لم أرَهُ يومًا</span>
-                <span class="verse-line">يختارُ وردةً بعينِها.</span>
-                <span class="verse-line highlight">إلَّا قلبي...</span>
-                <span class="verse-line highlight">منذُ رآكِ.</span>
-            </article>
+        <article class="stanza">
+            <span class="verse-line">حينَ تُغمِضينَ العالم</span>
+            <span class="verse-line">كلُّ مساءٍ...</span>
+            <span class="verse-line">تُعلِّمينَ العيونَ</span>
+            <span class="verse-line">كيف تُغمِضُ خوفَها،</span>
+            <span class="verse-line">ثم تعودينَ</span>
+            <span class="verse-line">وعيناكِ...</span>
+            <span class="verse-line">لا تعرفانِ النوم.</span>
+            <span class="verse-line">أفكِّرُ أحيانًا...</span>
+            <span class="verse-line">حينَ يسلِّمُ الناسُ</span>
+            <span class="verse-line">أحلامَهم</span>
+            <span class="verse-line">إلى يديكِ،</span>
+            <span class="verse-line">إلى مَن</span>
+            <span class="verse-line highlight">تُسلِّمينَ تعبَكِ؟</span>
+        </article>
 
-            <article class="stanza">
-                <span class="verse-line">غريبٌ...</span>
-                <span class="verse-line">أنَّ امرأةً</span>
-                <span class="verse-line">تجعلُ الآخرينَ</span>
-                <span class="verse-line">ينسونَ الألم،</span>
-                <span class="verse-line">كانتْ</span>
-                <span class="verse-line highlight">أجملَ ألمٍ</span>
-                <span class="verse-line">عرفتُهُ أنا.</span>
-                <span class="verse-line">ليسَ لأنَّها أوجعتني...</span>
-                <span class="verse-line">بل لأنَّها</span>
-                <span class="verse-line">جعلتْ قلبي</span>
-                <span class="verse-line">يعرفُ</span>
-                <span class="verse-line">أنَّه كانَ نائمًا</span>
-                <span class="verse-line">قبلَها.</span>
-            </article>
+        <article class="stanza">
+            <span class="verse-line">رأيتُ المطرَ</span>
+            <span class="verse-line">يسقطُ ألفَ مرَّة،</span>
+            <span class="verse-line">لكنِّي</span>
+            <span class="verse-line">لم أرَهُ يومًا</span>
+            <span class="verse-line">يختارُ وردةً بعينِها.</span>
+            <span class="verse-line highlight">إلَّا قلبي...</span>
+            <span class="verse-line highlight">منذُ رآكِ.</span>
+        </article>
 
-            <article class="stanza">
-                <span class="verse-line">لو سألوكِ يومًا:</span>
-                <span class="verse-line">كم حياةً أنقذتِ؟</span>
-                <span class="verse-line">ربَّما</span>
-                <span class="verse-line">لن تعرفي العدد.</span>
-                <span class="verse-line">أمَّا أنا...</span>
-                <span class="verse-line">فسأقولُ:</span>
-                <span class="verse-line highlight">واحدة.</span>
-                <span class="verse-line">حياتي...</span>
-                <span class="verse-line">حينَ دخلتِها</span>
-                <span class="verse-line highlight">دونَ أن تطرقي الباب...</span>
-                <span class="name-reveal">يا هاجَر</span>
-            </article>
-        </main>
+        <article class="stanza">
+            <span class="verse-line">غريبٌ...</span>
+            <span class="verse-line">أنَّ امرأةً</span>
+            <span class="verse-line">تجعلُ الآخرينَ</span>
+            <span class="verse-line">ينسونَ الألم،</span>
+            <span class="verse-line">كانتْ</span>
+            <span class="verse-line highlight">أجملَ ألمٍ</span>
+            <span class="verse-line">عرفتُهُ أنا.</span>
+            <span class="verse-line">ليسَ لأنَّها أوجعتني...</span>
+            <span class="verse-line">بل لأنَّها</span>
+            <span class="verse-line">جعلتْ قلبي</span>
+            <span class="verse-line">يعرفُ</span>
+            <span class="verse-line">أنَّه كانَ نائمًا</span>
+            <span class="verse-line">قبلَها.</span>
+        </article>
+
+        <article class="stanza">
+            <span class="verse-line">لو سألوكِ يومًا:</span>
+            <span class="verse-line">كم حياةً أنقذتِ؟</span>
+            <span class="verse-line">ربَّما</span>
+            <span class="verse-line">لن تعرفي العدد.</span>
+            <span class="verse-line">أمَّا أنا...</span>
+            <span class="verse-line">فسأقولُ:</span>
+            <span class="verse-line highlight">واحدة.</span>
+            <span class="verse-line">حياتي...</span>
+            <span class="verse-line">حينَ دخلتِها</span>
+            <span class="verse-line highlight">دونَ أن تطرقي الباب...</span>
+            <br>
+            <span class="name-reveal her-name">يا هاجَر</span>
+        </article>
 
         <footer class="poem-footer">
-            <p>✦ Pour Toujours <span>حبيبتي هاجر</span> ✦</p>
+            <p>✦ Pour Toujours <span class="her-name-inline her-name">حبيبتي هاجَر</span> ✦</p>
+            <div class="voice-diamond" id="voice-diamond" style="display:none">🎙️</div>
+            <span class="voice-hint" id="voice-hint" style="display:none">اضغطي على الماسة لتسمعي رسالتي الصوتية</span>
         </footer>
 
-        <!-- RETURN BUTTON -->
         <div class="return-btn-container">
             <button class="btn-return" id="return-btn">
                 <span>العودة إلى المتجر</span>
@@ -818,17 +714,47 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="letter-modal">
+        <div class="modal-card">
+            <h4>رسالةٌ سرِّيّة</h4>
+            <p>وجدتِها...
+
+لم أضعْ هذه الرسالة هنا عبثًا، وضعتُها لمن تبحثُ عن الأسرار كما أبحثُ أنا عن وجهكِ في كلِّ حشد.
+
+إنّكِ لم تكوني فصلًا في حياتي...
+كنتِ الكتابَ كلَّه.
+
+وأنا مهما طالتِ الطرقُ وقصُرتِ الأيام
+سأبقى أوّلَ من يقرأكِ، وآخرَ من يفهمكِ.
+
+أحبّكِ بقدر ما لا تستطيع هذه الشاشةُ أن تتّسع. ✦</p>
+            <button class="modal-close" data-close="letter-modal">إغلاق ✦</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="note-modal">
+        <div class="modal-card">
+            <h4>ملاحظةٌ خاصّة</h4>
+            <p id="note-modal-text"></p>
+            <button class="modal-close" data-close="note-modal">إغلاق ✦</button>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <button class="music-btn" id="music-btn" title="الموسيقى">♪</button>
     <button id="install-btn">✦ Install App</button>
 
     <script>
-        // PWA Service Worker Registration
+        const SPECIAL_DATE = { month: 2, day: 14 };
+        const VOICE_NOTE_FILE = 'voice.mp3';
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(() => {});
             });
         }
 
-        // Custom Install Prompt
         let deferredPrompt = null;
         const installBtn = document.getElementById('install-btn');
 
@@ -850,7 +776,350 @@
             installBtn.style.display = 'none';
         });
 
-        // Daily Message — a different verse every day of the week
+        function playChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const notes = [261.63, 329.63, 392.00, 523.25];
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 0.1 + (idx * 0.15));
+                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.5 + (idx * 0.2));
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + (idx * 0.15));
+                    osc.stop(ctx.currentTime + 3.0);
+                });
+            } catch (e) {}
+        }
+
+        // AMBIENT MUSIC
+        const musicBtn = document.getElementById('music-btn');
+        let musicCtx = null, musicOn = false, musicTimer = null;
+        const scale = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
+
+        function playAmbientNote() {
+            if (!musicCtx || !musicOn) return;
+            const now = musicCtx.currentTime;
+            const freq = scale[Math.floor(Math.random() * scale.length)] * (Math.random() > 0.7 ? 2 : 1);
+            const osc = musicCtx.createOscillator();
+            const gain = musicCtx.createGain();
+            osc.type = Math.random() > 0.5 ? 'sine' : 'triangle';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.03, now + 0.6);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.2);
+            osc.connect(gain); gain.connect(musicCtx.destination);
+            osc.start(now); osc.stop(now + 3.4);
+        }
+
+        musicBtn.addEventListener('click', () => {
+            try {
+                if (!musicCtx) musicCtx = new (window.AudioContext || window.webkitAudioContext)();
+                musicOn = !musicOn;
+                musicBtn.classList.toggle('playing', musicOn);
+                musicBtn.textContent = musicOn ? '♫' : '♪';
+                if (musicOn) {
+                    playAmbientNote();
+                    musicTimer = setInterval(playAmbientNote, 1600);
+                    showToast('♪ موسيقى هادئة... لكِ وحدك');
+                } else {
+                    clearInterval(musicTimer);
+                }
+            } catch (e) {}
+        });
+
+        // FX CANVAS — gold dust, cursor sparkles, confetti
+        const canvas = document.getElementById('fx-canvas');
+        const fctx = canvas.getContext('2d');
+        let W, H;
+
+        function resizeCanvas() {
+            W = canvas.width = innerWidth;
+            H = canvas.height = innerHeight;
+        }
+        resizeCanvas();
+        addEventListener('resize', resizeCanvas);
+
+        const dust = [], sparks = [], confetti = [];
+        for (let i = 0; i < 55; i++) {
+            dust.push({
+                x: Math.random() * innerWidth,
+                y: Math.random() * innerHeight,
+                r: Math.random() * 1.8 + 0.4,
+                vy: -(Math.random() * 0.35 + 0.08),
+                vx: (Math.random() - 0.5) * 0.15,
+                a: Math.random() * 0.5 + 0.15,
+                tw: Math.random() * Math.PI * 2
+            });
+        }
+
+        function burstConfetti(x, y, count = 90) {
+            for (let i = 0; i < count; i++) {
+                const ang = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 7 + 2;
+                confetti.push({
+                    x, y,
+                    vx: Math.cos(ang) * speed,
+                    vy: Math.sin(ang) * speed - 3,
+                    size: Math.random() * 5 + 2,
+                    rot: Math.random() * Math.PI,
+                    vr: (Math.random() - 0.5) * 0.25,
+                    life: 1,
+                    hue: 40 + Math.random() * 15
+                });
+            }
+        }
+
+        addEventListener('pointermove', (e) => {
+            if (Math.random() > 0.55) {
+                sparks.push({ x: e.clientX, y: e.clientY, life: 1, r: Math.random() * 2.2 + 0.8 });
+            }
+        });
+
+        function fxLoop() {
+            fctx.clearRect(0, 0, W, H);
+            dust.forEach(p => {
+                p.tw += 0.02; p.x += p.vx; p.y += p.vy;
+                if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+                fctx.globalAlpha = p.a * (0.6 + 0.4 * Math.sin(p.tw));
+                fctx.fillStyle = '#d4af37';
+                fctx.beginPath();
+                fctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                fctx.fill();
+            });
+            for (let i = sparks.length - 1; i >= 0; i--) {
+                const s = sparks[i];
+                s.life -= 0.045;
+                if (s.life <= 0) { sparks.splice(i, 1); continue; }
+                fctx.globalAlpha = s.life * 0.8;
+                fctx.fillStyle = '#f7e7ad';
+                fctx.beginPath();
+                fctx.arc(s.x, s.y, s.r * s.life, 0, Math.PI * 2);
+                fctx.fill();
+            }
+            for (let i = confetti.length - 1; i >= 0; i--) {
+                const c = confetti[i];
+                c.vy += 0.12; c.x += c.vx; c.y += c.vy; c.rot += c.vr; c.life -= 0.008;
+                if (c.life <= 0 || c.y > H + 20) { confetti.splice(i, 1); continue; }
+                fctx.save();
+                fctx.globalAlpha = Math.min(c.life, 1);
+                fctx.translate(c.x, c.y);
+                fctx.rotate(c.rot);
+                fctx.fillStyle = `hsl(${c.hue}, 65%, ${55 + (c.hue % 20)}%)`;
+                fctx.fillRect(-c.size / 2, -c.size / 4, c.size, c.size / 2);
+                fctx.restore();
+            }
+            fctx.globalAlpha = 1;
+            requestAnimationFrame(fxLoop);
+        }
+        fxLoop();
+
+        // TOAST
+        const toastEl = document.getElementById('toast');
+        let toastTimer = null;
+        function showToast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+        }
+
+        // MODALS
+        document.querySelectorAll('.modal-close').forEach(btn => {
+            btn.addEventListener('click', () =>
+                document.getElementById(btn.dataset.close).classList.remove('open'));
+        });
+        document.querySelectorAll('.modal-overlay').forEach(ov => {
+            ov.addEventListener('click', (e) => {
+                if (e.target === ov) ov.classList.remove('open');
+            });
+        });
+
+        // SECRET — tap logo 5 times
+        let tapCount = 0, tapTimer = null;
+        document.getElementById('brand-logo').addEventListener('click', () => {
+            tapCount++;
+            clearTimeout(tapTimer);
+            tapTimer = setTimeout(() => tapCount = 0, 1800);
+            if (tapCount >= 3 && tapCount < 5) showToast(`✦ ${5 - tapCount}... استمري`);
+            if (tapCount >= 5) {
+                tapCount = 0;
+                playChime();
+                burstConfetti(innerWidth / 2, innerHeight / 2, 130);
+                document.getElementById('letter-modal').classList.add('open');
+            }
+        });
+
+        // PRODUCTS + LONG-PRESS NOTES + MEMORIES GALLERY
+        const products = [
+            { badge: 'Sur Mesure', cat: 'Haute Joaillerie', title: 'خاتم الألماس والأمل', price: '480,000 DZD',
+              img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800&auto=format&fit=crop',
+              note: 'هذا الخاتم... اخترتُه وأنا أفكرُ بعينيكِ فقط. كلُّ بريقٍ فيه يحكي قصةً لا يعرفها أحدٌ سواهما.' },
+            { badge: 'Édition Limitée', cat: 'Édition Limitée', title: 'قلادة الشمس الذهبية', price: '620,000 DZD',
+              img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800&auto=format&fit=crop',
+              note: 'قلادة الشمس... لأنّكِ شمسُ صباحاتي حتى في الأيام الغائمة.' },
+            { badge: 'Pièce Unique', cat: 'Collection Privée', title: 'أقراط اللؤلؤ الملكية', price: '350,000 DZD',
+              img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop',
+              note: 'أقراط اللؤلؤ... لأنّكِ كاللؤلؤ: نادرة، صافية، وكلُّ من رآكِ يتمنّاك.' },
+            { badge: 'Souvenir I', cat: 'Memories Collection', title: 'أولُ ابتسامةٍ رأيتها لكِ', price: '',
+              img: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=800&auto=format&fit=crop',
+              note: 'هذه الابتسامة... التي أنقذتني يومًا لم أكن فيه أعرف أنّي أحتاج إنقاذًا.' },
+            { badge: 'Souvenir II', cat: 'Memories Collection', title: 'مساؤنا الأول', price: '',
+              img: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?q=80&w=800&auto=format&fit=crop',
+              note: 'الغروبُ ذلك المساء كان جميلًا... لكنّه لم يكن سوى خلفيةٍ لوجهكِ.' },
+            { badge: 'Souvenir III', cat: 'Memories Collection', title: 'وعدُ الشتاء', price: '',
+              img: 'https://images.unsplash.com/photo-1489549132488-d00b7eee80f1?q=800&auto=format&fit=crop',
+              note: 'وعدتُكِ أن يكونَ كلُّ شتائنا هكذا: باردٌ في الخارج... دافئٌ لأنّنا معًا.' }
+        ];
+
+        const grid = document.getElementById('product-grid');
+        products.forEach((p) => {
+            const card = document.createElement('div');
+            card.className = 'product-card trigger-click';
+            card.dataset.note = p.note;
+            card.innerHTML = `
+                <span class="product-badge">${p.badge}</span>
+                <div class="product-img-wrapper"><img class="product-img" src="${p.img}" alt="${p.title}" loading="lazy"></div>
+                <div class="product-info">
+                    <div class="product-category">${p.cat}</div>
+                    <div class="product-title">${p.title}</div>
+                    ${p.price ? `<div class="product-price">${p.price}</div>` : ''}
+                </div>
+                <div class="press-hint"></div>`;
+            grid.appendChild(card);
+        });
+
+        let longPressFired = false;
+        document.querySelectorAll('.product-card').forEach(card => {
+            const hint = card.querySelector('.press-hint');
+            let pressTimer = null;
+
+            card.addEventListener('pointerdown', (e) => {
+                longPressFired = false;
+                pressTimer = setTimeout(() => {
+                    longPressFired = true;
+                    hint.innerText = card.dataset.note;
+                    hint.classList.add('show');
+                    playChime();
+                    burstConfetti(e.clientX, e.clientY, 40);
+                    if (navigator.vibrate) navigator.vibrate(40);
+                    setTimeout(() => hint.classList.remove('show'), 3500);
+                }, 600);
+            });
+
+            ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev =>
+                card.addEventListener(ev, () => clearTimeout(pressTimer)));
+
+            card.addEventListener('contextmenu', (e) => {
+                if (longPressFired) e.preventDefault();
+            });
+        });
+
+        // OPEN POEM
+        document.querySelectorAll('.trigger-click, .hero-banner').forEach(el => {
+            el.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (longPressFired) { longPressFired = false; return; }
+                playChime();
+
+                const shopContainer = document.getElementById('shop-container');
+                const loaderOverlay = document.getElementById('loader-overlay');
+                const poemContainer = document.getElementById('poem-container');
+
+                loaderOverlay.classList.add('active');
+
+                setTimeout(() => {
+                    shopContainer.style.display = 'none';
+                    loaderOverlay.classList.remove('active');
+                    poemContainer.style.display = 'block';
+                    setTimeout(() => {
+                        poemContainer.style.opacity = '1';
+                        startTypewriter();
+                        revealStanzas();
+                        burstConfetti(innerWidth / 2, innerHeight * 0.25, 120);
+                    }, 50);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 1800);
+            });
+        });
+
+        // RETURN TO STORE
+        document.getElementById('return-btn').addEventListener('click', function() {
+            playChime();
+            const shopContainer = document.getElementById('shop-container');
+            const loaderOverlay = document.getElementById('loader-overlay');
+            const poemContainer = document.getElementById('poem-container');
+
+            document.getElementById('loader-sub-text').innerText = 'جاري العودة إلى المتجر...';
+            poemContainer.style.opacity = '0';
+            loaderOverlay.classList.add('active');
+
+            setTimeout(() => {
+                poemContainer.style.display = 'none';
+                loaderOverlay.classList.remove('active');
+                shopContainer.style.display = 'block';
+                document.getElementById('loader-sub-text').innerText = 'جاري فتح سر صُنع لكِ خصيصًا...';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1500);
+        });
+
+        // TYPEWRITER LETTER
+        const typedText = document.getElementById('typed-text');
+        let typedStarted = false;
+
+        function getHerName() { return localStorage.getItem('herName') || 'هاجَر'; }
+        function applyName() {
+            const n = getHerName();
+            document.querySelectorAll('.her-name').forEach(el => {
+                el.textContent = el.classList.contains('her-name-inline') ? `حبيبتي ${n}` : `يا ${n}`;
+            });
+            typedLetterText = `إلى ${n}...\n\nقبل أن تقرئي القصيدة، اعلمي أنّ كلَّ كلمةٍ فيها\nكُتبتْ مرتين: مرةً بالحبر، ومرةً بالاشتياق.`;
+        }
+
+        let typedLetterText = '';
+        function startTypewriter() {
+            if (typedStarted) return;
+            typedStarted = true;
+            typedText.classList.remove('done');
+            typedText.textContent = '';
+            let i = 0;
+            const timer = setInterval(() => {
+                typedText.textContent = typedLetterText.slice(0, ++i);
+                if (i >= typedLetterText.length) {
+                    clearInterval(timer);
+                    typedText.classList.add('done');
+                }
+            }, 45);
+        }
+
+        // REVEAL STANZAS ON SCROLL
+        function revealStanzas() {
+            const stanzas = document.querySelectorAll('.stanza');
+            stanzas.forEach((s, idx) => {
+                s.classList.remove('revealed');
+                setTimeout(() => s.classList.add('revealed'), 1200 + idx * 900);
+            });
+        }
+
+        // NAME EDITOR
+        document.getElementById('rename-btn').addEventListener('click', () => {
+            const current = getHerName();
+            const name = prompt('اسمُها؟', current);
+            if (name && name.trim()) {
+                localStorage.setItem('herName', name.trim());
+                applyName();
+                showToast('✦ تمّ — القصيدة الآن لها وحدَها');
+            }
+        });
+        applyName();
+
+        // DAILY MESSAGE + MEMORY OF THE DAY
         const dailyMessages = [
             'كلُّ يومٍ يمرُّ... ويبقى قلبي مكانًا لا يسكنه إلا أنتِ يا هاجر.',
             'إذا كانَ للحُبِّ عنوانٌ، فأنّا نعرفهُ حينَ أراكِ.',
@@ -862,91 +1131,142 @@
         ];
         document.getElementById('daily-text').innerText = dailyMessages[new Date().getDay()];
 
-        function playChime() {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                const ctx = new AudioCtx();
-                
-                const notes = [261.63, 329.63, 392.00, 523.25];
-                notes.forEach((freq, idx) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    
-                    osc.type = 'sine';
-                    osc.frequency.value = freq;
-                    
-                    gain.gain.setValueAtTime(0, ctx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 0.1 + (idx * 0.15));
-                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.5 + (idx * 0.2));
-                    
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    
-                    osc.start(ctx.currentTime + (idx * 0.15));
-                    osc.stop(ctx.currentTime + 3.0);
-                });
-            } catch (e) {}
+        const memoriesOfDay = [
+            'ذكرى اليوم: ضحكتِ من قلبك... وأنا نسيتُ العالم كله.',
+            'ذكرى اليوم: أولُ رسالةٍ أرسلتِها لي... قرأتُها ألف مرّة.',
+            'ذكرى اليوم: مشينا طويلًا ولا أذكري الطريق... كنتُ أنظر إليكِ.',
+            'ذكرى اليوم: قالت لي إنّها تعتمد عليّ... فشعرتُ أنّ لي وطنًا.',
+            'ذكرى اليوم: غنّيتِ بصوتٍ خفيض... حفظتُ اللحن لا الكلمات.',
+            'ذكرى اليوم: أمسكتِ يدي في الزحام... فصارَ الزحامُ سلامًا.',
+            'ذكرى اليوم: نظرتِ إليّ نظرةً واحدة... وكتبتُ عنها هذا الموقع.'
+        ];
+        document.getElementById('memory-text').innerText =
+            memoriesOfDay[new Date().getDate() % memoriesOfDay.length];
+
+        // COUNTDOWN
+        function nextSpecialDate() {
+            const now = new Date();
+            let d = new Date(now.getFullYear(), SPECIAL_DATE.month - 1, SPECIAL_DATE.day);
+            if (d < now) d = new Date(now.getFullYear() + 1, SPECIAL_DATE.month - 1, SPECIAL_DATE.day);
+            return d;
         }
+        setInterval(() => {
+            const diff = nextSpecialDate() - new Date();
+            const days = Math.floor(diff / 864e5);
+            const hours = Math.floor(diff % 864e5 / 36e5);
+            const mins = Math.floor(diff % 36e5 / 6e4);
+            const secs = Math.floor(diff % 6e4 / 1e3);
+            document.getElementById('cd-days').textContent = days;
+            document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+            document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+        }, 1000);
 
-        // Open Poem Canvas
-        document.querySelectorAll('.trigger-click, .product-card, .hero-banner').forEach(element => {
-            element.addEventListener('click', function(e) {
-                e.stopPropagation();
-                
-                playChime();
+        // REASONS GENERATOR
+        const reasons = [
+            'لأنّكِ تبتسمين... فيصيرُ يومي الصعبُ أسهلَ ما يكون.',
+            'لأنّ صوتكِ هو الموسيقى الوحيدةُ التي لا أتعَبُ منها.',
+            'لأنّكِ تؤمنين بي أكثر ممّا أؤمنُ بنفسي.',
+            'لأنّكِ تجعلين العاديّ معكِ استثنائيًّا.',
+            'لأنّكِ قلبُكِ أكبرُ من أن تتّسع له الدنيا.',
+            'لأنّكِ تسمعين ما لا أقول، وتفهمين ما لا أعرف كيف أشرحه.',
+            'لأنّ المستقبل معكِ... ليس مخيفًا بل مُشتاقًا إليه.',
+            'لأنّكِ دعاءُ كلِّ ليلة، وشكرُ كلِّ صباح.',
+            'لأنّكِ عندما تغمضين عينيكِ... أثقُ أنّ الدنيا بخير.',
+            'لأنّكِ يا هاجر... ببساطة، أنتِ السبب.'
+        ];
+        const reasonText = document.getElementById('reason-text');
+        const reasonBox = document.querySelector('.reason-box');
+        let reasonIdx = new Date().getDate() % reasons.length;
+        reasonText.innerText = reasons[reasonIdx];
 
-                const shopContainer = document.getElementById('shop-container');
-                const loaderOverlay = document.getElementById('loader-overlay');
-                const poemContainer = document.getElementById('poem-container');
-                const ambientBg = document.getElementById('ambient-bg');
-                
-                document.getElementById('loader-sub-text').innerText = 'جاري فتح سر صُنع لكِ خصيصًا...';
-
-                loaderOverlay.classList.add('active');
-
-                setTimeout(() => {
-                    shopContainer.style.display = 'none';
-                    loaderOverlay.classList.remove('active');
-                    
-                    document.body.style.backgroundColor = 'var(--bg-dark)';
-                    
-                    ambientBg.style.display = 'block';
-                    poemContainer.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        poemContainer.style.opacity = '1';
-                    }, 50);
-
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 1800);
-            });
+        document.getElementById('reason-btn').addEventListener('click', () => {
+            reasonBox.classList.add('fade');
+            setTimeout(() => {
+                reasonIdx = (reasonIdx + 1) % reasons.length;
+                reasonText.innerText = reasons[reasonIdx];
+                reasonBox.classList.remove('fade');
+            }, 350);
         });
 
-        // Return to Store Action
-        document.getElementById('return-btn').addEventListener('click', function() {
-            playChime();
+        // SCRATCH CARD
+        const sc = document.getElementById('scratch-canvas');
+        const sctx = sc.getContext('2d');
+        let scratching = false, scratched = false;
 
-            const shopContainer = document.getElementById('shop-container');
-            const loaderOverlay = document.getElementById('loader-overlay');
-            const poemContainer = document.getElementById('poem-container');
-            const ambientBg = document.getElementById('ambient-bg');
+        function initScratch() {
+            sc.width = sc.offsetWidth;
+            sc.height = sc.offsetHeight;
+            sctx.globalCompositeOperation = 'source-over';
+            const g = sctx.createLinearGradient(0, 0, sc.width, sc.height);
+            g.addColorStop(0, '#3a3320'); g.addColorStop(0.5, '#6b5a2e'); g.addColorStop(1, '#3a3320');
+            sctx.fillStyle = g;
+            sctx.fillRect(0, 0, sc.width, sc.height);
+            sctx.fillStyle = 'rgba(212,175,55,0.35)';
+            sctx.font = `${Math.max(16, sc.width / 22)}px Montserrat, sans-serif`;
+            sctx.textAlign = 'center';
+            sctx.fillText('✦ اكتشفي بيديكِ ✦', sc.width / 2, sc.height / 2);
+        }
+        initScratch();
+        addEventListener('resize', () => { if (!scratched) initScratch(); });
 
-            document.getElementById('loader-sub-text').innerText = 'جاري العودة إلى المتجر...';
+        function scratchPos(e) {
+            const rect = sc.getBoundingClientRect();
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        }
 
-            poemContainer.style.opacity = '0';
-            loaderOverlay.classList.add('active');
+        sc.addEventListener('pointerdown', (e) => {
+            scratching = true;
+            sc.setPointerCapture(e.pointerId);
+            scratchMove(e);
+        });
+        sc.addEventListener('pointerup', () => scratching = false);
+        sc.addEventListener('pointerleave', () => scratching = false);
 
-            setTimeout(() => {
-                poemContainer.style.display = 'none';
-                ambientBg.style.display = 'none';
-                loaderOverlay.classList.remove('active');
-                
-                document.body.style.backgroundColor = 'var(--bg-light)';
-                shopContainer.style.display = 'block';
+        function scratchMove(e) {
+            if (!scratching || scratched) return;
+            const { x, y } = scratchPos(e);
+            sctx.globalCompositeOperation = 'destination-out';
+            sctx.beginPath();
+            sctx.arc(x, y, 28, 0, Math.PI * 2);
+            sctx.fill();
 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 1500);
+            const imgData = sctx.getImageData(0, 0, sc.width, sc.height).data;
+            let clear = 0;
+            for (let i = 3; i < imgData.length; i += 40) {
+                if (imgData[i] === 0) clear++;
+            }
+            if (clear / (imgData.length / 40) > 0.45) {
+                scratched = true;
+                sctx.clearRect(0, 0, sc.width, sc.height);
+                playChime();
+                burstConfetti(innerWidth / 2, innerHeight / 2, 140);
+                showToast('🎉 وجدتِ مفاجأتكِ!');
+                if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+            }
+        }
+        sc.addEventListener('pointermove', scratchMove);
+
+        // VOICE NOTE
+        fetch(VOICE_NOTE_FILE, { method: 'HEAD' })
+            .then(r => {
+                if (r.ok) {
+                    document.getElementById('voice-diamond').style.display = 'inline-flex';
+                    document.getElementById('voice-hint').style.display = 'block';
+                }
+            })
+            .catch(() => {});
+
+        document.getElementById('voice-diamond')?.addEventListener('click', function() {
+            let audio = document.getElementById('voice-audio');
+            if (!audio) {
+                audio = document.createElement('audio');
+                audio.id = 'voice-audio';
+                audio.src = VOICE_NOTE_FILE;
+                document.body.appendChild(audio);
+            }
+            audio.paused ? audio.play() : audio.pause();
+            this.style.background = audio.paused ? '' : 'rgba(212,175,55,0.3)';
         });
     </script>
 </body>
