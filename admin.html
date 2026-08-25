@@ -162,6 +162,7 @@ function showTab(t) {
 
 const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 async function saveKey(key, value) {
+    if (!DB_OK) throw new Error('جدول content غير موجود — شغّلي أمر SQL أولاً');
     const r = await fetch(`${SB_URL}/rest/v1/content`, {
         method: 'POST',
         headers: { ...H, Prefer: 'resolution=merge-duplicates' },
@@ -173,14 +174,32 @@ async function saveKey(key, value) {
 // ================= PUZZLES =================
 let P = [];
 
+let DB_OK = true;
+
 async function loadAll() {
-    const r = await fetch(`${SB_URL}/rest/v1/content?select=*`, { headers: H });
-    const rows = await r.json();
-    const map = Object.fromEntries(rows.map(x => [x.key, x.value]));
-    P = Array.isArray(map.puzzles) ? map.puzzles : [];
-    T = map.texts || {};
-    renderPuzzleList();
-    fillTexts();
+    try {
+        const r = await fetch(`${SB_URL}/rest/v1/content?select=*`, { headers: H });
+        if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            if (err.code === '42P01' || r.status === 404) {
+                DB_OK = false;
+                document.getElementById('plist').innerHTML =
+                    '<div class="empty" style="color:#e03131">⚠️ جدول content غير موجود!<br><br>شغّلي أمر SQL الذي أرسله لك في Supabase ثم اضغطي «↺ تحديث»</div>';
+                return;
+            }
+            throw new Error(err.message || r.status);
+        }
+        const rows = await r.json();
+        DB_OK = true;
+        const map = Object.fromEntries(rows.map(x => [x.key, x.value]));
+        P = Array.isArray(map.puzzles) ? map.puzzles : [];
+        T = map.texts || {};
+        renderPuzzleList();
+        fillTexts();
+    } catch (e) {
+        document.getElementById('plist').innerHTML =
+            `<div class="empty">⚠️ خطأ اتصال: ${esc(e.message)}</div>`;
+    }
 }
 
 function renderPuzzleList() {
