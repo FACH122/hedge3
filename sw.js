@@ -1,4 +1,4 @@
-const CACHE_NAME = 'maison-eternite-v38';
+const CACHE_NAME = 'maison-eternite-v39';
 const APP_SHELL = [
     './',
     './index.html',
@@ -34,6 +34,10 @@ self.addEventListener('fetch', (event) => {
 
     // Network-first for navigation, fall back to cache (offline support)
     if (request.mode === 'navigate') {
+        if (request.url.includes('admin.html')) {
+            event.respondWith(fetch(request));
+            return;
+        }
         event.respondWith(
             fetch(request)
                 .then((response) => {
