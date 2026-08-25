@@ -1195,6 +1195,7 @@
             const hl = document.getElementById('hidden-letter-text');
             if (hl && t.hiddenLetter) hl.innerText = t.hiddenLetter.split('{name}').join(getHerName());
         }
+        applyTexts();
 
         // DEFAULT POEM (fallback when DB has no poem yet)
         const DEFAULT_POEM = [
@@ -1441,6 +1442,7 @@
         });
 
         // PUZZLE ENGINE — ID-based progress, immune to edits/reorders
+        let puzzles = [];
         function normAnswer(s) {
             return s.trim().replace(/[أإآ]/g, 'ا').replace(/[ةه]/g, 'ه').replace(/[\s\u064B-\u0652]/g, '').toLowerCase();
         }
