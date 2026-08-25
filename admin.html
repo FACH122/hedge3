@@ -177,7 +177,8 @@ let P = [];
 
 let DB_OK = true;
 
-async function loadAll() {
+let _retryTimer = null;
+async function loadAll(retry) {
     try {
         const r = await fetch(`${SB_URL}/rest/v1/content?select=*`, { headers: H });
         if (!r.ok) {
@@ -199,7 +200,9 @@ async function loadAll() {
         fillTexts();
     } catch (e) {
         document.getElementById('plist').innerHTML =
-            `<div class="empty">⚠️ خطأ اتصال: ${esc(e.message)}</div>`;
+            '<div class="empty">⚠️ ضعف الاتصال... جاري إعادة المحاولة تلقائياً</div>';
+        clearTimeout(_retryTimer);
+        _retryTimer = setTimeout(() => loadAll(true), 4000);
     }
 }
 
