@@ -1,13 +1,13 @@
 {
-    "name": "Maison de L'Éternité — Haute Parfumerie & Joaillerie",
-    "short_name": "L'Éternité",
-    "description": "Maison de L'Éternité — Haute Parfumerie & Joaillerie",
+    "name": "حديقتي السحرية — Wonderland",
+    "short_name": "Wonderland",
+    "description": "حديقة سحرية وردية من الأحلام والمفاجآت",
     "start_url": "./index.html",
     "scope": "./",
     "display": "standalone",
     "orientation": "portrait-primary",
-    "background_color": "#050608",
-    "theme_color": "#050608",
+    "background_color": "#ffe9f3",
+    "theme_color": "#ff8fab",
     "lang": "ar",
     "dir": "rtl",
     "icons": [
