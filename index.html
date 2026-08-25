@@ -194,14 +194,24 @@
         .reasons-section { text-align: center; margin-bottom: 100px; }
 
         .reason-box {
-            max-width: 620px; margin: 36px auto 26px; min-height: 130px;
-            display: flex; align-items: center; justify-content: center; padding: 34px;
-            border-radius: 16px; border: 1px dashed rgba(231,90,156,0.35);
-            background: rgba(231,90,156,0.04); font-size: 1.55rem; line-height: 2;
+            position: relative; overflow: hidden;
+            max-width: 620px; margin: 36px auto 26px; min-height: 150px;
+            display: flex; align-items: center; justify-content: center; padding: 34px 24px;
+            border-radius: 16px; border: 1px solid var(--border-gold);
+            background: #fff; font-size: 1.45rem; line-height: 2;
             color: var(--gold-light); transition: opacity 0.35s ease, transform 0.35s ease;
         }
 
-        .reason-box.fade { opacity: 0; transform: translateY(8px); }
+        .reason-hint {
+            display: block; font-family: 'Montserrat', sans-serif;
+            font-size: 0.62rem; letter-spacing: 3px; color: #d6336c;
+            text-transform: uppercase; margin-bottom: 12px;
+        }
+
+        #reason-canvas {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            touch-action: none; cursor: crosshair; border-radius: 16px;
+        }
 
         .scratch-section { text-align: center; margin-bottom: 100px; }
 
@@ -645,7 +655,13 @@
                     <span>Aseab Hobbi</span>
                     <h3>أسبابُ حبّي لكِ</h3>
                 </div>
-                <div class="reason-box"><p id="reason-text"></p></div>
+                <div class="reason-box">
+                    <div style="position:relative;z-index:2">
+                        <span class="reason-hint">✦ سببٌ من قلبي ✦</span>
+                        <p id="reason-text" style="margin:0"></p>
+                    </div>
+                    <canvas id="reason-canvas"></canvas>
+                </div>
                 <button class="btn-gold" id="reason-btn">✦ أعطيني سببًا آخر ✦</button>
             </section>
 
@@ -1205,13 +1221,66 @@
         }
 
         document.getElementById('reason-btn').addEventListener('click', () => {
-            reasonBox.classList.add('fade');
-            setTimeout(() => {
-                reasonIdx = (reasonIdx + 1) % reasons.length;
-                reasonText.innerText = reasons[reasonIdx];
-                reasonBox.classList.remove('fade');
-            }, 350);
+            reasonIdx = (reasonIdx + 1) % reasons.length;
+            reasonText.innerText = reasons[reasonIdx];
+            rRevealed = false;
+            initReasonFoil();
         });
+
+        // REASON SCRATCH FOIL
+        const rc = document.getElementById('reason-canvas');
+        const rcx = rc.getContext('2d');
+        let rScratching = false, rRevealed = false;
+
+        function initReasonFoil() {
+            rc.width = rc.offsetWidth || 600;
+            rc.height = rc.offsetHeight || 150;
+            rcx.globalCompositeOperation = 'source-over';
+            const g = rcx.createLinearGradient(0, 0, rc.width, rc.height);
+            g.addColorStop(0, '#f9cfe3'); g.addColorStop(0.5, '#e78ab5'); g.addColorStop(1, '#f9cfe3');
+            rcx.fillStyle = g;
+            rcx.fillRect(0, 0, rc.width, rc.height);
+            rcx.fillStyle = 'rgba(255,255,255,0.85)';
+            rcx.font = `${Math.max(14, rc.width / 30)}px Montserrat, sans-serif`;
+            rcx.textAlign = 'center';
+            rcx.fillText('✨ اكتشفي سببَ الحب بلمسة صغيرة', rc.width / 2, rc.height / 2);
+        }
+        initReasonFoil();
+        addEventListener('resize', () => { if (!rRevealed) initReasonFoil(); });
+
+        function reasonPos(e) {
+            const rect = rc.getBoundingClientRect();
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        }
+
+        rc.addEventListener('pointerdown', (e) => {
+            if (rRevealed) return;
+            rScratching = true;
+            rc.setPointerCapture(e.pointerId);
+            reasonScratch(e);
+        });
+        rc.addEventListener('pointerup', () => rScratching = false);
+        rc.addEventListener('pointerleave', () => rScratching = false);
+
+        function reasonScratch(e) {
+            if (!rScratching || rRevealed) return;
+            const { x, y } = reasonPos(e);
+            rcx.globalCompositeOperation = 'destination-out';
+            rcx.beginPath();
+            rcx.arc(x, y, 26, 0, Math.PI * 2);
+            rcx.fill();
+
+            const data = rcx.getImageData(0, 0, rc.width, rc.height).data;
+            let clear = 0;
+            for (let i = 3; i < data.length; i += 40) if (data[i] === 0) clear++;
+            if (clear / (data.length / 40) > 0.5) {
+                rRevealed = true;
+                rcx.clearRect(0, 0, rc.width, rc.height);
+                playChime();
+                burstConfetti(innerWidth / 2, innerHeight / 2, 45);
+            }
+        }
+        rc.addEventListener('pointermove', reasonScratch);
 
         // SCRATCH CARD
         const sc = document.getElementById('scratch-canvas');
