@@ -1065,12 +1065,12 @@
     });
 
     // ================= CONTENT LOADING =================
-    async function loadContent(retry) {
+    async function loadContent() {
         try {
             const r = await fetch(`${SUPABASE_URL}/rest/v1/content?select=*`, {
                 headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
             });
-            if (!r.ok && retry !== false) return setTimeout(() => loadContent(false), 3000);
+            if (!r.ok) return;
             const rows = await r.json();
             rows.forEach(row => {
                 if (row.key === 'puzzles' && Array.isArray(row.value)) {
@@ -1091,10 +1091,7 @@
                     poemData = row.value;
                 }
             });
-        } catch (e) {
-            if (retry !== false) setTimeout(() => loadContent(false), 3000);
-            return;
-        }
+        } catch (e) {}
         refreshTexts();
         buildPoem();
         applyName();
