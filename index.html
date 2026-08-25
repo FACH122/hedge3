@@ -593,6 +593,47 @@
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
+        /* Daily Message Card */
+        .daily-message {
+            max-width: 640px;
+            margin: 0 auto 70px;
+            text-align: center;
+            padding: 34px 30px;
+            border-radius: 14px;
+            border: 1px solid var(--border-gold);
+            background: linear-gradient(160deg, #fffdf5 0%, #fbf4e0 100%);
+            box-shadow: 0 15px 40px rgba(179, 135, 40, 0.10);
+            position: relative;
+        }
+
+        .daily-message::before {
+            content: '✦';
+            position: absolute;
+            top: -13px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fbfbf9;
+            padding: 0 14px;
+            color: #b38728;
+            font-size: 1rem;
+        }
+
+        .dm-label {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 4px;
+            color: #b38728;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        #daily-text {
+            font-size: 1.45rem;
+            line-height: 2;
+            color: #2a2a2a;
+        }
+
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: 1fr; }
             .hero-content h2 { font-size: 2.4rem; }
@@ -637,6 +678,11 @@
                 <button class="btn-gold">استكشفي السر</button>
             </div>
         </section>
+
+        <div class="daily-message">
+            <span class="dm-label">✦ Message du Jour ✦</span>
+            <p id="daily-text"></p>
+        </div>
 
         <div class="section-header">
             <span>Collection Privée</span>
@@ -803,6 +849,18 @@
         window.addEventListener('appinstalled', () => {
             installBtn.style.display = 'none';
         });
+
+        // Daily Message — a different verse every day of the week
+        const dailyMessages = [
+            'كلُّ يومٍ يمرُّ... ويبقى قلبي مكانًا لا يسكنه إلا أنتِ يا هاجر.',
+            'إذا كانَ للحُبِّ عنوانٌ، فأنّا نعرفهُ حينَ أراكِ.',
+            'بينَ آلافِ الوجوه... عيناي لا تعرفانِ سوى دربكِ.',
+            'أنتِ القهوةُ في الصباح، والهدوءُ بعدَ العناء، والحكايةُ كلُّها.',
+            'لو كانَ للقلبِ صوتٌ، لسمعتَ العالمَ كلهُ ينادي باسمكِ.',
+            'معكِ... حتى العادي يصيرُ احتفالًا، والانتظارُ حلوى.',
+            'كلُّ مساءٍ أغمضُ عينيّ، فأجدُكِ أنتِ الحلمُ الذي لا أستيقظُ منه.'
+        ];
+        document.getElementById('daily-text').innerText = dailyMessages[new Date().getDay()];
 
         function playChime() {
             try {
