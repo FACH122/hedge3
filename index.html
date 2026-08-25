@@ -178,54 +178,18 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; margin-bottom: 100px; }
 
-        .product-card {
-            background: var(--bg-card); border: 1px solid rgba(231,90,156,0.14); border-radius: 14px;
-            overflow: hidden; cursor: pointer; user-select: none; -webkit-user-select: none;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative;
-        }
 
-        .product-card:hover {
-            transform: translateY(-12px); box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            border-color: rgba(231,90,156,0.4);
-        }
 
-        .product-badge {
-            position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.85);
-            color: var(--gold-light); font-family: 'Montserrat', sans-serif; font-size: 0.6rem;
-            letter-spacing: 2px; padding: 6px 14px; text-transform: uppercase; z-index: 2;
-            border-radius: 20px; border: 1px solid var(--border-gold);
-        }
 
-        .press-hint {
-            position: absolute; bottom: 150px; left: 50%; transform: translateX(-50%) scale(0.8);
-            background: rgba(255,255,255,0.92); border: 1px solid var(--border-gold); color: var(--gold-light);
-            font-size: 1rem; padding: 14px 22px; border-radius: 12px; white-space: nowrap; max-width: 88%;
-            opacity: 0; pointer-events: none; transition: all 0.35s ease; z-index: 5; line-height: 1.8;
-        }
 
-        .press-hint.show { opacity: 1; transform: translateX(-50%) scale(1); }
 
-        .product-img-wrapper { width: 100%; height: 360px; overflow: hidden; background: #fff0f7; }
 
-        .product-img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-        }
 
-        .product-card:hover .product-img { transform: scale(1.07); }
 
-        .product-info { padding: 28px 24px; text-align: center; }
 
-        .product-category {
-            font-family: 'Montserrat', sans-serif; font-size: 0.66rem; letter-spacing: 3px;
-            color: #c2255c; text-transform: uppercase; margin-bottom: 8px;
-        }
 
-        .product-title { font-size: 1.3rem; margin-bottom: 10px; color: var(--gold-light); }
 
-        .product-price { font-family: 'Montserrat', sans-serif; color: #8a6076; font-size: 1rem; letter-spacing: 1px; }
 
         .reasons-section { text-align: center; margin-bottom: 100px; }
 
@@ -603,7 +567,6 @@
         .puzzle-reward { font-size: 1.45rem; line-height: 2.2; color: var(--gold-light); white-space: pre-line; }
 
         @media (max-width: 900px) {
-            .product-grid { grid-template-columns: 1fr; }
             .hero-content h2 { font-size: 2.3rem; }
             header.poem-header h1 { font-size: 2.7rem; }
             .stanza { font-size: 1.3rem; padding: 38px 24px; }
@@ -616,18 +579,18 @@
         }
 
         /* HIERARCHY PASS */
-        .product-card, .daily-message, .puzzle-card, .typed-letter,
+        .daily-message, .puzzle-card, .typed-letter,
         .reason-box, .scratch-wrap {
             box-shadow: 0 10px 30px rgba(214, 51, 108, 0.09);
         }
 
-        .product-card:hover, .daily-message, .puzzle-card {
+        .daily-message, .puzzle-card {
             box-shadow: 0 18px 44px rgba(214, 51, 108, 0.14);
         }
 
         .section-header h3 { letter-spacing: 1px; }
 
-        .dm-label, .product-category, .tl-label {
+        .dm-label, .tl-label {
             font-weight: 600;
         }
     </style>
@@ -676,13 +639,6 @@
                 <p id="daily-text"></p>
                 <p id="memory-text"></p>
             </div>
-
-            <div class="section-header">
-                <span>Zaouia El-Hob</span>
-                <h3>زهورُ حديقتي... كلُّ وردةٍ تحمل كلمة</h3>
-            </div>
-
-            <div class="product-grid" id="product-grid"></div>
 
             <section class="reasons-section">
                 <div class="section-header">
@@ -1103,70 +1059,7 @@
             }
         });
 
-        // PRODUCTS + LONG-PRESS NOTES + MEMORIES GALLERY
-        const products = [
-            { badge: '🌸', cat: 'زهور الحديقة', title: 'خاتم الألماس والأمل', price: '',
-              img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800&auto=format&fit=crop',
-              note: 'هذا الخاتم... اخترتُه وأنا أفكرُ بعينيكِ فقط. كلُّ بريقٍ فيه يحكي قصةً لا يعرفها أحدٌ سواهما.' },
-            { badge: '💖', cat: 'ذكرياتنا', title: 'قلادة الشمس الذهبية', price: '',
-              img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800&auto=format&fit=crop',
-              note: 'قلادة الشمس... لأنّكِ شمسُ صباحاتي حتى في الأيام الغائمة.' },
-            { badge: '✨', cat: 'أسرار القلب', title: 'أقراط اللؤلؤ الملكية', price: '',
-              img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop',
-              note: 'أقراط اللؤلؤ... لأنّكِ كاللؤلؤ: نادرة، صافية، وكلُّ من رآكِ يتمنّاك.' },
-            { badge: '🌷', cat: 'ألبوم الذكريات', title: 'أولُ ابتسامةٍ رأيتها لكِ', price: '',
-              img: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=800&auto=format&fit=crop',
-              note: 'هذه الابتسامة... التي أنقذتني يومًا لم أكن فيه أعرف أنّي أحتاج إنقاذًا.' },
-            { badge: '🌙', cat: 'ألبوم الذكريات', title: 'مساؤنا الأول', price: '',
-              img: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?q=80&w=800&auto=format&fit=crop',
-              note: 'الغروبُ ذلك المساء كان جميلًا... لكنّه لم يكن سوى خلفيةٍ لوجهكِ.' },
-            { badge: '⭐', cat: 'ألبوم الذكريات', title: 'وعدُ الشتاء', price: '',
-              img: 'https://images.unsplash.com/photo-1489549132488-d00b7eee80f1?q=800&auto=format&fit=crop',
-              note: 'وعدتُكِ أن يكونَ كلُّ شتائنا هكذا: باردٌ في الخارج... دافئٌ لأنّنا معًا.' }
-        ];
-
-        const grid = document.getElementById('product-grid');
-        products.forEach((p) => {
-            const card = document.createElement('div');
-            card.className = 'product-card trigger-click';
-            card.dataset.note = p.note;
-            card.innerHTML = `
-                <span class="product-badge">${p.badge}</span>
-                <div class="product-img-wrapper"><img class="product-img" src="${p.img}" alt="${p.title}" loading="lazy"></div>
-                <div class="product-info">
-                    <div class="product-category">${p.cat}</div>
-                    <div class="product-title">${p.title}</div>
-                    ${p.price ? `<div class="product-price">${p.price}</div>` : ''}
-                </div>
-                <div class="press-hint"></div>`;
-            grid.appendChild(card);
-        });
-
         let longPressFired = false;
-        document.querySelectorAll('.product-card').forEach(card => {
-            const hint = card.querySelector('.press-hint');
-            let pressTimer = null;
-
-            card.addEventListener('pointerdown', (e) => {
-                longPressFired = false;
-                pressTimer = setTimeout(() => {
-                    longPressFired = true;
-                    hint.innerText = card.dataset.note;
-                    hint.classList.add('show');
-                    playChime();
-                    burstConfetti(e.clientX, e.clientY, 40);
-                    if (navigator.vibrate) navigator.vibrate(40);
-                    setTimeout(() => hint.classList.remove('show'), 3500);
-                }, 600);
-            });
-
-            ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev =>
-                card.addEventListener(ev, () => clearTimeout(pressTimer)));
-
-            card.addEventListener('contextmenu', (e) => {
-                if (longPressFired) e.preventDefault();
-            });
-        });
 
         // OPEN POEM
         document.querySelectorAll('.trigger-click, .hero-banner').forEach(el => {
