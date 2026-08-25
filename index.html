@@ -904,6 +904,7 @@
     <button class="music-btn" id="music-btn" title="الموسيقى">♪</button>
     <button id="install-btn">✦ Install App</button>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SPECIAL_DATE = { month: 2, day: 14 };
         const VOICE_NOTE_FILE = 'voice.mp3';
@@ -1724,6 +1725,14 @@
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) loadRemoteContent();
         });
+
+        // REALTIME — instant updates when admin saves
+        try {
+            const sbLive = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            sbLive.channel('content-changes')
+                .on('postgres_changes', { event: '*', schema: 'public' }, () => loadRemoteContent())
+                .subscribe();
+        } catch (e) {}
 
         // VOICE NOTE
         fetch(VOICE_NOTE_FILE, { method: 'HEAD' })
