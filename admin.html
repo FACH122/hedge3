@@ -69,7 +69,7 @@
     </div>
 
     <div class="wrap" id="app" style="display:none">
-        <h1>✦ إدارة الحديقة ✦</h1>
+        <h1>✦ إدارة الحديقة ✦ <small style="color:#c2255c;font-size:0.7rem">v3.2</small></h1>
         <div class="tabs">
             <button class="tab-btn active" data-t="puzzles" onclick="showTab('puzzles')">🧩 الألغاز</button>
             <button class="tab-btn" data-t="texts" onclick="showTab('texts')">💬 النصوص</button>
@@ -203,6 +203,16 @@ async function loadAll() {
     }
 }
 
+document.getElementById('plist').addEventListener('input', e => {
+    const card = e.target.closest('.card');
+    if (!card || card.dataset.id === undefined) return;
+    const i = +card.dataset.i;
+    if (!P[i]) return;
+    if (e.target.classList.contains('f-q')) P[i].q = e.target.value.trim();
+    if (e.target.classList.contains('f-a')) P[i].a = e.target.value.split('|').map(s=>s.trim()).filter(Boolean);
+    if (e.target.classList.contains('f-rw')) P[i].reward = e.target.value.trim();
+});
+
 function renderPuzzleList() {
     const el = document.getElementById('plist');
     if (!P.length) {
@@ -256,7 +266,6 @@ async function savePuzzle(btn) {
     try {
         await saveKey('puzzles', P);
         setStatus(card, '✔ حُفظ — ظهرت في الموقع!', true);
-        setTimeout(loadPuzzlesQuiet, 400);
     } catch (e) {
         setStatus(card, '✕ فشل: ' + e.message, false);
     } finally { btn.disabled = false; }
