@@ -81,7 +81,7 @@
             <div class="toolbar">
                 <button class="tbtn" onclick="newPuzzle()">➕ لغز جديد</button>
                 <button class="tbtn" onclick="loadPuzzles()">↺ تحديث</button>
-                <span style="color:#7d5468;font-size:0.82rem">التغييرات تظهر لها خلال ثوانٍ</span>
+                <span style="color:#7d5468;font-size:0.82rem">📅 حدّدي يوم فتح كل صندوق — يُفتح تلقائياً في يومه</span>
             </div>
             <div id="plist"><div class="loading">...جاري التحميل</div></div>
         </div>
@@ -211,6 +211,7 @@ document.getElementById('plist').addEventListener('input', e => {
     if (e.target.classList.contains('f-q')) P[i].q = e.target.value.trim();
     if (e.target.classList.contains('f-a')) P[i].a = e.target.value.split('|').map(s=>s.trim()).filter(Boolean);
     if (e.target.classList.contains('f-rw')) P[i].reward = e.target.value.trim();
+    if (e.target.classList.contains('f-unlock')) P[i].unlock = e.target.value;
 });
 
 function renderPuzzleList() {
@@ -223,7 +224,9 @@ function renderPuzzleList() {
         <div class="card" data-i="${i}">
             <div class="num-row">
                 <div class="num-badge">${i+1}</div>
-                <div style="flex:1;font-size:0.78rem;color:#7d5468">معرّف: ${esc(p.qid||'')}</div>
+                <label style="margin:0;flex:1;text-align:left">📅 يوم الفتح:
+                    <input type="date" class="f-unlock" value="${esc(p.unlock||'')}" style="border:1px solid #f3d3e1;border-radius:8px;padding:6px 10px;color:#44263b;margin-inline-start:6px">
+                </label>
             </div>
             <label>❓ السؤال</label>
             <textarea class="f-q">${esc(p.q)}</textarea>
@@ -252,7 +255,8 @@ function cardData(card) {
         q: card.querySelector('.f-q').value.trim(),
         a: card.querySelector('.f-a').value.split('|').map(s=>s.trim()).filter(Boolean),
         reward: card.querySelector('.f-rw').value.trim(),
-        reward_image: card.querySelector('.f-img').value.trim()
+        reward_image: card.querySelector('.f-img').value.trim(),
+        unlock: (card.querySelector('.f-unlock') || {}).value || ''
     };
 }
 
@@ -289,7 +293,9 @@ async function deletePuzzle(btn) {
 }
 
 function newPuzzle() {
-    P.push({ qid: crypto.randomUUID(), q:'', a:[], reward:'', reward_image:'' });
+    const t = new Date();
+    const todayStr = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+    P.push({ qid: crypto.randomUUID(), q:'', a:[], reward:'', reward_image:'', unlock: todayStr });
     renderPuzzleList();
     const first = document.getElementById('plist').querySelector('.card');
     first.scrollIntoView({ behavior:'smooth' });

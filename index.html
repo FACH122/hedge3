@@ -9,25 +9,26 @@
     <meta name="theme-color" content="#ff8fab">
     <meta name="description" content="حديقة سحرية وردية من الأحلام والمفاجآت">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="L'Éternité">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Wonderland">
     <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --gold-primary: #d6336c;
-            --gold-light: #c2255c;
-            --gold-gradient: linear-gradient(135deg, #f783ac 0%, #e64980 50%, #c2255c 100%);
-            --bg-dark: #ffe9f3;
-            --bg-surface: rgba(255, 255, 255, 0.94);
-            --bg-card: #ffffff;
-            --text-light: #44263b;
-            --border-gold: rgba(214, 51, 108, 0.18);
+            --primary: #d6336c;
+            --accent: #c2255c;
+            --grad: linear-gradient(135deg, #f783ac 0%, #e64980 50%, #c2255c 100%);
+            --bg-soft: #ffe9f3;
+            --card: #ffffff;
+            --surface: rgba(255, 255, 255, 0.94);
+            --text-main: #44263b;
+            --text-sub: #7d5468;
+            --border: rgba(214, 51, 108, 0.18);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
@@ -38,7 +39,7 @@
                 radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,182,213,0.28), transparent),
                 radial-gradient(ellipse 60% 40% at 90% 110%, rgba(255,143,177,0.12), transparent),
                 linear-gradient(180deg, #fffafd 0%, #fceef5 100%);
-            color: var(--text-light);
+            color: var(--text-main);
             font-family: 'Amiri', serif;
             min-height: 100vh;
             overflow-x: hidden;
@@ -46,1595 +47,1101 @@
 
         #fx-canvas { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 
-        .grain {
-            position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        main, header.shop-header, .top-banner { position: relative; z-index: 3; }
-
-        #shop-container {
-            width: 100%; max-width: 1320px; margin: 0 auto;
-            padding: 0 30px 80px;
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
+        .page { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 18px 70px; position: relative; z-index: 3; }
 
         .top-banner {
             text-align: center; font-family: 'Montserrat', sans-serif; font-size: 0.68rem;
-            letter-spacing: 3px; text-transform: uppercase; padding: 13px 0; color: #7d5468;
-            border-bottom: 1px solid rgba(231,90,156,0.12);
-            display: flex; justify-content: space-between; align-items: center;
+            letter-spacing: 3px; color: #8a6076; padding: 13px 0; text-transform: uppercase;
         }
 
-        .top-banner .gold-tag {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600;
-        }
-
-        header.shop-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 28px 0; border-bottom: 1px solid rgba(231,90,156,0.14); margin-bottom: 60px;
-        }
-
-        .shop-brand { text-align: center; cursor: pointer; user-select: none; }
-
-        .shop-brand h1 {
-            font-family: 'Cinzel Decorative', serif; font-size: 1.85rem; letter-spacing: 5px; font-weight: 700;
-            background: linear-gradient(120deg, #ff8fab, #c2255c, #ff8fab); background-size: 200% auto;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .brand { text-align: center; cursor: pointer; user-select: none; padding: 10px 0 34px; }
+        .brand h1 {
+            font-size: 2rem; letter-spacing: 2px; font-weight: 700;
+            background: linear-gradient(120deg, #ff8fab, #c2255c, #ff8fab);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: shimmer 6s linear infinite;
         }
-
         @keyframes shimmer { to { background-position: 200% center; } }
-
-        .shop-brand span {
-            font-family: 'Montserrat', sans-serif; font-size: 0.62rem; letter-spacing: 7px;
-            color: #7d5468; text-transform: uppercase; display: block; margin-top: 5px;
+        .brand span {
+            font-family: 'Montserrat', sans-serif; font-size: 0.62rem; letter-spacing: 6px;
+            color: #8a6076; display: block; margin-top: 5px; text-transform: uppercase;
         }
 
-        .shop-nav {
-            display: flex; gap: 36px; list-style: none;
-            font-family: 'Montserrat', sans-serif; font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase;
+        .card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(214,51,108,0.09);
+            padding: 30px 26px; margin-bottom: 26px; text-align: center;
         }
 
-        .shop-nav a, .action-btn {
-            color: #8a6076; text-decoration: none; cursor: pointer; transition: color 0.3s ease; position: relative;
+        .label {
+            display: block; font-family: 'Montserrat', sans-serif; font-weight: 600;
+            font-size: 0.66rem; letter-spacing: 4px; color: var(--accent);
+            text-transform: uppercase; margin-bottom: 14px;
         }
 
-        .shop-nav a::after {
-            content: ''; position: absolute; bottom: -6px; right: 0; width: 0; height: 1px;
-            background: var(--gold-primary); transition: width 0.3s ease;
+        .hero {
+            border-radius: 18px; overflow: hidden; position: relative; height: 320px;
+            margin-bottom: 26px; cursor: pointer; border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .shop-nav a:hover::after { width: 100%; }
-        .shop-nav a:hover, .action-btn:hover { color: var(--gold-light); }
-
-        .hero-banner {
-            position: relative; height: 560px; border-radius: 18px; overflow: hidden;
-            display: flex; align-items: center; justify-content: center; text-align: center;
-            margin-bottom: 90px; box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-            border: 1px solid rgba(231,90,156,0.15); cursor: pointer;
-        }
-
-        .hero-bg {
-            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5;
-            transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .hero-banner:hover .hero-bg { transform: scale(1.05); }
-
+        .hero img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.75; }
         .hero-content {
-            position: relative; z-index: 2; max-width: 700px; padding: 44px;
-            background: rgba(255,255,255,0.45); backdrop-filter: blur(10px);
-            border: 1px solid rgba(231,90,156,0.22); border-radius: 14px;
+            position: relative; z-index: 2; background: rgba(255,240,248,0.82);
+            backdrop-filter: blur(8px); border: 1px solid var(--border);
+            border-radius: 14px; padding: 24px 30px; max-width: 80%;
         }
+        .hero-content h2 { font-size: 1.7rem; color: var(--accent); margin-bottom: 8px; }
+        .hero-content p { font-size: 1.05rem; line-height: 1.9; color: var(--text-main); }
 
-        .hero-content h2 {
-            font-family: 'Cinzel', serif; font-size: 3.3rem; font-weight: 400; letter-spacing: 6px; margin-bottom: 15px;
-            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        #memory-text { margin-top: 12px; font-size: 1rem; color: var(--text-sub); }
+        #daily-text { font-size: 1.35rem; line-height: 2; color: var(--accent); min-height: 1em; }
 
-        .hero-content p { font-size: 1.2rem; font-weight: 300; margin-bottom: 35px; opacity: 0.85; line-height: 1.9; }
-
-        .btn-gold {
-            background: var(--gold-gradient); color: #fff; padding: 17px 46px; border: none;
-            font-family: 'Montserrat', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 4px;
-            text-transform: uppercase; cursor: pointer; transition: all 0.4s ease; border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(231,90,156,0.25);
-        }
-
-        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(231,90,156,0.45); }
-
-        .daily-message {
-            max-width: 660px; margin: 0 auto 90px; text-align: center; padding: 38px 34px;
-            border-radius: 16px; border: 1px solid var(--border-gold);
-            background: var(--bg-card); backdrop-filter: blur(14px);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.35); position: relative;
-        }
-
-        .daily-message::before {
-            content: '✦'; position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            background: var(--bg-dark); padding: 0 16px; color: var(--gold-primary); font-size: 1.05rem;
-        }
-
-        .dm-label {
-            display: block; font-family: 'Montserrat', sans-serif; font-size: 0.66rem; letter-spacing: 4px;
-            color: #c2255c; text-transform: uppercase; margin-bottom: 16px;
-        }
-
-        #daily-text { font-size: 1.5rem; line-height: 2.1; color: var(--gold-light); }
-        #memory-text { margin-top: 14px; font-size: 1.05rem; color: #8a6076; }
-
-        .section-header { text-align: center; margin-bottom: 55px; }
-
-        .section-header span {
-            font-family: 'Montserrat', sans-serif; font-size: 0.72rem; letter-spacing: 4px;
-            color: #c2255c; text-transform: uppercase; display: block; margin-bottom: 10px;
-        }
-
-        .section-header h3 {
-            font-family: 'Cinzel', serif; font-size: 2.1rem; font-weight: 400; letter-spacing: 2px;
-            background: linear-gradient(120deg, #e64980, #a61e4d);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        .reasons-section { text-align: center; margin-bottom: 100px; }
-
+        /* REASONS SCRATCH */
         .reason-box {
-            position: relative; overflow: hidden;
-            max-width: 620px; margin: 36px auto 26px; min-height: 150px;
-            display: flex; align-items: center; justify-content: center; padding: 34px 24px;
-            border-radius: 16px; border: 1px solid var(--border-gold);
-            background: #fff; font-size: 1.45rem; line-height: 2;
-            color: var(--gold-light); transition: opacity 0.35s ease, transform 0.35s ease;
+            position: relative; overflow: hidden; min-height: 150px;
+            display: flex; align-items: center; justify-content: center; padding: 26px 20px;
         }
-
         .reason-hint {
-            display: block; font-family: 'Montserrat', sans-serif;
-            font-size: 0.62rem; letter-spacing: 3px; color: #d6336c;
+            display: block; font-family: 'Montserrat', sans-serif; font-weight: 600;
+            font-size: 0.62rem; letter-spacing: 3px; color: var(--accent);
             text-transform: uppercase; margin-bottom: 12px;
         }
-
         #reason-canvas {
             position: absolute; inset: 0; width: 100%; height: 100%;
-            touch-action: none; cursor: crosshair; border-radius: 16px;
-            z-index: 5;
+            touch-action: none; cursor: crosshair; z-index: 5;
         }
+        #reason-text { font-size: 1.35rem; line-height: 2; color: var(--accent); margin: 0; }
 
-        .scratch-section { text-align: center; margin-bottom: 100px; }
-
+        /* PRIZE SCRATCH */
         .scratch-wrap {
-            position: relative; width: min(520px, 100%); height: 240px; margin: 40px auto 0;
-            border-radius: 16px; overflow: hidden; border: 1px solid var(--border-gold);
+            position: relative; width: min(480px, 100%); height: 210px;
+            margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid var(--border);
         }
-
         .scratch-prize {
             position: absolute; inset: 0; display: flex; flex-direction: column;
             align-items: center; justify-content: center; gap: 10px;
-            background: radial-gradient(circle at 50% 40%, rgba(231,90,156,0.16), rgba(255,240,248,0.98));
-            font-size: 1.6rem; color: var(--gold-light); line-height: 1.9;
+            background: radial-gradient(circle at 50% 40%, rgba(255,182,213,0.35), #fff0f7);
+            font-size: 1.4rem; color: var(--accent); line-height: 1.9;
         }
-
         .scratch-prize small {
-            font-family: 'Montserrat', sans-serif; font-size: 0.66rem; letter-spacing: 4px;
-            color: #7d5468; text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif; font-size: 0.62rem; letter-spacing: 4px;
+            color: #8a6076; text-transform: uppercase;
+        }
+        #scratch-canvas, #reason-canvas { touch-action: none; }
+
+        /* BUTTONS */
+        .btn {
+            background: var(--grad); color: #fff; border: none; cursor: pointer;
+            padding: 15px 38px; border-radius: 30px; font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(214,51,108,0.35); }
+        .btn:disabled { opacity: 0.55; cursor: wait; }
+        .btn-ghost {
+            background: transparent; color: var(--accent); border: 1px solid var(--border);
         }
 
-        #scratch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
-
-        footer.shop-footer {
-            text-align: center; border-top: 1px solid rgba(231,90,156,0.12); padding: 50px 0 0;
-            color: #7d5468; font-family: 'Montserrat', sans-serif; letter-spacing: 4px; font-size: 0.72rem;
-            text-transform: uppercase;
+        /* PUZZLE BOXES */
+        #boxes-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px; margin-bottom: 22px;
+        }
+        .box {
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 22px 12px; text-align: center; cursor: pointer; user-select: none;
+            transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+            box-shadow: 0 8px 22px rgba(214,51,108,0.08);
+        }
+        .box:hover { transform: translateY(-5px); box-shadow: 0 14px 32px rgba(214,51,108,0.16); }
+        .box .emoji { font-size: 2rem; display: block; margin-bottom: 10px; }
+        .box .num { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent); }
+        .box .sub { font-family: 'Montserrat', sans-serif; font-size: 0.68rem; color: var(--text-sub); margin-top: 6px; letter-spacing: 1px; }
+        .box.solved { opacity: 0.75; }
+        .box.locked { filter: grayscale(0.4); opacity: 0.85; cursor: not-allowed; }
+        .box.open-now { border-color: var(--primary); animation: glowpulse 2.2s ease-in-out infinite alternate; }
+        @keyframes glowpulse {
+            from { box-shadow: 0 8px 22px rgba(214,51,108,0.10); }
+            to   { box-shadow: 0 10px 30px rgba(214,51,108,0.35); }
         }
 
+        #box-detail { text-align: center; }
+        #box-detail .progress { font-family: 'Montserrat', sans-serif; font-size: 0.72rem;
+            font-weight: 600; letter-spacing: 2px; color: var(--accent); margin-bottom: 14px; text-transform: uppercase; }
+        #box-question { font-size: 1.45rem; line-height: 2; margin-bottom: 22px; color: var(--text-main); }
+        .answer-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        #box-answer {
+            flex: 1; min-width: 200px; max-width: 340px;
+            background: #fffbfd; border: 1px solid var(--border); border-radius: 30px;
+            padding: 14px 22px; font-family: 'Amiri', serif; font-size: 1.1rem;
+            color: var(--text-main); outline: none;
+        }
+        #box-answer:focus { border-color: var(--primary); }
+        .wrong-msg { margin-top: 16px; color: #e03131; font-size: 1rem; }
+
+        #reward-view { text-align: center; }
+        .reward-badge {
+            font-family: 'Aref Ruqaa', serif; font-size: 1.6rem; margin-bottom: 18px;
+            background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        #reward-image {
+            max-width: min(320px, 90%); border-radius: 14px; margin: 0 auto 18px;
+            display: block; border: 1px solid var(--border);
+            pointer-events: none; -webkit-user-select: none; user-select: none;
+            -webkit-user-drag: none; -webkit-touch-callout: none;
+        }
+        #reward-text { font-size: 1.35rem; line-height: 2.1; color: var(--accent); white-space: pre-line; }
+        .next-hint { margin-top: 16px; color: var(--text-sub); font-size: 0.95rem; }
+
+        .empty-note { color: var(--text-sub); font-size: 1.05rem; line-height: 2; padding: 10px 0; }
+
+        /* RECORDER */
+        .rec-zone { margin-top: 22px; padding-top: 20px; border-top: 1px dashed var(--border); }
+        .rec-divider { color: var(--text-sub); font-size: 0.85rem; letter-spacing: 3px; margin-bottom: 16px; }
+        .rec-timer { font-family: 'Montserrat', sans-serif; font-size: 1.25rem; color: var(--accent); min-width: 54px; }
+        .rec-dot { width: 13px; height: 13px; border-radius: 50%; background: #e03131; display: inline-block; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { opacity: 0.15; } }
+        .rec-row { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+        .mini-btn {
+            background: #fff; border: 1px solid var(--border); color: var(--accent);
+            padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 0.88rem; font-family: 'Amiri', serif;
+        }
+        .mini-btn:hover { background: #fff0f6; }
+        .rec-player { width: min(320px, 100%); height: 40px; margin: 12px auto 4px; display: block; }
+        .rec-status { font-size: 0.92rem; color: var(--primary); margin-top: 10px; min-height: 1.3em; }
+
+        footer.site-footer {
+            text-align: center; padding: 34px 0 0; color: var(--text-sub);
+            font-family: 'Montserrat', sans-serif; letter-spacing: 3px; font-size: 0.7rem; text-transform: uppercase;
+            border-top: 1px solid var(--border);
+        }
+
+        /* LOADER */
         #loader-overlay {
-            position: fixed; inset: 0; background: var(--bg-dark);
+            position: fixed; inset: 0; background: var(--bg-soft); z-index: 999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.8s ease;
+            opacity: 0; pointer-events: none; transition: opacity 0.7s ease;
         }
-
         #loader-overlay.active { opacity: 1; pointer-events: all; }
+        .loader-emblem { position: relative; width: 90px; height: 90px; margin-bottom: 28px;
+            display: flex; align-items: center; justify-content: center; }
+        .loader-ring { position: absolute; inset: 0; border-radius: 50%;
+            border: 2px solid rgba(214,51,108,0.15); border-top-color: var(--primary);
+            animation: spin 1.3s cubic-bezier(0.68,-0.55,0.27,1.55) infinite; }
+        .loader-diamond { font-size: 1.7rem; animation: pulse 1.4s ease-in-out infinite alternate; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { from { opacity: 0.45; transform: scale(0.92); } to { opacity: 1; transform: scale(1.1); } }
+        .loader-text { font-family: 'Montserrat', sans-serif; letter-spacing: 5px; color: var(--accent);
+            font-size: 0.95rem; margin-bottom: 6px; text-transform: uppercase; }
 
-        .loader-emblem {
-            position: relative; width: 100px; height: 100px; margin-bottom: 35px;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .loader-ring {
-            position: absolute; inset: 0; border-radius: 50%;
-            border: 1px solid rgba(231,90,156,0.15); border-top-color: var(--gold-primary);
-            animation: spin 1.4s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;
-        }
-
-        .loader-diamond {
-            font-size: 1.8rem; background: var(--gold-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: pulse 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.15); } }
-
-        .loader-text {
-            font-family: 'Cinzel', serif; font-size: 1.05rem; letter-spacing: 6px;
-            color: var(--gold-light); margin-bottom: 8px; text-transform: uppercase;
-        }
-
-        .loader-subtext { font-size: 1.1rem; color: #7d5468; }
-
+        /* POEM PAGE */
         #poem-container {
-            display: none; max-width: 820px; width: 100%; margin: 0 auto;
-            padding: 90px 25px 110px; opacity: 0; transition: opacity 1.8s ease;
+            display: none; max-width: 760px; margin: 0 auto; width: 100%;
+            padding: 60px 20px 90px; opacity: 0; transition: opacity 1.6s ease;
             position: relative; z-index: 3;
         }
-
-        header.poem-header { text-align: center; margin-bottom: 70px; position: relative; }
-
+        #poem-container.visible { opacity: 1; }
+        header.poem-header { text-align: center; margin-bottom: 50px; position: relative; }
         header.poem-header h1 {
-            font-family: 'Aref Ruqaa', serif; font-size: 3.6rem; font-weight: 400; margin-bottom: 20px;
-            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 25px rgba(231,90,156,0.2));
+            font-family: 'Aref Ruqaa', serif; font-size: 3rem; font-weight: 400; margin-bottom: 14px;
+            background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
         .rename-btn {
-            position: absolute; top: 8px; left: 0; background: transparent;
-            border: 1px solid var(--border-gold); color: #7d5468;
+            background: transparent; border: 1px solid var(--border); color: var(--text-sub);
             font-family: 'Montserrat', sans-serif; font-size: 0.62rem; letter-spacing: 2px;
-            padding: 7px 16px; border-radius: 20px; cursor: pointer; text-transform: uppercase;
-            transition: all 0.3s ease;
+            padding: 7px 16px; border-radius: 20px; cursor: pointer; margin-bottom: 12px;
         }
-
-        .rename-btn:hover { color: var(--gold-light); border-color: var(--gold-primary); }
-
-        .divider-ornament {
-            display: flex; align-items: center; justify-content: center; gap: 20px;
-            color: var(--gold-primary); opacity: 0.7; font-size: 0.9rem;
-        }
-
-        .divider-ornament::before, .divider-ornament::after {
-            content: ''; height: 1px; width: 110px;
-            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
-        }
-
-        .typed-letter {
-            background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 16px;
-            padding: 42px 38px; margin-bottom: 56px; backdrop-filter: blur(16px);
-            text-align: center; min-height: 120px;
-        }
-
-        .typed-letter .tl-label {
-            display: block; font-family: 'Montserrat', sans-serif; font-size: 0.64rem;
-            letter-spacing: 4px; color: #c2255c; text-transform: uppercase; margin-bottom: 20px;
-        }
-
-        #typed-text {
-            font-size: 1.4rem; line-height: 2.2; color: var(--gold-light); white-space: pre-line;
-        }
-
-        #typed-text::after { content: '▎'; color: var(--gold-primary); animation: caret 0.9s steps(1) infinite; }
+        .typed-letter { background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 34px 30px; margin-bottom: 44px; min-height: 100px; }
+        #typed-text { font-size: 1.25rem; line-height: 2.2; color: var(--accent); white-space: pre-line; }
+        #typed-text::after { content: '▎'; animation: caret 0.9s steps(1) infinite; }
         #typed-text.done::after { content: ''; }
         @keyframes caret { 50% { opacity: 0; } }
 
         .stanza {
-            background: var(--bg-surface); border: 1px solid var(--border-gold); border-radius: 16px;
-            padding: 52px 44px; margin-bottom: 48px; text-align: center; font-size: 1.55rem;
-            backdrop-filter: blur(20px); box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            color: #7a3552; line-height: 2.4;
-            transition: transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
-            opacity: 0; transform: translateY(30px);
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+            padding: 40px 32px; margin-bottom: 36px; text-align: center; font-size: 1.35rem;
+            line-height: 2.3; box-shadow: 0 10px 30px rgba(214,51,108,0.09);
+            opacity: 0; transform: translateY(24px);
         }
-
-        .stanza.revealed {
-            opacity: 1; transform: translateY(0);
-            transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.16,1,0.3,1),
-                        border-color 0.5s ease, box-shadow 0.5s ease;
-        }
-
-        .stanza:hover {
-            border-color: rgba(231,90,156,0.55); box-shadow: 0 35px 70px rgba(231,90,156,0.12);
-        }
-
-        .verse-line { display: block; margin-bottom: 6px; }
-
-        .highlight { color: var(--gold-light); font-weight: 700; text-shadow: 0 0 15px rgba(255,214,232,0.5); }
-
+        .stanza.revealed { opacity: 1; transform: none;
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.16,1,0.3,1); }
+        .verse-line { display: block; margin-bottom: 4px; }
+        .highlight { color: var(--primary); font-weight: 700; }
         .name-reveal {
-            font-family: 'Aref Ruqaa', serif; font-size: 2.6rem;
-            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            display: inline-block; margin-top: 18px;
-            filter: drop-shadow(0 0 20px rgba(231,90,156,0.4));
+            font-family: 'Aref Ruqaa', serif; font-size: 2.2rem;
+            background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: inline-block; margin-top: 16px;
         }
-
-        footer.poem-footer {
-            text-align: center; margin-top: 70px; color: #7d5468;
-            font-family: 'Montserrat', sans-serif; letter-spacing: 4px; font-size: 0.82rem; text-transform: uppercase;
-        }
-
-        footer.poem-footer span {
-            color: var(--gold-light); font-family: 'Aref Ruqaa', serif; font-size: 1.4rem;
-            text-transform: none; margin-right: 6px;
-        }
-
+        footer.poem-footer { text-align: center; margin-top: 50px; color: var(--text-sub);
+            font-family: 'Montserrat', sans-serif; letter-spacing: 3px; font-size: 0.8rem; text-transform: uppercase; }
+        footer.poem-footer .her-name { color: var(--accent); font-family: 'Aref Ruqaa', serif;
+            font-size: 1.3rem; text-transform: none; letter-spacing: 0; }
         .voice-diamond {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 58px; height: 58px; margin: 26px auto 0; border-radius: 50%;
-            border: 1px solid var(--border-gold); background: rgba(231,90,156,0.06);
-            font-size: 1.3rem; cursor: pointer; transition: all 0.4s ease;
-            animation: pulse 2.4s ease-in-out infinite alternate;
+            width: 56px; height: 56px; margin: 22px auto 0; border-radius: 50%;
+            border: 1px solid var(--border); background: #fff; font-size: 1.25rem;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            animation: pulse 2.2s ease-in-out infinite alternate;
         }
+        .voice-hint { display: block; font-family: 'Amiri', serif; font-size: 0.95rem; color: var(--text-sub); margin-top: 8px; }
 
-        .voice-diamond:hover {
-            background: rgba(231,90,156,0.18); border-color: var(--gold-primary); transform: scale(1.1);
-        }
-
-        .voice-hint {
-            display: block; font-size: 0.95rem; color: #7d5468; margin-top: 10px;
-            text-transform: none; letter-spacing: 0;
-        }
-
-        .return-btn-container { text-align: center; margin-top: 55px; }
-
-        .btn-return {
-            background: transparent; color: var(--gold-light); border: 1px solid var(--border-gold);
-            padding: 16px 40px; font-family: 'Montserrat', sans-serif; font-size: 0.78rem;
-            letter-spacing: 4px; text-transform: uppercase; cursor: pointer; border-radius: 30px;
-            transition: all 0.4s ease; display: inline-flex; align-items: center; gap: 12px;
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-return:hover {
-            background: var(--gold-gradient); color: #fff; border-color: transparent;
-            box-shadow: 0 10px 30px rgba(231,90,156,0.3); transform: translateY(-3px);
-        }
-
-        .modal-overlay {
-            position: fixed; inset: 0; z-index: 1200; background: rgba(255,214,232,0.75);
-            backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 24px;
-        }
-
-        .modal-overlay.open { display: flex; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .modal-card {
-            max-width: 600px; width: 100%; max-height: 82vh; overflow-y: auto;
-            background: #fff7fb; border: 1px solid var(--border-gold); border-radius: 18px;
-            padding: 48px 42px; text-align: center; animation: riseIn 0.5s cubic-bezier(0.16,1,0.3,1);
-        }
-
-        @keyframes riseIn { from { opacity: 0; transform: translateY(40px) scale(0.97); } to { opacity: 1; transform: none; } }
-
-        .modal-card h4 {
-            font-family: 'Aref Ruqaa', serif; font-size: 1.9rem; margin-bottom: 24px;
-            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .modal-card p { font-size: 1.3rem; line-height: 2.2; color: #7a4258; white-space: pre-line; }
-
-        .modal-close {
-            margin-top: 30px; background: transparent; border: 1px solid var(--border-gold);
-            color: var(--gold-light); font-family: 'Montserrat', sans-serif; font-size: 0.7rem;
-            letter-spacing: 3px; text-transform: uppercase; padding: 12px 34px; border-radius: 30px;
-            cursor: pointer; transition: all 0.3s ease;
-        }
-
-        .modal-close:hover { background: rgba(231,90,156,0.12); }
+        /* MODALS / TOAST / FLOATERS */
+        .modal-overlay { position: fixed; inset: 0; z-index: 1200; background: rgba(255,214,232,0.75);
+            backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .modal-card { max-width: 580px; width: 100%; max-height: 82vh; overflow-y: auto;
+            background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 42px 36px;
+            text-align: center; direction: rtl; }
+        .modal-card h4 { font-family: 'Aref Ruqaa', serif; font-size: 1.7rem; color: var(--accent); margin-bottom: 20px; }
+        .modal-card p { font-size: 1.2rem; line-height: 2.1; white-space: pre-line; }
+        .modal-close { margin-top: 26px; background: transparent; border: 1px solid var(--border);
+            color: var(--accent); font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.72rem;
+            letter-spacing: 2px; padding: 11px 30px; border-radius: 24px; cursor: pointer; }
 
         #toast {
-            position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
-            background: #fff7fb; border: 1px solid var(--border-gold); color: var(--gold-light);
-            font-size: 1.05rem; padding: 14px 28px; border-radius: 30px; z-index: 1300;
-            opacity: 0; pointer-events: none; transition: all 0.4s ease;
+            position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%) translateY(16px);
+            background: #fff; border: 1px solid var(--border); color: var(--accent);
+            padding: 13px 26px; border-radius: 30px; z-index: 1300; font-size: 1rem;
+            opacity: 0; pointer-events: none; transition: all 0.35s ease; box-shadow: 0 10px 30px rgba(214,51,108,0.18);
         }
-
         #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         .music-btn {
-            position: fixed; bottom: 24px; right: 24px; z-index: 1100;
-            width: 52px; height: 52px; border-radius: 50%;
-            border: 1px solid var(--border-gold); background: rgba(255,240,248,0.9);
-            backdrop-filter: blur(8px); color: var(--gold-light); font-size: 1.15rem;
-            cursor: pointer; transition: all 0.3s ease;
+            position: fixed; bottom: 22px; right: 20px; z-index: 1100; width: 50px; height: 50px;
+            border-radius: 50%; border: 1px solid var(--border); background: #fff; color: var(--accent);
+            font-size: 1.1rem; cursor: pointer;
         }
-
-        .music-btn:hover { border-color: var(--gold-primary); transform: scale(1.08); }
-        .music-btn.playing { animation: pulse 1.6s ease-in-out infinite alternate; border-color: var(--gold-primary); }
+        .music-btn.playing { animation: pulse 1.5s ease-in-out infinite alternate; }
 
         #install-btn {
-            display: none; position: fixed; bottom: 24px; left: 50%;
-            transform: translateX(-50%); z-index: 1000;
-            background: var(--gold-gradient); color: #fff; border: none; padding: 14px 32px;
-            font-family: 'Montserrat', sans-serif; font-size: 0.76rem; font-weight: 600; letter-spacing: 3px;
-            text-transform: uppercase; cursor: pointer; border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(231,90,156,0.45);
-            animation: float-in 0.8s cubic-bezier(0.16,1,0.3,1);
+            display: none; position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+            z-index: 1000; background: var(--grad); color: #fff; border: none; padding: 13px 30px;
+            font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 2px;
+            border-radius: 30px; cursor: pointer;
         }
 
-        #install-btn:hover { transform: translateX(-50%) translateY(-3px); }
-
-        @keyframes float-in {
-            from { opacity: 0; transform: translateX(-50%) translateY(30px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        .puzzle-section { text-align: center; margin-bottom: 100px; }
-
-        .puzzle-card {
-            max-width: 620px; margin: 0 auto; padding: 44px 36px;
-            border-radius: 16px; border: 1px solid var(--border-gold);
-            background: var(--bg-card); backdrop-filter: blur(14px);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
-        }
-
-        .lock-icon { font-size: 2.2rem; margin-bottom: 18px; }
-        .puzzle-locked p { font-size: 1.25rem; color: #8a6076; line-height: 2; }
-
-        .puzzle-timer {
-            font-family: 'Cinzel', serif; font-size: 2rem; margin-top: 16px;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .puzzle-question { font-size: 1.55rem; line-height: 2.1; color: var(--gold-light); margin-bottom: 28px; }
-
-        .puzzle-progress {
-            font-family: 'Montserrat', sans-serif; font-size: 0.68rem; letter-spacing: 3px;
-            color: #c2255c; text-transform: uppercase; margin-bottom: 18px;
-        }
-
-        .puzzle-next-hint { margin-top: 20px; color: #7d5468; font-size: 1rem; }
-
-        .puzzle-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-        #puzzle-answer {
-            background: rgba(255,255,255,0.6); border: 1px solid var(--border-gold);
-            border-radius: 30px; padding: 15px 24px; color: var(--gold-light);
-            font-family: 'Amiri', serif; font-size: 1.15rem; width: min(320px, 100%);
-            outline: none; transition: border-color 0.3s ease;
-        }
-
-        #puzzle-answer:focus { border-color: var(--gold-primary); }
-
-        .puzzle-wrong { margin-top: 20px; color: #c98a7a; font-size: 1.05rem; }
-
-        .puzzle-voice { margin-top: 30px; }
-
-        .pv-divider {
-            display: block; color: #7d5468; font-size: 0.9rem; letter-spacing: 4px;
-            margin-bottom: 18px;
-        }
-
-        #recorder-box { text-align: center; }
-
-        .btn-rec {
-            background: rgba(231,90,156,0.08); border: 1px solid var(--border-gold);
-            color: var(--gold-light); font-family: 'Amiri', serif; font-size: 1.2rem;
-            padding: 16px 34px; border-radius: 40px; cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-rec:hover { background: rgba(231,90,156,0.2); transform: translateY(-2px); }
-        .btn-rec.stop { border-color: rgba(201,138,122,0.5); color: #e8b8aa; padding: 10px 22px; font-size: 1rem; }
-        .btn-rec.send { border-color: rgba(37,211,102,0.4); color: #b8e6c8; }
-        .btn-rec.redo { border-color: var(--border-gold); color: #8a6076; padding: 10px 22px; font-size: 1rem; }
-
-        #rec-active {
-            display: flex; align-items: center; justify-content: center; gap: 16px;
-        }
-
-        .rec-dot {
-            width: 14px; height: 14px; border-radius: 50%; background: #e05d44;
-            animation: blink 1s steps(1) infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0.15; } }
-
-        .rec-timer {
-            font-family: 'Montserrat', sans-serif; font-size: 1.3rem; color: var(--gold-light);
-            min-width: 56px;
-        }
-
-        .rec-player { width: min(340px, 100%); margin-bottom: 16px; height: 44px; }
-
-        .rec-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-        .rec-status { margin-top: 14px; font-size: 1rem; color: #c2255c; }
-
-
-
-        .reward-image {
-            max-width: min(320px, 90%);
-            border-radius: 14px;
-            margin: 0 auto 20px;
-            display: block;
-            border: 1px solid var(--border-gold);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-            pointer-events: none;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-user-drag: none;
-            -webkit-touch-callout: none;
-        }
-
-        .solved-badge {
-            font-family: 'Cinzel', serif; font-size: 1.6rem; letter-spacing: 3px; margin-bottom: 22px;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .puzzle-reward { font-size: 1.45rem; line-height: 2.2; color: var(--gold-light); white-space: pre-line; }
-
-        @media (max-width: 900px) {
-            .hero-content h2 { font-size: 2.3rem; }
-            header.poem-header h1 { font-size: 2.7rem; }
-            .stanza { font-size: 1.3rem; padding: 38px 24px; }
-            .shop-nav { display: none; }
-            .top-banner div:nth-child(1), .top-banner div:nth-child(3) { display: none; }
-            #daily-text { font-size: 1.25rem; }
-            .cd-cell { min-width: 76px; padding: 18px 10px; }
-            .cd-num { font-size: 1.9rem; }
-            #typed-text { font-size: 1.2rem; }
-        }
-
-        /* HIERARCHY PASS */
-        .daily-message, .puzzle-card, .typed-letter,
-        .reason-box, .scratch-wrap {
-            box-shadow: 0 10px 30px rgba(214, 51, 108, 0.09);
-        }
-
-        .daily-message, .puzzle-card {
-            box-shadow: 0 18px 44px rgba(214, 51, 108, 0.14);
-        }
-
-        .section-header h3 { letter-spacing: 1px; }
-
-        .dm-label, .tl-label {
-            font-weight: 600;
+        @media (max-width: 600px) {
+            .hero-content h2 { font-size: 1.35rem; }
+            #box-question { font-size: 1.2rem; }
+            header.poem-header h1 { font-size: 2.2rem; }
+            .stanza { font-size: 1.15rem; padding: 28px 20px; }
         }
     </style>
 </head>
 <body>
 
     <canvas id="fx-canvas"></canvas>
-    <div class="grain"></div>
 
-    <div id="shop-container">
-        <div class="top-banner">
-            <div>🌸</div>
-            <div>مرحبًا بكِ في حديقتي السحرية <span class="gold-tag">✦</span></div>
-            <div>🌸</div>
+    <!-- MAIN GARDEN PAGE -->
+    <div class="page" id="garden-page">
+        <div class="top-banner">🌸 حديقتي السحرية 🌸</div>
+
+        <div class="brand" id="brand-logo">
+            <h1>Wonderland</h1>
+            <span>عالَمٌ وردِيّ من الأحلام</span>
         </div>
 
-        <header class="shop-header">
-            <nav class="shop-nav">
-                <a class="trigger-click">الحديقة</a>
-                <a class="trigger-click">الأسرار</a>
-            </nav>
-
-            <div class="shop-brand" id="brand-logo">
-                <h1>Wonderland</h1>
-                <span>عالَمٌ وردِيّ من الأحلام</span>
+        <section class="hero trigger-poem">
+            <img class="bg" src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1600&auto=format&fit=crop" alt="Pink Garden">
+            <div class="hero-content">
+                <h2>حديقةُ الأحلام</h2>
+                <p>مكانٌ بنيتُه لكِ... تزهر فيه المفاجآت كلَّ يوم</p>
             </div>
+        </section>
 
-            <nav class="shop-nav">
-                <a class="trigger-click">الحكايات</a>
-                <div class="action-btn trigger-click">💝 هدية لكِ</div>
-            </nav>
-        </header>
+        <div class="card">
+            <span class="label">✦ رسالة اليوم ✦</span>
+            <p id="daily-text"></p>
+            <p id="memory-text"></p>
+        </div>
 
-        <main>
-            <section class="hero-banner trigger-click">
-                <img class="hero-bg" src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1600&auto=format&fit=crop" alt="Pink Dream Garden">
-                <div class="hero-content">
-                    <h2>حديقةُ الأحلام</h2>
-                    <p>مكانٌ صغيرٌ بنيتُه لكِ... تزهر فيه المفاجآت، وتسكنه الكلمات التي لا أجرؤ على قولها بصوتٍ عالٍ</p>
-                    <button class="btn-gold">استكشفي السر</button>
-                </div>
-            </section>
-
-            <div class="daily-message">
-                <span class="dm-label">✦ رسالة اليوم ✦</span>
-                <p id="daily-text"></p>
-                <p id="memory-text"></p>
+        <div class="card reason-box">
+            <div style="position:relative;z-index:2;width:100%">
+                <span class="reason-hint">✦ سببٌ من قلبي — اكتشفيه بلمسة ✦</span>
+                <p id="reason-text" style="margin:0">...</p>
             </div>
+            <canvas id="reason-canvas"></canvas>
+        </div>
+        <div style="text-align:center;margin:-10px 0 26px">
+            <button class="btn btn-ghost" id="reason-btn">✦ سببٌ آخر ✦</button>
+        </div>
 
-            <section class="reasons-section">
-                <div class="section-header">
-                    <span>Aseab Hobbi</span>
-                    <h3>أسبابُ حبّي لكِ</h3>
+        <div class="card">
+            <span class="label">✦ بطاقة السحر ✦</span>
+            <div class="scratch-wrap">
+                <div class="scratch-prize">
+                    <small>Votre Surprise</small>
+                    <span id="prize-text">عشائةٌ تحت النجوم...<br>تاريخُها سرٌّ بيني وبينكِ ✦</span>
                 </div>
-                <div class="reason-box">
-                    <div style="position:relative;z-index:2">
-                        <span class="reason-hint">✦ سببٌ من قلبي ✦</span>
-                        <p id="reason-text" style="margin:0"></p>
-                    </div>
-                    <canvas id="reason-canvas"></canvas>
-                </div>
-                <button class="btn-gold" id="reason-btn">✦ أعطيني سببًا آخر ✦</button>
-            </section>
+                <canvas id="scratch-canvas"></canvas>
+            </div>
+        </div>
 
-            <section class="scratch-section">
-                <div class="section-header">
-                    <span>Bitaqa Sihr</span>
-                    <h3>بطاقةُ مفاجأة... اكتشفيها بيدكِ</h3>
-                </div>
-                <div class="scratch-wrap">
-                    <div class="scratch-prize">
-                        <small>Votre Surprise</small>
-                        <span id="prize-text">عشائةٌ تحت النجوم...<br>تاريخُها سرٌّ بيني وبينكِ ✦</span>
-                    </div>
-                    <canvas id="scratch-canvas"></canvas>
-                </div>
-            </section>
+        <div class="card" style="padding-bottom:22px">
+            <span class="label">🧩 صناديق الألغاز</span>
+            <p style="color:var(--text-sub);font-size:0.95rem;margin-bottom:18px">كل يومٍ تُفتح صندوقةٌ جديدة... حلّي المفتوح ثم انتظري القادم ✨</p>
+            <div id="boxes-grid"></div>
 
-            <section class="puzzle-section" id="puzzle-section">
-                <div class="section-header">
-                    <span>Enigma</span>
-                    <h3>لغزُ المساء ✦ ٩ مساءً</h3>
+            <div id="box-detail" style="display:none">
+                <div class="progress" id="box-progress"></div>
+                <p id="box-question"></p>
+                <div class="answer-row">
+                    <input type="text" id="box-answer" placeholder="اكتبي جوابك هنا..." autocomplete="off">
+                    <button class="btn" id="box-submit">تحقّقي</button>
                 </div>
-                <div class="puzzle-card">
-                    <div id="puzzle-locked" class="puzzle-locked">
-                        <div class="lock-icon">🔒</div>
-                        <p>يُفتَحُ لغزُ الليلة عند الساعة <b>٩:٠٠ مساءً</b></p>
-                        <p class="puzzle-timer" id="puzzle-countdown"></p>
+                <p class="wrong-msg" id="box-wrong" style="display:none">ليس هذا الجواب... فكّري مجددًا ✦</p>
+
+                <div id="reward-view" style="display:none">
+                    <div class="reward-badge">✦ إجابةٌ صحيحة! ✦</div>
+                    <img id="reward-image" alt="" draggable="false" style="display:none">
+                    <p id="reward-text"></p>
+                    <p class="next-hint" id="next-hint"></p>
+                </div>
+
+                <div class="rec-zone" id="rec-zone" style="display:none">
+                    <div class="rec-divider">— ما عرفتي؟ اسأليني —</div>
+                    <button class="mini-btn" id="rec-start">🎤 سجّلي رسالة صوتية</button>
+                    <div id="rec-active" style="display:none">
+                        <div class="rec-row"><span class="rec-dot"></span><span class="rec-timer" id="rec-timer">0:00</span>
+                        <button class="mini-btn" id="rec-stop">■ إيقاف</button></div>
                     </div>
-                    <div id="puzzle-open" style="display:none">
-                        <p class="puzzle-progress" id="puzzle-progress"></p>
-                        <p class="puzzle-question" id="puzzle-question"></p>
-                        <div class="puzzle-form">
-                            <input type="text" id="puzzle-answer" placeholder="اكتبي جوابك هنا..." autocomplete="off">
-                            <button class="btn-gold" id="puzzle-submit">تحقّقي</button>
-                        </div>
-                        <p class="puzzle-wrong" id="puzzle-wrong" style="display:none">ليس هذا الجواب... فكّري مجددًا يا صاحبةَ القلب الجميل ✦</p>
-                        <div class="puzzle-voice">
-                            <span class="pv-divider">— أو —</span>
-                            <div id="recorder-box">
-                                <button class="btn-rec" id="rec-start">🎤 اضغطي للتسجيل</button>
-                                <div style="margin-top:14px">
-                                    <button class="btn-rec" id="img-pick-btn" style="font-size:1rem;padding:12px 26px">📷 أو أرسلي صورة</button>
-                                    <input type="file" id="img-input" accept="image/*" style="display:none">
-                                    <p class="rec-status" id="img-status"></p>
-                                </div>
-                                <div id="rec-active" style="display:none">
-                                    <span class="rec-dot"></span>
-                                    <span class="rec-timer" id="rec-timer">0:00</span>
-                                    <button class="btn-rec stop" id="rec-stop">■ أوقفي</button>
-                                </div>
-                                <div id="rec-review" style="display:none">
-                                    <audio controls id="rec-player" class="rec-player"></audio>
-                                    <div class="rec-actions">
-                                        <button class="btn-rec send" id="rec-send">✦ إرسالي الصوت</button>
-                                        <button class="btn-rec redo" id="rec-redo">↺ أعيدي التسجيل</button>
-                                    </div>
-                                    <p class="rec-status" id="rec-status"></p>
-                                </div>
-                            </div>
+                    <div id="rec-review" style="display:none">
+                        <audio controls id="rec-player" class="rec-player"></audio>
+                        <div class="rec-row">
+                            <button class="btn" id="rec-send" style="padding:11px 24px;font-size:0.78rem">✦ إرسالي الصوت</button>
+                            <button class="mini-btn" id="rec-redo">↺ من جديد</button>
                         </div>
                     </div>
-                    <div id="puzzle-reward-view" style="display:none">
-                        <div class="solved-badge">✦ إجابةٌ صحيحة! ✦</div>
-                        <img id="reward-image" class="reward-image" alt="" draggable="false" style="display:none">
-                        <p class="puzzle-reward" id="puzzle-reward-text"></p>
-                        <p class="puzzle-next-hint" id="puzzle-next-hint">اللغزُ التالي يظهرُ بعد لحظات...</p>
+                    <div class="rec-row" style="margin-top:12px">
+                        <button class="mini-btn" id="img-pick-btn">📷 أو أرسلي صورة</button>
+                        <input type="file" id="img-input" accept="image/*" style="display:none">
                     </div>
-                    <div id="puzzle-nightdone" style="display:none">
-                        <div class="solved-badge">🌙 انتهت ليلةُ الألغاز</div>
-                        <p class="puzzle-reward" id="puzzle-nightdone-text"></p>
-                    </div>
+                    <p class="rec-status" id="upload-status"></p>
                 </div>
-            </section>
-        </main>
+            </div>
+        </div>
 
-        <footer class="shop-footer">
-            <p>✦ صُنعت هذه الحديقة بحبٍّ... لكِ وحدكِ ✦</p>
-        </footer>
+        <footer class="site-footer">✦ صُنعت هذه الحديقة بحبٍّ — لكِ وحدكِ ✦</footer>
     </div>
 
+    <!-- LOADER -->
     <div id="loader-overlay">
-        <div class="loader-emblem">
-            <div class="loader-ring"></div>
-            <div class="loader-diamond">✦</div>
-        </div>
-        <div class="loader-text" id="loader-title-text">✦ Wonderland ✦</div>
-        <div class="loader-subtext" id="loader-sub-text">جاري فتح سر صُنع لكِ خصيصًا...</div>
+        <div class="loader-emblem"><div class="loader-ring"></div><div class="loader-diamond">🌸</div></div>
+        <div class="loader-text">Wonderland</div>
     </div>
 
+    <!-- POEM PAGE -->
     <div id="poem-container">
         <header class="poem-header">
             <button class="rename-btn" id="rename-btn">غيّري الاسم ✎</button>
             <h1>حينَ تُغمِضينَ العالم</h1>
-            <div class="divider-ornament">✦ ✤ ✦</div>
         </header>
 
-        <div class="typed-letter">
-            <span class="tl-label">✦ رسالةٌ من القلب ✦</span>
-            <p id="typed-text"></p>
-        </div>
-
+        <div class="typed-letter"><p id="typed-text"></p></div>
         <div id="stanza-list"></div>
 
-
         <footer class="poem-footer">
-            <p>✦ Pour Toujours <span class="her-name-inline her-name">حبيبتي هاجَر</span> ✦</p>
+            <p>✦ Pour Toujours <span class="her-name"></span> ✦</p>
             <div class="voice-diamond" id="voice-diamond" style="display:none">🎙️</div>
-            <span class="voice-hint" id="voice-hint" style="display:none">اضغطي على الماسة لتسمعي رسالتي الصوتية</span>
+            <span class="voice-hint" id="voice-hint" style="display:none">اضغطي على الماسة لتسمعي رسالتي</span>
         </footer>
 
-        <div class="return-btn-container">
-            <button class="btn-return" id="return-btn">
-                <span>العودة إلى المتجر</span>
-                ✦
-            </button>
+        <div style="text-align:center;margin-top:36px">
+            <button class="btn btn-ghost" id="return-btn">العودة إلى الحديقة ✦</button>
         </div>
     </div>
 
+    <!-- SECRET LETTER -->
     <div class="modal-overlay" id="letter-modal">
         <div class="modal-card">
             <h4>رسالةٌ سرِّيّة</h4>
             <p id="hidden-letter-text">وجدتِها...
 
-لم أضعْ هذه الرسالة هنا عبثًا، وضعتُها لمن تبحثُ عن الأسرار كما أبحثُ أنا عن وجهكِ في كلِّ حشد.
+لم أضع هذه الرسالة هنا عبثًا، وضعتها لمن تبحث عن الأسرار كما أبحث أنا عن وجهكِ في كل حشد.
 
-إنّكِ لم تكوني فصلًا في حياتي...
-كنتِ الكتابَ كلَّه.
-
-وأنا مهما طالتِ الطرقُ وقصُرتِ الأيام
-سأبقى أوّلَ من يقرأكِ، وآخرَ من يفهمكِ.
-
-أحبّكِ بقدر ما لا تستطيع هذه الشاشةُ أن تتّسع. ✦</p>
+أحبكِ بقدر ما لا تستطيع هذه الشاشة أن تتسع. ✦</p>
             <button class="modal-close" data-close="letter-modal">إغلاق ✦</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="note-modal">
-        <div class="modal-card">
-            <h4>ملاحظةٌ خاصّة</h4>
-            <p id="note-modal-text"></p>
-            <button class="modal-close" data-close="note-modal">إغلاق ✦</button>
-        </div>
-    </div>
-
     <div id="toast"></div>
-
     <button class="music-btn" id="music-btn" title="الموسيقى">♪</button>
     <button id="install-btn">✦ Install App</button>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const VOICE_NOTE_FILE = 'voice.mp3';
-
-        if (location.search.includes('reset')) {
-            ['puzzleProgress', 'puzzleSolvedTonight', 'puzzleNight', 'solvedIds'].forEach(k => localStorage.removeItem(k));
-        }
-
-        let CONTENT = { puzzles: [], texts: {}, poem: null };
-        let solvedIds = JSON.parse(localStorage.getItem('solvedIds') || '[]');
-        if (!Array.isArray(solvedIds)) solvedIds = [];
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
-            });
-        }
-
-        let deferredPrompt = null;
-        const installBtn = document.getElementById('install-btn');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'block';
-        });
-
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
-            deferredPrompt = null;
-            installBtn.style.display = 'none';
-        });
-
-        window.addEventListener('appinstalled', () => {
-            installBtn.style.display = 'none';
-        });
-
-        function playChime() {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                const ctx = new AudioCtx();
-                const notes = [261.63, 329.63, 392.00, 523.25];
-                notes.forEach((freq, idx) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0, ctx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 0.1 + (idx * 0.15));
-                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.5 + (idx * 0.2));
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(ctx.currentTime + (idx * 0.15));
-                    osc.stop(ctx.currentTime + 3.0);
-                });
-            } catch (e) {}
-        }
-
-        // AMBIENT MUSIC
-        const musicBtn = document.getElementById('music-btn');
-        let musicCtx = null, musicOn = false, musicTimer = null;
-        const scale = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
-
-        function playAmbientNote() {
-            if (!musicCtx || !musicOn) return;
-            const now = musicCtx.currentTime;
-            const freq = scale[Math.floor(Math.random() * scale.length)] * (Math.random() > 0.7 ? 2 : 1);
-            const osc = musicCtx.createOscillator();
-            const gain = musicCtx.createGain();
-            osc.type = Math.random() > 0.5 ? 'sine' : 'triangle';
-            osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0, now);
-            gain.gain.linearRampToValueAtTime(0.03, now + 0.6);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.2);
-            osc.connect(gain); gain.connect(musicCtx.destination);
-            osc.start(now); osc.stop(now + 3.4);
-        }
-
-        musicBtn.addEventListener('click', () => {
-            try {
-                if (!musicCtx) musicCtx = new (window.AudioContext || window.webkitAudioContext)();
-                musicOn = !musicOn;
-                musicBtn.classList.toggle('playing', musicOn);
-                musicBtn.textContent = musicOn ? '♫' : '♪';
-                if (musicOn) {
-                    playAmbientNote();
-                    musicTimer = setInterval(playAmbientNote, 1600);
-                    showToast('♪ موسيقى هادئة... لكِ وحدك');
-                } else {
-                    clearInterval(musicTimer);
-                }
-            } catch (e) {}
-        });
-
-        // FX CANVAS — gold dust, cursor sparkles, confetti
-        const canvas = document.getElementById('fx-canvas');
-        const fctx = canvas.getContext('2d');
-        let W, H;
-
-        function resizeCanvas() {
-            W = canvas.width = innerWidth;
-            H = canvas.height = innerHeight;
-        }
-        resizeCanvas();
-        addEventListener('resize', resizeCanvas);
-
-        const dust = [], sparks = [], confetti = [];
-        for (let i = 0; i < 55; i++) {
-            dust.push({
-                x: Math.random() * innerWidth,
-                y: Math.random() * innerHeight,
-                r: Math.random() * 1.8 + 0.4,
-                vy: -(Math.random() * 0.35 + 0.08),
-                vx: (Math.random() - 0.5) * 0.15,
-                a: Math.random() * 0.5 + 0.15,
-                tw: Math.random() * Math.PI * 2
-            });
-        }
-
-        function burstConfetti(x, y, count = 90) {
-            for (let i = 0; i < count; i++) {
-                const ang = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 7 + 2;
-                confetti.push({
-                    x, y,
-                    vx: Math.cos(ang) * speed,
-                    vy: Math.sin(ang) * speed - 3,
-                    size: Math.random() * 5 + 2,
-                    rot: Math.random() * Math.PI,
-                    vr: (Math.random() - 0.5) * 0.25,
-                    life: 1,
-                    hue: 325 + Math.random() * 25
-                });
-            }
-        }
-
-        addEventListener('pointermove', (e) => {
-            if (Math.random() > 0.55) {
-                sparks.push({ x: e.clientX, y: e.clientY, life: 1, r: Math.random() * 2.2 + 0.8 });
-            }
-        });
-
-        function fxLoop() {
-            fctx.clearRect(0, 0, W, H);
-            dust.forEach(p => {
-                p.tw += 0.02; p.x += p.vx; p.y += p.vy;
-                if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
-                fctx.globalAlpha = p.a * (0.6 + 0.4 * Math.sin(p.tw));
-                fctx.fillStyle = '#f48fbf';
-                fctx.beginPath();
-                fctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                fctx.fill();
-            });
-            for (let i = sparks.length - 1; i >= 0; i--) {
-                const s = sparks[i];
-                s.life -= 0.045;
-                if (s.life <= 0) { sparks.splice(i, 1); continue; }
-                fctx.globalAlpha = s.life * 0.8;
-                fctx.fillStyle = '#ffffff';
-                fctx.beginPath();
-                fctx.arc(s.x, s.y, s.r * s.life, 0, Math.PI * 2);
-                fctx.fill();
-            }
-            for (let i = confetti.length - 1; i >= 0; i--) {
-                const c = confetti[i];
-                c.vy += 0.12; c.x += c.vx; c.y += c.vy; c.rot += c.vr; c.life -= 0.008;
-                if (c.life <= 0 || c.y > H + 20) { confetti.splice(i, 1); continue; }
-                fctx.save();
-                fctx.globalAlpha = Math.min(c.life, 1);
-                fctx.translate(c.x, c.y);
-                fctx.rotate(c.rot);
-                fctx.fillStyle = `hsl(${c.hue}, 80%, ${70 + (c.hue % 12)}%)`;
-                fctx.fillRect(-c.size / 2, -c.size / 4, c.size, c.size / 2);
-                fctx.restore();
-            }
-            fctx.globalAlpha = 1;
-            requestAnimationFrame(fxLoop);
-        }
-        fxLoop();
-
-        // TOAST
-        const toastEl = document.getElementById('toast');
-        let toastTimer = null;
-        function showToast(msg) {
-            toastEl.textContent = msg;
-            toastEl.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
-        }
-
-        // MODALS
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', () =>
-                document.getElementById(btn.dataset.close).classList.remove('open'));
-        });
-        document.querySelectorAll('.modal-overlay').forEach(ov => {
-            ov.addEventListener('click', (e) => {
-                if (e.target === ov) ov.classList.remove('open');
-            });
-        });
-
-        // SECRET — tap logo 5 times
-        let tapCount = 0, tapTimer = null;
-        document.getElementById('brand-logo').addEventListener('click', () => {
-            tapCount++;
-            clearTimeout(tapTimer);
-            tapTimer = setTimeout(() => tapCount = 0, 1800);
-            if (tapCount >= 3 && tapCount < 5) showToast(`✦ ${5 - tapCount}... استمري`);
-            if (tapCount >= 5) {
-                tapCount = 0;
-                playChime();
-                burstConfetti(innerWidth / 2, innerHeight / 2, 130);
-                document.getElementById('letter-modal').classList.add('open');
-            }
-        });
-
-        let longPressFired = false;
-
-        // OPEN POEM
-        document.querySelectorAll('.trigger-click, .hero-banner').forEach(el => {
-            el.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (longPressFired) { longPressFired = false; return; }
-                playChime();
-
-                const shopContainer = document.getElementById('shop-container');
-                const loaderOverlay = document.getElementById('loader-overlay');
-                const poemContainer = document.getElementById('poem-container');
-
-                loaderOverlay.classList.add('active');
-
-                setTimeout(() => {
-                    shopContainer.style.display = 'none';
-                    loaderOverlay.classList.remove('active');
-                    poemContainer.style.display = 'block';
-                    setTimeout(() => {
-                        poemContainer.style.opacity = '1';
-                        startTypewriter();
-                        revealStanzas();
-                        burstConfetti(innerWidth / 2, innerHeight * 0.25, 120);
-                    }, 50);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 1800);
-            });
-        });
-
-        // RETURN TO STORE
-        document.getElementById('return-btn').addEventListener('click', function() {
-            playChime();
-            const shopContainer = document.getElementById('shop-container');
-            const loaderOverlay = document.getElementById('loader-overlay');
-            const poemContainer = document.getElementById('poem-container');
-
-            document.getElementById('loader-sub-text').innerText = 'جاري العودة إلى المتجر...';
-            poemContainer.style.opacity = '0';
-            loaderOverlay.classList.add('active');
-
-            setTimeout(() => {
-                poemContainer.style.display = 'none';
-                loaderOverlay.classList.remove('active');
-                shopContainer.style.display = 'block';
-                document.getElementById('loader-sub-text').innerText = 'جاري فتح سر صُنع لكِ خصيصًا...';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 1500);
-        });
-
-        // TYPEWRITER LETTER
-        const typedText = document.getElementById('typed-text');
-        let typedStarted = false;
-
-        function getHerName() { return localStorage.getItem('herName') || 'هاجَر'; }
-        function applyName() {
-            const n = getHerName();
-            document.querySelectorAll('.her-name').forEach(el => {
-                el.textContent = el.classList.contains('her-name-inline') ? `حبيبتي ${n}` : `يا ${n}`;
-            });
-        }
-
-        function typedLetterFor(n) {
-            const tpl = CONTENT.texts.typedLetter ||
-                'إلى {name}...\n\nقبل أن تقرئي القصيدة، اعلمي أنّ كلَّ كلمةٍ فيها\nكُتبتْ مرتين: مرةً بالحبر، ومرةً بالاشتياق.';
-            return tpl.split('{name}').join(n);
-        }
-        let typedLetterText = '';
-        function startTypewriter() {
-            typedLetterText = typedLetterFor(getHerName());
-            typedStarted = true;
-            typedText.classList.remove('done');
-            typedText.textContent = '';
-            let i = 0;
-            const timer = setInterval(() => {
-                typedText.textContent = typedLetterText.slice(0, ++i);
-                if (typedLetterText && i >= typedLetterText.length) {
-                    clearInterval(timer);
-                    typedText.classList.add('done');
-                }
-            }, 45);
-        }
-
-        // REVEAL STANZAS ON SCROLL
-        function revealStanzas() {
-            const stanzas = document.querySelectorAll('.stanza');
-            stanzas.forEach((s, idx) => {
-                s.classList.remove('revealed');
-                setTimeout(() => s.classList.add('revealed'), 1200 + idx * 900);
-            });
-        }
-
-        // NAME EDITOR
-        document.getElementById('rename-btn').addEventListener('click', () => {
-            const current = getHerName();
-            const name = prompt('اسمُها؟', current);
-            if (name && name.trim()) {
-                localStorage.setItem('herName', name.trim());
-                applyName();
-                showToast('✦ تمّ — القصيدة الآن لها وحدَها');
-            }
-        });
-        applyName();
-
-        // DAILY MESSAGE + MEMORY OF THE DAY
-        let dailyMessages = [
-            'كلُّ يومٍ يمرُّ... ويبقى قلبي مكانًا لا يسكنه إلا أنتِ يا هاجر.',
-            'إذا كانَ للحُبِّ عنوانٌ، فأنّا نعرفهُ حينَ أراكِ.',
-            'بينَ آلافِ الوجوه... عيناي لا تعرفانِ سوى دربكِ.',
-            'أنتِ القهوةُ في الصباح، والهدوءُ بعدَ العناء، والحكايةُ كلُّها.',
-            'لو كانَ للقلبِ صوتٌ، لسمعتَ العالمَ كلهُ ينادي باسمكِ.',
-            'معكِ... حتى العادي يصيرُ احتفالًا، والانتظارُ حلوى.',
-            'كلُّ مساءٍ أغمضُ عينيّ، فأجدُكِ أنتِ الحلمُ الذي لا أستيقظُ منه.'
-        ];
-
-        let memoriesOfDay = [
-            'ذكرى اليوم: ضحكتِ من قلبك... وأنا نسيتُ العالم كله.',
-            'ذكرى اليوم: أولُ رسالةٍ أرسلتِها لي... قرأتُها ألف مرّة.',
-            'ذكرى اليوم: مشينا طويلًا ولا أذكري الطريق... كنتُ أنظر إليكِ.',
-            'ذكرى اليوم: قالت لي إنّها تعتمد عليّ... فشعرتُ أنّ لي وطنًا.',
-            'ذكرى اليوم: غنّيتِ بصوتٍ خفيض... حفظتُ اللحن لا الكلمات.',
-            'ذكرى اليوم: أمسكتِ يدي في الزحام... فصارَ الزحامُ سلامًا.',
-            'ذكرى اليوم: نظرتِ إليّ نظرةً واحدة... وكتبتُ عنها هذا الموقع.'
-        ];
-
-        // REASONS GENERATOR
-        let reasons = [
-            'لأنّكِ تبتسمين... فيصيرُ يومي الصعبُ أسهلَ ما يكون.',
-            'لأنّ صوتكِ هو الموسيقى الوحيدةُ التي لا أتعَبُ منها.',
-            'لأنّكِ تؤمنين بي أكثر ممّا أؤمنُ بنفسي.',
-            'لأنّكِ تجعلين العاديّ معكِ استثنائيًّا.',
-            'لأنّكِ قلبُكِ أكبرُ من أن تتّسع له الدنيا.',
-            'لأنّكِ تسمعين ما لا أقول، وتفهمين ما لا أعرف كيف أشرحه.',
-            'لأنّ المستقبل معكِ... ليس مخيفًا بل مُشتاقًا إليه.',
-            'لأنّكِ دعاءُ كلِّ ليلة، وشكرُ كلِّ صباح.',
-            'لأنّكِ عندما تغمضين عينيكِ... أثقُ أنّ الدنيا بخير.',
-            'لأنّكِ يا هاجر... ببساطة، أنتِ السبب.'
-        ];
-        const reasonText = document.getElementById('reason-text');
-        const reasonBox = document.querySelector('.reason-box');
-        let reasonIdx = new Date().getDate() % reasons.length;
-        reasonText.innerText = reasons[reasonIdx];
-
-        function applyTexts() {
-            const t = CONTENT.texts || {};
-            if (Array.isArray(t.dailyMessages) && t.dailyMessages.length)
-                dailyMessages = t.dailyMessages;
-            if (Array.isArray(t.memoriesOfDay) && t.memoriesOfDay.length)
-                memoriesOfDay = t.memoriesOfDay;
-            if (Array.isArray(t.reasons) && t.reasons.length)
-                reasons = t.reasons;
-
-            document.getElementById('daily-text').innerText = dailyMessages[new Date().getDay() % dailyMessages.length];
-            document.getElementById('memory-text').innerText =
-                memoriesOfDay[new Date().getDate() % memoriesOfDay.length];
-            reasonIdx = new Date().getDate() % reasons.length;
-            reasonText.innerText = reasons[reasonIdx];
-
-            const prize = document.getElementById('prize-text');
-            if (prize && t.scratchPrize) prize.innerHTML = t.scratchPrize.split('\n').join('<br>');
-
-            const hl = document.getElementById('hidden-letter-text');
-            if (hl && t.hiddenLetter) hl.innerText = t.hiddenLetter.split('{name}').join(getHerName());
-        }
-        applyTexts();
-
-        // DEFAULT POEM (fallback when DB has no poem yet)
-        const DEFAULT_POEM = [
-            ['حينَ تُغمِضينَ العالم','كلُّ مساءٍ...','تُعلِّمينَ العيونَ','كيف تُغمِضُ خوفَها،','ثم تعودينَ','وعيناكِ...','لا تعرفانِ النوم.','أفكِّرُ أحيانًا...','حينَ يسلِّمُ الناسُ','أحلامَهم','إلى يديكِ،','إلى مَن','**تُسلِّمينَ تعبَكِ؟'],
-            ['رأيتُ المطرَ','يسقطُ ألفَ مرَّة،','لكنِّي','لم أرَهُ يومًا','يختارُ وردةً بعينِها.','**إلَّا قلبي...','**منذُ رآكِ.'],
-            ['غريبٌ...','أنَّ امرأةً','تجعلُ الآخرينَ','ينسونَ الألم،','كانتْ','**أجملَ ألمٍ','عرفتُهُ أنا.','ليسَ لأنَّها أوجعتني...','بل لأنَّها','جعلتْ قلبي','يعرفُ','أنَّه كانَ نائمًا','قبلَها.'],
-            ['لو سألوكِ يومًا:','كم حياةً أنقذتِ؟','ربَّما','لن تعرفي العدد.','أمَّا أنا...','فسأقولُ:','**واحدة.','حياتي...','حينَ دخلتِها','**دونَ أن تطرقي الباب...']
-        ];
-
-        function buildPoem() {
-            const stanzas = CONTENT.poem && CONTENT.poem.length ? CONTENT.poem : DEFAULT_POEM;
-            const list = document.getElementById('stanza-list');
-            list.innerHTML = stanzas.map(lines => {
-                const html = lines.map(line => {
-                    const hl = line.startsWith('**');
-                    const text = hl ? line.slice(2) : line;
-                    return `<span class="verse-line ${hl ? 'highlight' : ''}">${text}</span>`;
-                }).join('');
-                return `<article class="stanza">${html}</article>`;
-            }).join('');
-            const last = list.lastElementChild;
-            if (last) last.insertAdjacentHTML('beforeend',
-                '<br><span class="name-reveal her-name"></span>');
-            applyName();
-        }
-
-        document.getElementById('reason-btn').addEventListener('click', () => {
-            reasonIdx = (reasonIdx + 1) % reasons.length;
-            reasonText.innerText = reasons[reasonIdx];
-            rRevealed = false;
-            initReasonFoil();
-        });
-
-        // REASON SCRATCH FOIL
-        const rc = document.getElementById('reason-canvas');
-        const rcx = rc.getContext('2d');
-        let rScratching = false, rRevealed = false;
-
-        function initReasonFoil() {
-            rc.width = rc.offsetWidth || 600;
-            rc.height = rc.offsetHeight || 150;
-            rcx.globalCompositeOperation = 'source-over';
-            const g = rcx.createLinearGradient(0, 0, rc.width, rc.height);
-            g.addColorStop(0, '#f9cfe3'); g.addColorStop(0.5, '#e78ab5'); g.addColorStop(1, '#f9cfe3');
-            rcx.fillStyle = g;
-            rcx.fillRect(0, 0, rc.width, rc.height);
-            rcx.fillStyle = 'rgba(255,255,255,0.85)';
-            rcx.font = `${Math.max(14, rc.width / 30)}px Montserrat, sans-serif`;
-            rcx.textAlign = 'center';
-            rcx.fillText('✨ اكتشفي سببَ الحب بلمسة صغيرة', rc.width / 2, rc.height / 2);
-        }
-        initReasonFoil();
-        addEventListener('resize', () => { if (!rRevealed) initReasonFoil(); });
-
-        function reasonPos(e) {
-            const rect = rc.getBoundingClientRect();
-            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        }
-
-        rc.addEventListener('pointerdown', (e) => {
-            if (rRevealed) return;
-            rScratching = true;
-            rc.setPointerCapture(e.pointerId);
-            reasonScratch(e);
-        });
-        rc.addEventListener('pointerup', () => rScratching = false);
-        rc.addEventListener('pointerleave', () => rScratching = false);
-
-        function reasonScratch(e) {
-            if (!rScratching || rRevealed) return;
-            const { x, y } = reasonPos(e);
-            rcx.globalCompositeOperation = 'destination-out';
-            rcx.beginPath();
-            rcx.arc(x, y, 26, 0, Math.PI * 2);
-            rcx.fill();
-
-            const data = rcx.getImageData(0, 0, rc.width, rc.height).data;
-            let clear = 0;
-            for (let i = 3; i < data.length; i += 40) if (data[i] === 0) clear++;
-            if (clear / (data.length / 40) > 0.5) {
-                rRevealed = true;
-                rcx.clearRect(0, 0, rc.width, rc.height);
-                playChime();
-                burstConfetti(innerWidth / 2, innerHeight / 2, 45);
-            }
-        }
-        rc.addEventListener('pointermove', reasonScratch);
-
-        // SCRATCH CARD
-        const sc = document.getElementById('scratch-canvas');
-        const sctx = sc.getContext('2d');
-        let scratching = false, scratched = false;
-
-        function initScratch() {
-            sc.width = sc.offsetWidth;
-            sc.height = sc.offsetHeight;
-            sctx.globalCompositeOperation = 'source-over';
-            const g = sctx.createLinearGradient(0, 0, sc.width, sc.height);
-            g.addColorStop(0, '#e78ab5'); g.addColorStop(0.5, '#f9cfe3'); g.addColorStop(1, '#e78ab5');
-            sctx.fillStyle = g;
-            sctx.fillRect(0, 0, sc.width, sc.height);
-            sctx.fillStyle = 'rgba(231,90,156,0.35)';
-            sctx.font = `${Math.max(16, sc.width / 22)}px Montserrat, sans-serif`;
-            sctx.textAlign = 'center';
-            sctx.fillText('✦ اكتشفي بيديكِ ✦', sc.width / 2, sc.height / 2);
-        }
-        initScratch();
-        addEventListener('resize', () => { if (!scratched) initScratch(); });
-
-        function scratchPos(e) {
-            const rect = sc.getBoundingClientRect();
-            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        }
-
-        sc.addEventListener('pointerdown', (e) => {
-            scratching = true;
-            sc.setPointerCapture(e.pointerId);
-            scratchMove(e);
-        });
-        sc.addEventListener('pointerup', () => scratching = false);
-        sc.addEventListener('pointerleave', () => scratching = false);
-
-        function scratchMove(e) {
-            if (!scratching || scratched) return;
-            const { x, y } = scratchPos(e);
-            sctx.globalCompositeOperation = 'destination-out';
-            sctx.beginPath();
-            sctx.arc(x, y, 28, 0, Math.PI * 2);
-            sctx.fill();
-
-            const imgData = sctx.getImageData(0, 0, sc.width, sc.height).data;
-            let clear = 0;
-            for (let i = 3; i < imgData.length; i += 40) {
-                if (imgData[i] === 0) clear++;
-            }
-            if (clear / (imgData.length / 40) > 0.45) {
-                scratched = true;
-                sctx.clearRect(0, 0, sc.width, sc.height);
-                playChime();
-                burstConfetti(innerWidth / 2, innerHeight / 2, 140);
-                showToast('🎉 وجدتِ مفاجأتكِ!');
-                if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
-            }
-        }
-        sc.addEventListener('pointermove', scratchMove);
-
-                        // IN-APP VOICE RECORDER (Supabase upload)
-        const SUPABASE_URL = 'https://gmjvwnqjoiloolyzwwox.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtanZ3bnFqb2lsb29seXp3d294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2Mjg5MDYsImV4cCI6MjEwMzIwNDkwNn0.lLbHjBbfVRrCM10kTWc-6Tx-ga117soIbED4qpR-s_4';
-
-        let mediaRecorder = null;
-        let recChunks = [];
-        let recBlob = null;
-        let recInterval = null;
-        let recSeconds = 0;
-
-        const recStart = document.getElementById('rec-start');
-        const recActive = document.getElementById('rec-active');
-        const recReview = document.getElementById('rec-review');
-        const recStopBtn = document.getElementById('rec-stop');
-        const recSend = document.getElementById('rec-send');
-        const recRedo = document.getElementById('rec-redo');
-        const recPlayer = document.getElementById('rec-player');
-        const recStatus = document.getElementById('rec-status');
-
-        function resetRecorder() {
-            clearInterval(recInterval);
-            recBlob = null;
-            recChunks = [];
-            recSeconds = 0;
-            document.getElementById('rec-timer').textContent = '0:00';
-            recActive.style.display = 'none';
-            recReview.style.display = 'none';
-            recStart.style.display = '';
-            recStatus.textContent = '';
-        }
-
-        recStart.addEventListener('click', async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                recChunks = [];
-                mediaRecorder.ondataavailable = e => recChunks.push(e.data);
-                mediaRecorder.onstop = () => {
-                    stream.getTracks().forEach(t => t.stop());
-                    recBlob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-                    recPlayer.src = URL.createObjectURL(recBlob);
-                    recActive.style.display = 'none';
-                    recReview.style.display = 'block';
-                };
-                mediaRecorder.start();
-                recSeconds = 0;
-                recStart.style.display = 'none';
-                recActive.style.display = 'flex';
-                recInterval = setInterval(() => {
-                    recSeconds++;
-                    document.getElementById('rec-timer').textContent =
-                        `${Math.floor(recSeconds / 60)}:${String(recSeconds % 60).padStart(2, '0')}`;
-                    if (recSeconds >= 120) mediaRecorder.state !== 'inactive' && mediaRecorder.stop();
-                }, 1000);
-            } catch (err) {
-                showToast('🎤 اسمحِ بالوصول إلى الميكروفون أولاً');
-            }
-        });
-
-        recStopBtn.addEventListener('click', () => {
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-        });
-
-        recRedo.addEventListener('click', resetRecorder);
-
-        recSend.addEventListener('click', async () => {
-            if (!recBlob) return;
-            if (SUPABASE_URL.includes('YOUR_')) {
-                recStatus.textContent = '⚠️ التخزين غير مُعدّ بعد — قول لي "جهّزت Supabase" مع المفاتيح';
-                return;
-            }
-            recSend.disabled = true;
-            recStatus.textContent = '⏳ جاري الإرسال...';
-            try {
-                const ext = (recBlob.type.includes('mp4') || recBlob.type.includes('aac')) ? 'm4a' : 'webm';
-                const safeName = getHerName().replace(/[^a-zA-Z0-9]/g, '') || 'sender';
-                const fname = `puzzle-${puzzleProgress}-${safeName}-${Date.now()}.${ext}`;
-                const res = await fetch(`${SUPABASE_URL}/storage/v1/object/voices/${encodeURIComponent(fname)}`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Content-Type': (recBlob.type || 'audio/webm').split(';')[0]
-                    },
-                    body: recBlob
-                });
-                if (!res.ok) throw new Error(await res.text());
-                playChime();
-                burstConfetti(innerWidth / 2, innerHeight / 2, 80);
-                showToast('✦ وصلني صوتكِ... انتظري تلميحي');
-                resetRecorder();
-            } catch (err) {
-                console.error(err);
-                recStatus.textContent = 'تعذّر الإرسال: ' + (err.message || err);
-            } finally {
-                recSend.disabled = false;
-            }
-        });
-
-        // PUZZLE ENGINE — ID-based progress, immune to edits/reorders
-        let puzzles = [];
-        function normAnswer(s) {
-            return s.trim().replace(/[أإآ]/g, 'ا').replace(/[ةه]/g, 'ه').replace(/[\s\u064B-\u0652]/g, '').toLowerCase();
-        }
-
-        function showOnly(id) {
-            ['puzzle-locked', 'puzzle-open', 'puzzle-reward-view', 'puzzle-nightdone'].forEach(x => {
-                document.getElementById(x).style.display = (x === id) ? '' : 'none';
-            });
-        }
-
-        function currentPuzzle() {
-            return puzzles.find(p => !solvedIds.includes(p.qid));
-        }
-
-        function renderPuzzle() {
-            if (!puzzles.length) {
-                showOnly('puzzle-nightdone');
-                document.getElementById('puzzle-nightdone-text').innerText =
-                    '🌱 الحديقة تُزرع بألغاز جديدة... عودي قريباً يا فلّة قلبي';
-                return;
-            }
-
-            const p = currentPuzzle();
-            if (!p) {
-                showOnly('puzzle-nightdone');
-                document.getElementById('puzzle-nightdone-text').innerText =
-                    'حليتِ كل الألغاز يا بطلة...\n\nلكن أعظم لغز يبقى: كيف أحبتك هكذا؟\nالجواب: لا أعرف... فقط حدث.\n\nأحبك يا ' + getHerName() + ' ✦';
-                return;
-            }
-
-            showOnly('puzzle-open');
-            const done = solvedIds.filter(id => puzzles.some(x => x.qid === id)).length;
-            document.getElementById('puzzle-progress').textContent =
-                `اللغز ${done + 1} من ${puzzles.length}`;
-            document.getElementById('puzzle-question').textContent = p.q;
-            document.getElementById('puzzle-answer').value = '';
-        }
-
-        function handleCorrect() {
-            const p = currentPuzzle();
-            if (!p) return;
-            solvedIds.push(p.qid);
-            localStorage.setItem('solvedIds', JSON.stringify(solvedIds));
-
-            playChime();
-            burstConfetti(innerWidth / 2, innerHeight / 2, 110);
-            if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
-
-            showOnly('puzzle-reward-view');
-            document.getElementById('puzzle-reward-text').innerText = p.reward || '';
-            const rimg = document.getElementById('reward-image');
-            rimg.addEventListener('contextmenu', e => e.preventDefault());
-            if (rimg._hideTimer) clearTimeout(rimg._hideTimer);
-            if (p.reward_image) {
-                rimg.src = p.reward_image;
-                rimg.style.display = 'block';
-                rimg.style.opacity = '1';
-                rimg._hideTimer = setTimeout(() => {
-                    rimg.style.transition = 'opacity 1s ease';
-                    rimg.style.opacity = '0';
-                    setTimeout(() => { rimg.style.display = 'none'; }, 1000);
-                }, 5000);
-            } else {
-                rimg.style.display = 'none';
-            }
-            document.getElementById('puzzle-next-hint').style.display =
-                currentPuzzle() ? '' : 'none';
-
-            setTimeout(renderPuzzle, 4500);
-        }
-
-        document.getElementById('puzzle-submit').addEventListener('click', () => {
-            const p = currentPuzzle();
-            if (!p) return;
-            const val = document.getElementById('puzzle-answer').value;
-            if (!val.trim()) return;
-            if ((p.a || []).some(a => normAnswer(a) === normAnswer(val))) {
-                handleCorrect();
-            } else {
-                document.getElementById('puzzle-wrong').style.display = 'block';
-                setTimeout(() => document.getElementById('puzzle-wrong').style.display = 'none', 3500);
-            }
-        });
-
-        document.getElementById('puzzle-answer').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') document.getElementById('puzzle-submit').click();
-        });
-
-        renderPuzzle();
-
-// LOAD CONTENT FROM SUPABASE — everything from the database
-        async function loadRemoteContent() {
-            const H = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
-            try {
-                const r = await fetch(`${SUPABASE_URL}/rest/v1/content?select=*`, { headers: H });
-                if (r.ok) {
-                    const rows = await r.json();
-                    rows.forEach(row => {
-                        if (row.key === 'puzzles' && Array.isArray(row.value)) {
-                            puzzles = row.value.map((p, i) => ({
-                                qid: p.qid || ('q' + i + '-' + String(p.q || '').length),
-                                q: p.q || p.question || '',
-                                a: Array.isArray(p.a) ? p.a : String(p.a || p.answers || '').split('|').map(s => s.trim()).filter(Boolean),
-                                reward: p.reward || p.reward_text || '',
-                                reward_image: p.reward_image || ''
-                            }));
-                        } else if (row.key === 'texts' && row.value && typeof row.value === 'object') {
-                            CONTENT.texts = row.value;
-                        } else if (row.key === 'poem' && Array.isArray(row.value)) {
-                            CONTENT.poem = row.value;
-                        }
-                    });
-                }
-            } catch (e) {}
-            const sig = JSON.stringify([puzzles, CONTENT.texts, CONTENT.poem]);
-            if (sig !== loadRemoteContent._lastSig) {
-                loadRemoteContent._lastSig = sig;
-                applyTexts();
-                buildPoem();
-                renderPuzzle();
-            }
-        }
-        loadRemoteContent();
-        setInterval(loadRemoteContent, 60000);
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) loadRemoteContent();
-        });
-
-        // REALTIME — instant updates when admin saves
+    'use strict';
+    // ================= CONFIG =================
+    const SUPABASE_URL = 'https://gmjvwnqjoiloolyzwwox.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtanZ3bnFqb2lsb29seXp3d294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2Mjg5MDYsImV4cCI6MjEwMzIwNDkwNn0.lLbHjBbfVRrCM10kTWc-6Tx-ga117soIbED4qpR-s_4';
+    const VOICE_NOTE_FILE = 'voice.mp3';
+
+    if (location.search.includes('reset')) {
+        ['solvedIds', 'herName'].forEach(k => localStorage.removeItem(k));
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+    }
+
+    // ================= STATE =================
+    let puzzles = [];
+    let solvedIds = JSON.parse(localStorage.getItem('solvedIds') || '[]');
+    if (!Array.isArray(solvedIds)) solvedIds = [];
+    let texts = {};
+    let poemData = null;
+    let activeBox = null;
+
+    function getHerName() { return localStorage.getItem('herName') || 'هاجَر'; }
+
+    // ================= HELPERS =================
+    const $id = id => document.getElementById(id);
+    function showToast(msg) {
+        const t = $id('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => t.classList.remove('show'), 2600);
+    }
+    function normAnswer(s) {
+        return String(s).trim().replace(/[أإآ]/g, 'ا').replace(/[ةه]/g, 'ه').replace(/[\s\u064B-\u0652]/g, '').toLowerCase();
+    }
+    function playChime() {
         try {
-            const sbLive = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            sbLive.channel('content-changes')
-                .on('postgres_changes', { event: '*', schema: 'public' }, () => loadRemoteContent())
-                .subscribe();
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return;
+            const ctx = new AC();
+            [261.63, 329.63, 392.00, 523.25].forEach((freq, i) => {
+                const o = ctx.createOscillator(), g = ctx.createGain();
+                o.type = 'sine'; o.frequency.value = freq;
+                g.gain.setValueAtTime(0, ctx.currentTime);
+                g.gain.linearRampToValueAtTime(0.055, ctx.currentTime + 0.1 + i * 0.15);
+                g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.4 + i * 0.2);
+                o.connect(g); g.connect(ctx.destination);
+                o.start(ctx.currentTime + i * 0.15); o.stop(ctx.currentTime + 3);
+            });
         } catch (e) {}
+    }
 
-        // HER IMAGE UPLOAD
-        const imgPickBtn = document.getElementById('img-pick-btn');
-        const imgInput = document.getElementById('img-input');
-        imgPickBtn.addEventListener('click', () => imgInput.click());
-        imgInput.addEventListener('change', async () => {
-            const file = imgInput.files[0];
-            if (!file) return;
-            const st = document.getElementById('img-status');
-            st.textContent = '⏳ جاري إرسال الصورة...';
-            imgPickBtn.disabled = true;
-            try {
-                const ext = file.name.split('.').pop().toLowerCase();
-                const fname = `photo-${puzzleProgress}-${Date.now()}.${ext}`;
-                const r = await fetch(`${SUPABASE_URL}/storage/v1/object/fromher/${fname}`, {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-                        apikey: SUPABASE_ANON_KEY,
-                        'Content-Type': file.type
-                    },
-                    body: file
-                });
-                if (!r.ok) throw new Error((await r.json()).message || r.status);
-                playChime();
-                burstConfetti(innerWidth / 2, innerHeight / 2, 70);
-                showToast('📷 وصلت صورتكِ ✦');
-                st.textContent = '';
-                imgInput.value = '';
-            } catch (err) {
-                st.textContent = 'تعذّر الإرسال: ' + err.message;
-            } finally {
-                imgPickBtn.disabled = false;
-            }
+    // ================= INSTALL =================
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault();
+        deferredPrompt = e;
+        $id('install-btn').style.display = 'block';
+    });
+    $id('install-btn').addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        $id('install-btn').style.display = 'none';
+    });
+    window.addEventListener('appinstalled', () => { $id('install-btn').style.display = 'none'; });
+
+    // ================= MUSIC =================
+    let musicCtx = null, musicOn = false, musicTimer = null;
+    const SCALE = [220, 261.63, 293.66, 329.63, 392, 440, 523.25];
+    function ambientNote() {
+        if (!musicCtx || !musicOn) return;
+        try {
+            const now = musicCtx.currentTime;
+            const freq = SCALE[Math.floor(Math.random() * SCALE.length)] * (Math.random() > 0.7 ? 2 : 1);
+            const o = musicCtx.createOscillator(), g = musicCtx.createGain();
+            o.type = Math.random() > 0.5 ? 'sine' : 'triangle';
+            o.frequency.value = freq;
+            g.gain.setValueAtTime(0, now);
+            g.gain.linearRampToValueAtTime(0.03, now + 0.6);
+            g.gain.exponentialRampToValueAtTime(0.0001, now + 3.2);
+            o.connect(g); g.connect(musicCtx.destination);
+            o.start(now); o.stop(now + 3.4);
+        } catch (e) {}
+    }
+    $id('music-btn').addEventListener('click', () => {
+        try {
+            if (!musicCtx) musicCtx = new (window.AudioContext || window.webkitAudioContext)();
+            musicOn = !musicOn;
+            $id('music-btn').classList.toggle('playing', musicOn);
+            $id('music-btn').textContent = musicOn ? '♫' : '♪';
+            if (musicOn) { ambientNote(); musicTimer = setInterval(ambientNote, 1600); showToast('♪ موسيقى هادئة لكِ وحدك'); }
+            else clearInterval(musicTimer);
+        } catch (e) {}
+    });
+
+    // ================= FX CANVAS =================
+    const canvas = document.getElementById('fx-canvas');
+    const fctx = canvas.getContext('2d');
+    let W, H;
+    function sizeFx() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+    sizeFx();
+    addEventListener('resize', sizeFx);
+
+    const dust = [], sparks = [], confetti = [];
+    for (let i = 0; i < 50; i++) {
+        dust.push({ x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+            r: Math.random() * 1.8 + 0.4, vy: -(Math.random() * 0.35 + 0.08),
+            vx: (Math.random() - 0.5) * 0.15, a: Math.random() * 0.45 + 0.12, tw: Math.random() * 6.28 });
+    }
+    function burst(x, y, n = 90) {
+        for (let i = 0; i < n; i++) {
+            const a = Math.random() * 6.283, sp = Math.random() * 7 + 2;
+            confetti.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 3,
+                s: Math.random() * 5 + 2, rot: Math.random() * 3.14, vr: (Math.random() - 0.5) * 0.25,
+                life: 1, hue: 320 + Math.random() * 30 });
+        }
+    }
+    addEventListener('pointermove', e => {
+        if (Math.random() > 0.55) sparks.push({ x: e.clientX, y: e.clientY, life: 1, r: Math.random() * 2.2 + 0.8 });
+    });
+    function fxLoop() {
+        fctx.clearRect(0, 0, W, H);
+        for (const p of dust) {
+            p.tw += 0.02; p.x += p.vx; p.y += p.vy;
+            if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+            fctx.globalAlpha = p.a * (0.6 + 0.4 * Math.sin(p.tw));
+            fctx.fillStyle = '#f48fbf';
+            fctx.beginPath(); fctx.arc(p.x, p.y, p.r, 0, 6.283); fctx.fill();
+        }
+        for (let i = sparks.length - 1; i >= 0; i--) {
+            const s = sparks[i]; s.life -= 0.045;
+            if (s.life <= 0) { sparks.splice(i, 1); continue; }
+            fctx.globalAlpha = s.life * 0.8;
+            fctx.fillStyle = '#ffffff';
+            fctx.beginPath(); fctx.arc(s.x, s.y, s.r * s.life, 0, 6.283); fctx.fill();
+        }
+        for (let i = confetti.length - 1; i >= 0; i--) {
+            const c = confetti[i];
+            c.vy += 0.12; c.x += c.vx; c.y += c.vy; c.rot += c.vr; c.life -= 0.008;
+            if (c.life <= 0 || c.y > H + 20) { confetti.splice(i, 1); continue; }
+            fctx.save();
+            fctx.globalAlpha = Math.min(c.life, 1);
+            fctx.translate(c.x, c.y); fctx.rotate(c.rot);
+            fctx.fillStyle = `hsl(${c.hue}, 80%, ${70 + (c.hue % 12)}%)`;
+            fctx.fillRect(-c.s / 2, -c.s / 4, c.s, c.s / 2);
+            fctx.restore();
+        }
+        fctx.globalAlpha = 1;
+        requestAnimationFrame(fxLoop);
+    }
+    fxLoop();
+
+    // ================= SECRET LETTER (logo x5) =================
+    let taps = 0, tapT = null;
+    $id('brand-logo').addEventListener('click', () => {
+        taps++;
+        clearTimeout(tapT);
+        tapT = setTimeout(() => taps = 0, 1800);
+        if (taps >= 3 && taps < 5) showToast(`✦ ${5 - taps}... استمري`);
+        if (taps >= 5) {
+            taps = 0;
+            playChime();
+            burst(innerWidth / 2, innerHeight / 2, 130);
+            $id('letter-modal').classList.add('open');
+        }
+    });
+    document.querySelectorAll('.modal-close').forEach(b =>
+        b.addEventListener('click', () => $id(b.dataset.close).classList.remove('open')));
+    document.querySelectorAll('.modal-overlay').forEach(ov =>
+        ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); }));
+
+    // ================= POEM PAGE =================
+    const DEFAULT_POEM = [
+        ['حينَ تُغمِضينَ العالم','كلُّ مساءٍ...','تُعلِّمينَ العيونَ','كيف تُغمِضُ خوفَها،','ثم تعودينَ','وعيناكِ...','لا تعرفانِ النوم.','أفكِّرُ أحيانًا...','حينَ يسلِّمُ الناسُ','أحلامَهم','إلى يديكِ،','إلى مَن','**تُسلِّمينَ تعبَكِ؟'],
+        ['رأيتُ المطرَ','يسقطُ ألفَ مرَّة،','لكنِّي','لم أرَهُ يومًا','يختارُ وردةً بعينِها.','**إلَّا قلبي...','**منذُ رآكِ.'],
+        ['غريبٌ...','أنَّ امرأةً','تجعلُ الآخرينَ','ينسونَ الألم،','كانتْ','**أجملَ ألمٍ','عرفتُهُ أنا.','ليسَ لأنَّها أوجعتني...','بل لأنَّها','جعلتْ قلبي','يعرفُ','أنَّه كانَ نائمًا','قبلَها.'],
+        ['لو سألوكِ يومًا:','كم حياةً أنقذتِ؟','ربَّما','لن تعرفي العدد.','أمَّا أنا...','فسأقولُ:','**واحدة.','حياتي...','حينَ دخلتِها','**دونَ أن تطرقي الباب...']
+    ];
+    const DEFAULT_TYPED = 'إلى {name}...\n\nقبل أن تقرئي القصيدة، اعلمي أنّ كلَّ كلمةٍ فيها\nكُتبتْ مرتين: مرةً بالحبر، ومرةً بالاشتياق.';
+
+    function applyName() {
+        const n = getHerName();
+        document.querySelectorAll('.her-name').forEach(el => {
+            el.textContent = el.classList.contains('her-name-inline') ? `حبيبتي ${n}` : `يا ${n}`;
         });
+        const hl = document.getElementById('hidden-letter-text');
+        if (hl && texts.hiddenLetter) hl.innerText = texts.hiddenLetter.split('{name}').join(n);
+    }
 
-// VOICE NOTE
-        fetch(VOICE_NOTE_FILE, { method: 'HEAD' })
-            .then(r => {
-                if (r.ok) {
-                    document.getElementById('voice-diamond').style.display = 'inline-flex';
-                    document.getElementById('voice-hint').style.display = 'block';
+    function buildPoem() {
+        const stanzas = (poemData && poemData.length) ? poemData : DEFAULT_POEM;
+        const list = document.getElementById('stanza-list');
+        list.innerHTML = stanzas.map(lines => {
+            const inner = lines.map(line => {
+                const h = line.startsWith('**');
+                return `<span class="verse-line ${h ? 'highlight' : ''}">${h ? line.slice(2) : line}</span>`;
+            }).join('');
+            return `<article class="stanza">${inner}</article>`;
+        }).join('');
+        const last = list.lastElementChild;
+        if (last) last.insertAdjacentHTML('beforeend', '<br><span class="name-reveal her-name"></span>');
+        applyName();
+    }
+    buildPoem();
+
+    let typedStarted = false;
+    function typedLetterFor() {
+        return (texts.typedLetter || DEFAULT_TYPED).split('{name}').join(getHerName());
+    }
+    function startTypewriter() {
+        const el = document.getElementById('typed-text');
+        const full = typedLetterFor();
+        el.classList.remove('done'); el.textContent = '';
+        let i = 0;
+        const t = setInterval(() => {
+            el.textContent = full.slice(0, ++i);
+            if (i >= full.length) { clearInterval(t); el.classList.add('done'); }
+        }, 45);
+    }
+
+    $id('rename-btn').addEventListener('click', () => {
+        const n = prompt('اسمُها؟', getHerName());
+        if (n && n.trim()) { localStorage.setItem('herName', n.trim()); applyName(); showToast('✦ تم'); }
+    });
+
+    function openPoem() {
+        playChime();
+        $id('loader-overlay').classList.add('active');
+        setTimeout(() => {
+            $id('garden-page').style.display = 'none';
+            $id('loader-overlay').classList.remove('active');
+            const pc = document.getElementById('poem-container');
+            pc.style.display = 'block';
+            requestAnimationFrame(() => pc.classList.add('visible'));
+            startTypewriter();
+            burst(innerWidth / 2, innerHeight * 0.25, 110);
+            window.scrollTo({ top: 0 });
+        }, 1500);
+    }
+    $id('return-btn').addEventListener('click', () => {
+        playChime();
+        const pc = document.getElementById('poem-container');
+        pc.classList.remove('visible');
+        setTimeout(() => {
+            pc.style.display = 'none';
+            $id('garden-page').style.display = '';
+            window.scrollTo({ top: 0 });
+        }, 500);
+    });
+    document.querySelectorAll('.trigger-poem').forEach(el => el.addEventListener('click', openPoem));
+
+    // ================= DAILY / MEMORY / REASONS =================
+    const FALLBACK_DAILY = [
+        'كلُّ يومٍ يمرُّ... ويبقى قلبي مكانًا لا يسكنه إلا أنتِ.',
+        'إذا كانَ للحُبِّ عنوانٌ، فأنّا نعرفهُ حينَ أراكِ.',
+        'بينَ آلافِ الوجوه... عيناي لا تعرفانِ سوى دربكِ.',
+        'أنتِ القهوةُ في الصباح، والهدوءُ بعدَ العناء، والحكايةُ كلُّها.',
+        'لو كانَ للقلبِ صوتٌ، لسمعتَ العالمَ كلهُ ينادي باسمكِ.',
+        'معكِ... حتى العادي يصيرُ احتفالًا، والانتظارُ حلوى.',
+        'كلُّ مساءٍ أغمضُ عينيّ، فأجدُكِ الحلمُ الذي لا أستيقظُ منه.'
+    ];
+    const FALLBACK_MEMORIES = [
+        'ذكرى اليوم: ضحكتِ من قلبك... ونسيتُ العالم كله.',
+        'ذكرى اليوم: أولُ رسالةٍ أرسلتِها لي... قرأتُها ألف مرّة.'
+    ];
+    const FALLBACK_REASONS = [
+        'لأنّكِ تبتسمين... فيصيرُ يومي الصعبُ أسهلَ ما يكون.',
+        'لأنّ صوتكِ هو الموسيقى الوحيدةُ التي لا أتعَبُ منها.',
+        'لأنّكِ تؤمنين بي أكثر ممّا أؤمنُ بنفسي.',
+        'لأنّ المستقبل معكِ ليس مخيفًا بل مُشتاقًا إليه.',
+        'لأنّكِ دعاءُ كلِّ ليلة، وشكرُ كلِّ صباح.'
+    ];
+
+    function refreshTexts() {
+        const daily = (texts.dailyMessages && texts.dailyMessages.length) ? texts.dailyMessages : FALLBACK_DAILY;
+        const mems = (texts.memoriesOfDay && texts.memoriesOfDay.length) ? texts.memoriesOfDay : FALLBACK_MEMORIES;
+        const now = new Date();
+        $id('daily-text').innerText = daily[now.getDay() % daily.length];
+        $id('memory-text').innerText = mems[now.getDate() % mems.length];
+    }
+    refreshTexts();
+
+    let reasonIdx = new Date().getDate() % 997;
+    function currentReasons() {
+        return (texts.reasons && texts.reasons.length) ? texts.reasons : FALLBACK_REASONS;
+    }
+    function showReason() {
+        const rs = currentReasons();
+        reasonIdx = reasonIdx % rs.length;
+        document.getElementById('reason-text').innerText = rs[reasonIdx];
+    }
+    showReason();
+
+    // REASON SCRATCH FOIL
+    const rc = document.getElementById('reason-canvas');
+    const rcx = rc.getContext('2d');
+    let rDown = false, rOpen = false;
+    function initReasonFoil() {
+        rc.width = rc.offsetWidth || 600; rc.height = rc.offsetHeight || 150;
+        rcx.globalCompositeOperation = 'source-over';
+        const g = rcx.createLinearGradient(0, 0, rc.width, rc.height);
+        g.addColorStop(0, '#f9cfe3'); g.addColorStop(0.5, '#e78ab5'); g.addColorStop(1, '#f9cfe3');
+        rcx.fillStyle = g; rcx.fillRect(0, 0, rc.width, rc.height);
+        rcx.fillStyle = 'rgba(255,255,255,0.9)';
+        rcx.font = Math.max(13, rc.width / 34) + 'px Montserrat, sans-serif';
+        rcx.textAlign = 'center';
+        rcx.fillText('✨ اكتشفي سببَ الحب بلمسة صغيرة', rc.width / 2, rc.height / 2);
+    }
+    initReasonFoil();
+    addEventListener('resize', () => { if (!rOpen) initReasonFoil(); });
+    rc.addEventListener('pointerdown', e => { if (rOpen) return; rDown = true; rc.setPointerCapture(e.pointerId); rScratch(e); });
+    rc.addEventListener('pointerup', () => rDown = false);
+    rc.addEventListener('pointerleave', () => rDown = false);
+    function rScratch(e) {
+        if (!rDown || rOpen) return;
+        const rect = rc.getBoundingClientRect();
+        rcx.globalCompositeOperation = 'destination-out';
+        rcx.beginPath();
+        rcx.arc(e.clientX - rect.left, e.clientY - rect.top, 26, 0, 6.283);
+        rcx.fill();
+        const d = rcx.getImageData(0, 0, rc.width, rc.height).data;
+        let clear = 0;
+        for (let i = 3; i < d.length; i += 40) if (d[i] === 0) clear++;
+        if (clear / (d.length / 40) > 0.5) {
+            rOpen = true;
+            rcx.clearRect(0, 0, rc.width, rc.height);
+            playChime();
+            burst(innerWidth / 2, innerHeight / 2, 45);
+        }
+    }
+    rc.addEventListener('pointermove', rScratch);
+
+    $id('reason-btn').addEventListener('click', () => {
+        reasonIdx++;
+        showReason();
+        rOpen = false;
+        initReasonFoil();
+    });
+
+    // PRIZE SCRATCH
+    const sc = document.getElementById('scratch-canvas');
+    const scx = sc.getContext('2d');
+    let sDown = false, sOpen = false;
+    function initPrizeFoil() {
+        sc.width = sc.offsetWidth || 480; sc.height = sc.offsetHeight || 210;
+        scx.globalCompositeOperation = 'source-over';
+        const g = scx.createLinearGradient(0, 0, sc.width, sc.height);
+        g.addColorStop(0, '#e78ab5'); g.addColorStop(0.5, '#f9cfe3'); g.addColorStop(1, '#e78ab5');
+        scx.fillStyle = g; scx.fillRect(0, 0, sc.width, sc.height);
+        scx.fillStyle = 'rgba(255,255,255,0.9)';
+        scx.font = '16px Montserrat, sans-serif'; scx.textAlign = 'center';
+        scx.fillText('✦ اكتشفي مفاجأتك بيدكِ ✦', sc.width / 2, sc.height / 2);
+    }
+    initPrizeFoil();
+    addEventListener('resize', () => { if (!sOpen) initPrizeFoil(); });
+    sc.addEventListener('pointerdown', e => { if (sOpen) return; sDown = true; sc.setPointerCapture(e.pointerId); pScratch(e); });
+    sc.addEventListener('pointerup', () => sDown = false);
+    sc.addEventListener('pointerleave', () => sDown = false);
+    function pScratch(e) {
+        if (!sDown || sOpen) return;
+        const rect = sc.getBoundingClientRect();
+        scx.globalCompositeOperation = 'destination-out';
+        scx.beginPath();
+        scx.arc(e.clientX - rect.left, e.clientY - rect.top, 28, 0, 6.283);
+        scx.fill();
+        const d = scx.getImageData(0, 0, sc.width, sc.height).data;
+        let clear = 0;
+        for (let i = 3; i < d.length; i += 40) if (d[i] === 0) clear++;
+        if (clear / (d.length / 40) > 0.45) {
+            sOpen = true;
+            scx.clearRect(0, 0, sc.width, sc.height);
+            playChime();
+            burst(innerWidth / 2, innerHeight / 2, 140);
+            showToast('🎉 وجدتِ مفاجأتك!');
+            if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+        }
+    }
+    sc.addEventListener('pointermove', pScratch);
+
+    // ================= PUZZLE BOXES =================
+    function todayStr() {
+        const d = new Date();
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+    function boxState(p) {
+        if (solvedIds.includes(p.qid)) return 'solved';
+        if (p.unlock && p.unlock > todayStr()) return 'locked';
+        return 'open';
+    }
+
+    function renderBoxes() {
+        const grid = document.getElementById('boxes-grid');
+        if (!puzzles.length) {
+            grid.innerHTML = '<div class="empty-note">🌱 الحديقة تُزرع بألغاز جديدة... عودي قريباً يا فلّة قلبي</div>';
+            closeDetail();
+            return;
+        }
+        grid.innerHTML = puzzles.map((p, i) => {
+            const st = boxState(p);
+            const emoji = st === 'solved' ? '✅' : st === 'locked' ? '🔒' : '🎁';
+            let sub = '';
+            if (st === 'solved') sub = 'حُلّت';
+            else if (st === 'locked') sub = 'تُفتح في ' + p.unlock;
+            else sub = 'افتحيني!';
+            return `<div class="box ${st} ${st === 'open' ? 'open-now' : ''}" data-i="${i}">
+                <span class="emoji">${emoji}</span>
+                <div class="num">صندوق ${i + 1}</div>
+                <div class="sub">${sub}</div>
+            </div>`;
+        }).join('');
+        grid.querySelectorAll('.box').forEach(b =>
+            b.addEventListener('click', () => onBoxClick(+b.dataset.i)));
+    }
+
+    function onBoxClick(i) {
+        const p = puzzles[i];
+        const st = boxState(p);
+        if (st === 'solved') { showToast('✔ حُلّت من قبل — انتظري الصندوق القادم'); return; }
+        if (st === 'locked') { showToast('🔒 تُفتح في ' + p.unlock); return; }
+        openDetail(p, i);
+    }
+
+    function openDetail(p, i) {
+        activeBox = p;
+        $id('boxes-grid').querySelectorAll('.box').forEach((b, j) =>
+            b.classList.toggle('selected', j === i));
+        showOnly('box-detail');
+        document.getElementById('box-progress').textContent =
+            `الصندوق ${i + 1} من ${puzzles.length}`;
+        document.getElementById('box-question').textContent = p.q;
+        document.getElementById('box-answer').value = '';
+        document.getElementById('box-wrong').style.display = 'none';
+        $id('rec-zone').style.display = 'block';
+        resetRecorder();
+        $id('box-detail').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function closeDetail() {
+        activeBox = null;
+        const d = document.getElementById('box-detail');
+        if (d) d.style.display = 'none';
+    }
+
+    function showOnly(id) {
+        ['box-detail'].forEach(x => {
+            const el = document.getElementById(x);
+            if (el) el.style.display = (x === id) ? '' : 'none';
+        });
+    }
+
+    $id('box-submit').addEventListener('click', () => {
+        const p = activeBox;
+        if (!p) return;
+        const val = $id('box-answer').value;
+        if (!val.trim()) return;
+        if ((p.a || []).some(a => normAnswer(a) === normAnswer(val))) {
+            solveBox(p);
+        } else {
+            $id('box-wrong').style.display = 'block';
+            setTimeout(() => $id('box-wrong').style.display = 'none', 3500);
+        }
+    });
+    $id('box-answer').addEventListener('keydown', e => {
+        if (e.key === 'Enter') $id('box-submit').click();
+    });
+
+    function solveBox(p) {
+        solvedIds.push(p.qid);
+        localStorage.setItem('solvedIds', JSON.stringify(solvedIds));
+        playChime();
+        burst(innerWidth / 2, innerHeight / 2, 120);
+        if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+
+        $id('rec-zone').style.display = 'none';
+        showOnly('reward-view');
+        document.getElementById('reward-text').innerText = p.reward || '';
+        const img = document.getElementById('reward-image');
+        if (img._t) clearTimeout(img._t);
+        if (p.reward_image) {
+            img.src = p.reward_image;
+            img.style.display = 'block';
+            img.style.opacity = '1';
+            img._t = setTimeout(() => {
+                img.style.transition = 'opacity 1s ease'; img.style.opacity = '0';
+                setTimeout(() => { img.style.display = 'none'; }, 1000);
+            }, 5000);
+        } else img.style.display = 'none';
+
+        const next = puzzles.find(x => !solvedIds.includes(x.qid));
+        document.getElementById('next-hint').innerText = next
+            ? 'الصندوق التالي ينتظركِ ✦'
+            : 'أنهيتِ كلَّ الصناديق... أحبكِ يا ' + getHerName() + ' ✦';
+        renderBoxes();
+    }
+    renderBoxes();
+
+    // ================= RECORDER =================
+    let mediaRecorder = null, recChunks = [], recBlob = null, recInt = null, recSec = 0;
+
+    function resetRecorder() {
+        clearInterval(recInt);
+        recBlob = null; recChunks = []; recSec = 0;
+        $id('rec-timer').textContent = '0:00';
+        $id('rec-active').style.display = 'none';
+        $id('rec-review').style.display = 'none';
+        $id('rec-start').style.display = '';
+        $id('upload-status').textContent = '';
+    }
+
+    $id('rec-start').addEventListener('click', async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            recChunks = [];
+            mediaRecorder.ondataavailable = e => recChunks.push(e.data);
+            mediaRecorder.onstop = () => {
+                stream.getTracks().forEach(t => t.stop());
+                recBlob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+                $id('rec-player').src = URL.createObjectURL(recBlob);
+                $id('rec-active').style.display = 'none';
+                $id('rec-review').style.display = 'block';
+            };
+            mediaRecorder.start();
+            recSec = 0;
+            $id('rec-start').style.display = 'none';
+            $id('rec-active').style.display = 'flex';
+            recInt = setInterval(() => {
+                recSec++;
+                $id('rec-timer').textContent =
+                    Math.floor(recSec / 60) + ':' + String(recSec % 60).padStart(2, '0');
+                if (recSec >= 120 && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+            }, 1000);
+        } catch (e) {
+            showToast('🎤 اسمحي بالوصول للميكروفون أولاً');
+        }
+    });
+    $id('rec-stop').addEventListener('click', () => {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    });
+    $id('rec-redo').addEventListener('click', resetRecorder);
+
+    async function uploadToBucket(bucket, blobOrFile, fname, contentType) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 60000);
+        try {
+            const r = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${encodeURIComponent(fname)}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                    apikey: SUPABASE_ANON_KEY,
+                    'Content-Type': contentType
+                },
+                body: blobOrFile,
+                signal: ctrl.signal
+            });
+            clearTimeout(timer);
+            if (!r.ok) {
+                const err = await r.json().catch(() => ({}));
+                throw new Error(err.message || ('HTTP ' + r.status));
+            }
+            return true;
+        } catch (e) {
+            clearTimeout(timer);
+            throw e;
+        }
+    }
+
+    $id('rec-send').addEventListener('click', async () => {
+        if (!recBlob || !activeBox) return;
+        const st = $id('upload-status');
+        $id('rec-send').disabled = true;
+        st.textContent = '⏳ جاري الإرسال...';
+        try {
+            const ext = recBlob.type.includes('mp4') || recBlob.type.includes('aac') ? 'm4a' : 'webm';
+            const who = getHerName().replace(/[^a-zA-Z0-9]/g, '') || 'voice';
+            await uploadToBucket('voices', recBlob,
+                `puzzle-${puzzles.indexOf(activeBox)}-${who}-${Date.now()}.${ext}`,
+                recBlob.type.split(';')[0]);
+            playChime(); burst(innerWidth / 2, innerHeight / 2, 80);
+            showToast('✦ وصلني صوتكِ... انتظري تلميحي');
+            resetRecorder();
+        } catch (e) {
+            st.textContent = 'تعذّر الإرسال: ' + (e.name === 'AbortError' ? 'انتهت المهلة' : e.message);
+        } finally {
+            $id('rec-send').disabled = false;
+        }
+    });
+
+    $id('img-pick-btn').addEventListener('click', () => $id('img-input').click());
+    $id('img-input').addEventListener('change', async () => {
+        const file = $id('img-input').files[0];
+        if (!file || !activeBox) return;
+        const st = $id('upload-status');
+        if (!file.type.startsWith('image/')) { st.textContent = '✕ اختر ملف صورة'; return; }
+        if (file.size > 8 * 1024 * 1024) { st.textContent = '✕ الصورة كبيرة — الحد ٨ ميغا'; return; }
+        st.textContent = '⏳ جاري إرسال الصورة...';
+        $id('img-pick-btn').disabled = true;
+        try {
+            const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+            await uploadToBucket('fromher', file, `photo-${puzzles.indexOf(activeBox)}-${Date.now()}.${ext}`, file.type);
+            playChime(); burst(innerWidth / 2, innerHeight / 2, 70);
+            showToast('📷 وصلت صورتكِ ✦');
+            st.textContent = '';
+            $id('img-input').value = '';
+        } catch (e) {
+            st.textContent = 'تعذّر الإرسال: ' + (e.name === 'AbortError' ? 'انتهت المهلة' : e.message);
+        } finally {
+            $id('img-pick-btn').disabled = false;
+        }
+    });
+
+    // ================= VOICE NOTE DIAMOND =================
+    fetch(VOICE_NOTE_FILE, { method: 'HEAD' })
+        .then(r => {
+            if (r.ok) {
+                $id('voice-diamond').style.display = 'flex';
+                $id('voice-hint').style.display = 'block';
+            }
+        }).catch(() => {});
+    $id('voice-diamond')?.addEventListener('click', function () {
+        let a = document.getElementById('voice-audio');
+        if (!a) {
+            a = document.createElement('audio');
+            a.id = 'voice-audio'; a.src = VOICE_NOTE_FILE;
+            document.body.appendChild(a);
+        }
+        if (a.paused) a.play(); else a.pause();
+    });
+
+    // ================= CONTENT LOADING =================
+    async function loadContent() {
+        try {
+            const r = await fetch(`${SUPABASE_URL}/rest/v1/content?select=*`, {
+                headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
+            });
+            if (!r.ok) return;
+            const rows = await r.json();
+            rows.forEach(row => {
+                if (row.key === 'puzzles' && Array.isArray(row.value)) {
+                    puzzles = row.value.map((p, i) => ({
+                        qid: p.qid || ('q' + i),
+                        q: p.q || '',
+                        a: Array.isArray(p.a) ? p.a : String(p.a || '').split('|').map(s => s.trim()).filter(Boolean),
+                        reward: p.reward || '',
+                        reward_image: p.reward_image || '',
+                        unlock: p.unlock || ''
+                    }));
+                    if (activeBox && !puzzles.some(x => x.qid === activeBox.qid)) closeDetail();
+                } else if (row.key === 'texts' && row.value) {
+                    texts = row.value;
+                } else if (row.key === 'poem' && Array.isArray(row.value) && row.value.length) {
+                    poemData = row.value;
                 }
-            })
-            .catch(() => {});
-
-        document.getElementById('voice-diamond')?.addEventListener('click', function() {
-            let audio = document.getElementById('voice-audio');
-            if (!audio) {
-                audio = document.createElement('audio');
-                audio.id = 'voice-audio';
-                audio.src = VOICE_NOTE_FILE;
-                document.body.appendChild(audio);
-            }
-            audio.paused ? audio.play() : audio.pause();
-            this.style.background = audio.paused ? '' : 'rgba(231,90,156,0.3)';
-        });
+            });
+        } catch (e) {}
+        refreshTexts();
+        buildPoem();
+        applyName();
+        renderBoxes();
+    }
+    loadContent();
+    setInterval(loadContent, 60000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) loadContent(); });
+    try {
+        const sbLive = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        sbLive.channel('content-changes')
+            .on('postgres_changes', { event: '*', schema: 'public' }, () => loadContent())
+            .subscribe();
+    } catch (e) {}
     </script>
 </body>
 </html>
