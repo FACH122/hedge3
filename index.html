@@ -1551,7 +1551,7 @@
         const PUZZLE_TEST_MODE = location.search.includes('test');
 
         function isPuzzleTime() {
-            return PUZZLE_TEST_MODE || new Date().getHours() >= PUZZLE_HOUR;
+            return true;
         }
 
         function showOnly(id) {
