@@ -3,421 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✦ Admin</title>
+    <title>✦ لوحة التحكم</title>
     <style>
-        :root {
-            --gold-light: #f7e7ad;
-            --bg-dark: #07080c;
-            --bg-card: rgba(20, 22, 32, 0.55);
-            --border-gold: rgba(212, 175, 55, 0.25);
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: #fdf2f7; color: #44263b; min-height: 100vh; padding: 24px 14px 60px; }
+        h1 { text-align: center; font-size: 1.25rem; margin-bottom: 20px; color: #c2255c; }
+
+        .gate { max-width: 340px; margin: 14vh auto 0; background: #fff; border: 1px solid #f3d3e1;
+            border-radius: 16px; padding: 36px 26px; text-align: center; box-shadow: 0 10px 30px rgba(214,51,108,.08); }
+        .gate input { width: 100%; padding: 13px; border-radius: 10px; margin-bottom: 12px;
+            border: 1px solid #f3d3e1; font-size: 1rem; outline: none; text-align: center; }
+        .gate input:focus { border-color: #e64980; }
+        .btn-main { width: 100%; padding: 13px; border: none; border-radius: 10px; cursor: pointer;
+            background: linear-gradient(135deg,#f783ac,#c2255c); color: #fff; font-weight: 700; font-size: 1rem; }
+
+        .wrap { max-width: 780px; margin: 0 auto; }
+        .tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 22px; flex-wrap: wrap; }
+        .tab-btn { padding: 10px 22px; border-radius: 24px; cursor: pointer; font-size: 0.92rem;
+            background: #fff; border: 1px solid #f3d3e1; color: #7d5468; }
+        .tab-btn.active { background: linear-gradient(135deg,#f783ac,#c2255c); color: #fff; border-color: transparent; font-weight: 700; }
+
+        .toolbar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+        .tbtn { background: #fff; border: 1px solid #f3d3e1; color: #c2255c;
+            padding: 9px 18px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; }
+        .tbtn:hover { background: #fff0f6; }
+
+        .card { background: #fff; border: 1px solid #f3d3e1; border-radius: 14px;
+            padding: 18px; margin-bottom: 14px; direction: rtl; }
+        .card label { display: block; font-size: 0.78rem; font-weight: 700; color: #c2255c; margin: 12px 0 5px; }
+        .card textarea, .card input[type=text], .card input[type=number] {
+            width: 100%; border: 1px solid #f3d3e1; border-radius: 9px;
+            padding: 10px; font-family: inherit; font-size: 0.95rem; outline: none; color: #44263b; background: #fffbfd;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-        body {
-            background:
-                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.07), transparent),
-                var(--bg-dark);
-            color: #eceae4; font-family: system-ui, sans-serif; min-height: 100vh; padding: 30px 16px 60px;
-        }
-        h1 { text-align: center; font-size: 1.3rem; letter-spacing: 4px; margin-bottom: 24px; color: var(--gold-light); }
-        .gate { max-width: 360px; margin: 14vh auto 0; text-align: center;
-            background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 16px; padding: 40px 30px; }
-        .gate input { width: 100%; padding: 14px; border-radius: 10px; margin-bottom: 16px;
-            background: rgba(5,6,10,0.6); border: 1px solid var(--border-gold);
-            color: var(--gold-light); font-size: 1rem; outline: none; text-align: center; }
-        .gate button { background: linear-gradient(135deg,#bf953f,#fcf6ba,#b38728); border: none;
-            color: #0a0a0a; font-weight: 600; letter-spacing: 2px; padding: 13px 34px;
-            border-radius: 30px; cursor: pointer; font-size: 0.85rem; }
-        .wrap { max-width: 820px; margin: 0 auto; }
-        .tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 26px; flex-wrap: wrap; }
-        .tab-btn {
-            background: transparent; border: 1px solid var(--border-gold); color: #b5aea4;
-            padding: 11px 26px; border-radius: 30px; cursor: pointer; font-size: 0.9rem;
-        }
-        .tab-btn.active { background: linear-gradient(135deg,#bf953f,#fcf6ba,#b38728); color: #0a0a0a; border-color: transparent; font-weight: 600; }
-        .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-        .tbtn { background: transparent; border: 1px solid var(--border-gold); color: var(--gold-light);
-            padding: 9px 18px; border-radius: 20px; cursor: pointer; font-size: 0.82rem; }
-        .tbtn:hover { background: rgba(212,175,55,0.12); }
-        .pcard { background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 14px;
-            padding: 20px; margin-bottom: 16px; direction: rtl; }
-        .pcard label { display: block; font-size: 0.75rem; color: #b38728; margin: 10px 0 5px; letter-spacing: 1px; }
-        .pcard textarea, .pcard input[type=text], .pcard input[type=number] {
-            width: 100%; background: rgba(5,6,10,0.6); border: 1px solid var(--border-gold);
-            border-radius: 8px; color: #eceae4; padding: 10px; font-family: inherit; font-size: 0.95rem; outline: none;
-        }
-        .pcard textarea { resize: vertical; min-height: 52px; }
-        .row { display: flex; gap: 10px; align-items: flex-start; }
-        .row > *:first-child { width: 90px; flex-shrink: 0; }
-        .actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
-        .save { background: linear-gradient(135deg,#bf953f,#fcf6ba,#b38728); color: #0a0a0a; border: none;
-            padding: 10px 26px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.82rem; }
-        .del { background: transparent; border: 1px solid rgba(201,138,122,0.5); color: #e8b8aa;
-            padding: 10px 22px; border-radius: 20px; cursor: pointer; font-size: 0.82rem; }
-        .imgbtn { background: transparent; border: 1px dashed var(--border-gold); color: #b5aea4;
-            padding: 10px 18px; border-radius: 20px; cursor: pointer; font-size: 0.82rem; }
-        .rimg { max-width: 180px; max-height: 130px; border-radius: 10px; display: block; margin-top: 10px;
-            border: 1px solid var(--border-gold); }
-        .status { font-size: 0.8rem; color: #7da98c; margin-top: 8px; min-height: 1em; }
-        .big-ta { width: 100%; min-height: 220px; background: rgba(5,6,10,0.6); border: 1px solid var(--border-gold);
-            border-radius: 12px; color: #eceae4; padding: 16px; font-family: inherit; font-size: 1rem;
-            line-height: 2; resize: vertical; outline: none; direction: rtl; }
-        .hint { color: #77706a; font-size: 0.8rem; margin: 8px 0 20px; direction: rtl; text-align: right; }
-        .empty { text-align: center; color: #6e6862; padding: 50px 0; line-height: 2.2; direction: rtl; }
+        .card textarea:focus, .card input:focus { border-color: #e64980; }
+        .card textarea { resize: vertical; min-height: 50px; }
+        .num-row { display: flex; gap: 10px; align-items: center; margin-bottom: 4px; }
+        .num-badge { background: #ffe9f3; color: #c2255c; font-weight: 700; border-radius: 50%;
+            width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+        .save { background: linear-gradient(135deg,#f783ac,#c2255c); color: #fff; border: none;
+            padding: 10px 24px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 0.85rem; }
+        .del { background: #fff; border: 1px solid #ffc9c9; color: #e03131;
+            padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; }
+        .status { font-size: 0.82rem; min-height: 1.2em; margin-top: 8px; }
+        .status.ok { color: #2b8a3e; } .status.err { color: #e03131; }
+        .rimg { max-width: 170px; max-height: 120px; border-radius: 10px; margin-top: 8px;
+            border: 1px solid #f3d3e1; display: block; }
+
+        .big-ta { width: 100%; min-height: 180px; border: 1px solid #f3d3e1; border-radius: 12px;
+            padding: 14px; font-family: inherit; font-size: 1rem; line-height: 2; resize: vertical;
+            outline: none; direction: rtl; color: #44263b; background: #fffbfd; }
+        .hint { color: #7d5468; font-size: 0.82rem; margin: 6px 0 18px; }
+        .lbl { font-size: 0.85rem; font-weight: 700; color: #c2255c; display: block; margin: 18px 0 6px; }
+
+        .voice-item { background: #fff; border: 1px solid #f3d3e1; border-radius: 12px;
+            padding: 14px; margin-bottom: 10px; direction: rtl; }
+        .voice-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+            font-size: 0.85rem; margin-bottom: 8px; }
+        .voice-meta b { color: #c2255c; }
+        .voice-meta span { color: #7d5468; font-size: 0.78rem; }
+        audio { width: 100%; height: 38px; }
+        .empty { text-align: center; color: #7d5468; padding: 40px 0; line-height: 2; }
+        .loading { text-align: center; color: #c2255c; padding: 30px; font-weight: 700; }
     </style>
 </head>
 <body>
     <div class="gate" id="gate">
-        <h1>✦ ADMIN ✦</h1>
+        <h1>✦ لوحة التحكم</h1>
         <input type="password" id="pass" placeholder="الرمز السري">
-        <button onclick="tryEnter()">دخول</button>
+        <button class="btn-main" onclick="tryEnter()">دخول</button>
     </div>
 
     <div class="wrap" id="app" style="display:none">
-        <h1>✦ لوحة التحكم ✦</h1>
+        <h1>✦ إدارة الحديقة ✦</h1>
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('puzzles')">🧩 الألغاز والمكافآت</button>
-            <button class="tab-btn" onclick="showTab('texts')">💬 النصوص اليومية</button>
-            <button class="tab-btn" onclick="showTab('voices')">🎙️ الرسائل الصوتية</button>
+            <button class="tab-btn active" data-t="puzzles" onclick="showTab('puzzles')">🧩 الألغاز</button>
+            <button class="tab-btn" data-t="voices" onclick="showTab('voices')">🎙️ الرسائل الصوتية</button>
+            <button class="tab-btn" data-t="texts" onclick="showTab('texts')">💬 النصوص</button>
         </div>
 
+        <!-- PUZZLES -->
         <div id="tab-puzzles">
             <div class="toolbar">
                 <button class="tbtn" onclick="newPuzzle()">➕ لغز جديد</button>
-                <button class="tbtn" onclick="seedDefaults()">⬇ استيراد الألغاز الأصلية (٣٠)</button>
+                <button class="tbtn" onclick="seedDefaults()">⬇ استيراد الـ٣٠</button>
                 <button class="tbtn" onclick="loadPuzzles()">↺ تحديث</button>
             </div>
-            <div id="plist"></div>
+            <div id="plist"><div class="loading">...جاري التحميل</div></div>
         </div>
 
+        <!-- VOICES -->
         <div id="tab-voices" style="display:none">
             <div class="toolbar">
-                <span class="tbtn" id="voice-count" style="cursor:default;border:none;color:#77706a"></span>
+                <span class="tbtn" id="vcount" style="cursor:default;border:none;background:none;color:#7d5468"></span>
                 <button class="tbtn" onclick="loadVoices()">↺ تحديث</button>
             </div>
-            <div id="vlist"></div>
+            <div id="vlist"><div class="loading">...جاري التحميل</div></div>
         </div>
 
+        <!-- TEXTS -->
         <div id="tab-texts" style="display:none">
-            <p class="hint">كل سطر = رسالة واحدة. سطر الأسبوع الأول للرسائل اليومية، الثاني للذكريات، الثالث لأسباب الحب.</p>
-            <label class="hint" style="color:#b38728;font-size:0.85rem">الرسائل اليومية (٧ أسطر):</label>
+            <label class="lbl">💬 رسالة اليوم (كل سطر = يوم)</label>
             <textarea class="big-ta" id="ta-daily"></textarea>
-            <label class="hint" style="color:#b38728;font-size:0.85rem;margin-top:20px">ذكرى اليوم (أسطر متعددة):</label>
+            <p class="hint">٧ أسطر = رسالة لكل يوم من أيام الأسبوع</p>
+
+            <label class="lbl">🌸 ذكرى اليوم</label>
             <textarea class="big-ta" id="ta-memory"></textarea>
-            <label class="hint" style="color:#b38728;font-size:0.85rem;margin-top:20px">أسباب حبي (سطر لكل سبب):</label>
+            <p class="hint">تتغير كل عدة أيام بالترتيب</p>
+
+            <label class="lbl">💗 أسباب الحب (سبب في كل سطر)</label>
             <textarea class="big-ta" id="ta-reasons"></textarea>
-            <div class="toolbar" style="margin-top:20px">
+
+            <div class="toolbar" style="margin-top:16px">
                 <button class="save" onclick="saveTexts()">💾 حفظ النصوص</button>
+                <button class="tbtn" onclick="loadTexts()">↺ استعادة</button>
             </div>
             <p class="status" id="text-status" style="text-align:center"></p>
         </div>
     </div>
 
-    <script>
-        const ADMIN_PASS = 'hajar2026';
-        const SB_URL = 'https://gmjvwnqjoiloolyzwwox.supabase.co';
-        const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtanZ3bnFqb2lsb29seXp3d294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2Mjg5MDYsImV4cCI6MjEwMzIwNDkwNn0.lLbHjBbfVRrCM10kTWc-6Tx-ga117soIbED4qpR-s_4';
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const ADMIN_PASS = 'hajar2026';
+const SB_URL = 'https://gmjvwnqjoiloolyzwwox.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtanZ3bnFqb2lsb29seXp3d294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2Mjg5MDYsImV4cCI6MjEwMzIwNDkwNn0.lLbHjBbfVRrCM10kTWc-6Tx-ga117soIbED4qpR-s_4';
+const H = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
 
-        const HEADERS = {
-            'Authorization': `Bearer ${SB_KEY}`,
-            'apikey': SB_KEY,
-            'Content-Type': 'application/json'
-        };
+function tryEnter() {
+    if (pass.value === ADMIN_PASS) { sessionStorage.setItem('ok','1'); enter(); }
+    else { pass.value=''; pass.placeholder='رمز خاطئ!'; pass.focus(); }
+}
+document.getElementById('pass').addEventListener('keydown', e => { if (e.key==='Enter') tryEnter(); });
 
-        const DEFAULT_PUZZLES = [
-            {q:'انظري إلى كلمة «باريس» جيدًا... ما هو الحرفُ الذي يقبعُ في وسطِها؟',a:'حرف ر|الراء|r',rw:'أنتِ وسطُ عالمي... كلَّه.'},
-            {q:'يزنُ لا شيء، لكنّ أثقلَ الناسِ لا يستطيعون حملَه لمدة دقيقتين. ما هو؟',a:'النفس|نفس',rw:'خذيف نفس... أنا معك دائمًا.'},
-            {q:'كلَّما أخذتَ منه كبر، ما هو؟',a:'الحفرة|حفرة|الثقب|الدين',rw:'كلَّما عرفتُكِ أكثر... كبر حبّي لكِ.'},
-            {q:'له أسنانٌ لكنّه لا يعض. ما هو؟',a:'المشط|مشط',rw:'ابتسامتُكِ أجملُ من أيِّ مشط.'},
-            {q:'يمشي بلا أرجل، ويبكي بلا عيون. ما هو؟',a:'السحاب|سحاب|الغيوم|غيمة|السحابة',rw:'أنا سحابتُكِ... وأنتِ مطري.'},
-            {q:'ما هو الشيء الذي يُكسرُ قبل أن تكلّميه؟',a:'الصمت|صمت',rw:'صمتُنا معًا... أحلى من كلِّ الكلام.'},
-            {q:'شيءٌ إذا وضعته في الماء لا يبتلّ. ما هو؟',a:'الظل|ظل|الضوء|نور',rw:'ظلّكِ على قلبي... لا يمحوه شيء.'},
-            {q:'بيتٌ لا نوافذَ له ولا أبواب، ويسكنه أجملُ إنسانة. ما هو؟',a:'قلبي|قلب',rw:'وأنتِ ساكنتَه دون إذن... ولم أطردكِ أبدًا.'},
-            {q:'يُذكرُ بالحرفين، ويُرى بالعين. من هو؟',a:'العشق|عشق|الحب|حب',rw:'اسمُكِ أولُ ما خطرَ بالي.'},
-            {q:'أخوان يلتقيان كلَّ يومٍ ولا يتبادلان الكلام أبدًا. ما هما؟',a:'العينان|عينان|العينين|عيون',rw:'عيناكِ تحدّثني أكثر ممّا تتكلّم.'},
-            {q:'شيءٌ يعطيكِ ولا يفقر، ويُحفظُ ولا يُرى. ما هو؟',a:'الكلمة الطيبة|كلمة طيبة|الدعاء|الكلمة',rw:'كلماتُكِ عندي كنزٌ لا ينفد.'},
-            {q:'طويلٌ عند الصغير، وقصيرٌ عند الكبير. ما هو؟',a:'العمر|الأمل|الليل',rw:'عمري معكِ... لم أشعرْ به يومًا قصيرًا.'},
-            {q:'ما هو الشيء الذي يحرقُ نفسَه ليعطي الضوء للآخرين؟',a:'الشمعة|شمعة',rw:'أنا شمعتُكِ... احترقتُ لنوركِ.'},
-            {q:'يرتفع ولا ينخفض أبدا: الأقوال أم العمر؟',a:'الأقوال|أقوال|العمر|السن',rw:'مكانتكِ عندي ترتفعُ كلَّ يوم.'},
-            {q:'شيءٌ موجودُ في السماء وفي القرآن وفي قلبي. ما هو؟',a:'النور|نور|الضوء',rw:'نورُ عينيّ... هذا لقبُكِ منذ اليوم.'},
-            {q:'ما هو الشيء الذي يكونُ أخضرَ في الأرض، وأسودَ في السوق، وأحمرَ في البيت؟',a:'الشاي|شاي',rw:'شاهي معكِ... أحلى من أيِّ مقهى في باريس.'},
-            {q:'حاملٌ يحملُ ما ليس له، وحاملُهُ لا يملكُ شيئًا. ما هو؟',a:'الموت|الفنجان|الإبريق',rw:'منذ عرفتُكِ... صرتُ غنيًّا بلا مال.'},
-            {q:'كلمةٌ إذا قرأتها من الأمام أو الخلف بقيت هي هي. ما هي؟',a:'مستوى|كلمة',rw:'مهما نظرتُ إليكِ من أيِّ جهةٍ... تبقين أجمل.'},
-            {q:'شيءٌ يتكلّمُ كلَّ اللغاتِ بلا لسان. ما هو؟',a:'صدى|الصدى',rw:'قلبي يصرخ باسمكِ... حتى الصدى حفظه.'},
-            {q:'أنا زوجُ أختي وأختُ زوجي... من أنا؟',a:'لا أحد|أنا|زوجها|الزوج',rw:'الجواب: أنا. لأنّكِ كلُّ شيءٍ لي.'},
-            {q:'ما هو الشيء الذي تكتبُه ولا تقرؤه أبدًا؟',a:'العريضة|الجرح|الوعد',rw:'وعودي لكِ... محفورةٌ لا تُمحى.'},
-            {q:'شيءٌ إذا أحببته أحبّكِ أكثر، وإذا نسيتَه نسيك... ما هو؟',a:'القلب|قلب|الإنسان|الحبيب',rw:'قلبكِ مرآتي... أرى فيه نفسي أفضلَ ممّا أنا.'},
-            {q:'له رأسٌ ولا عين له، وله ذيلٌ ولا يتحرك. ما هو؟',a:'الدبابيس|الدبوس|دبوس|المفتاح',rw:'أنتِ مفتاحُ كلِّ أبوابي.'},
-            {q:'ما هو الشيء الذي يزدادُ نقصًا كلَّما شاركتَه؟',a:'السر|سر',rw:'سرُّنا المشترك... هو أجملُ ما نملك.'},
-            {q:'ينامُ حيًّا ويستيقظُ ميتًا... ما هو؟',a:'البطارية|الهاتف|الشمعة',rw:'بطاريّتي تمتلئُ كلَّما رأيتكِ.'},
-            {q:'شيءٌ لا تشتريه بالمال... بل بالوقت والاهتمام. ما هو؟',a:'الثقة|الحب|الوقت|الصداقة',rw:'وقتِكِ معي... أغلى هديةٍ وصلتني.'},
-            {q:'كلُّ ليلةٍ أضعُهُ ممتلئًا وأصبحُهُ فارغًا... ما هو؟',a:'الوسادة|وسادة|الدماغ|العقل',rw:'أفكاري عنكِ... لا تفارقني حتى في المنام.'},
-            {q:'ما هو الشيء الذي يجعلكِ تبكين بلا ألم وتضحكين بلا سبب؟',a:'الحب|الحنين|أنت|الاشتياق',rw:'الجواب الصحيح: أنتِ.'},
-            {q:'شيءٌ يشبهكِ تمامًا: نادر، ثمين، ولا يتكرّر. ما هو؟',a:'الماس|الألماس|اللؤلؤ|ذهب',rw:'وأنا الفقيرُ الذي وجدَ الكنزَ ولم يبحث عنه.'},
-            {q:'اللغز الأخير: من أحبّكِ قبل أن تعرفي معنى الحب؟',a:'أنت|انت|حبيبي',rw:'إجابةٌ صحيحة...\n\nكلُّ هذه الأسئلة كانت مجرّد أعذارٍ لأسمعُ جوابك.\n\nأحبّكِ يا هاجَر ✦'}
+function enter() {
+    gate.style.display='none'; app.style.display='block';
+    loadPuzzles();
+}
+if (sessionStorage.getItem('ok')==='1') enter();
+
+function showTab(t) {
+    ['puzzles','voices','texts'].forEach(x => document.getElementById('tab-'+x).style.display = x===t ? '' : 'none');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.t===t));
+    if (t==='voices') loadVoices();
+}
+
+const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+
+// ---------- PUZZLES ----------
+async function loadPuzzles() {
+    const el = document.getElementById('plist');
+    el.innerHTML = '<div class="loading">...جاري التحميل</div>';
+    try {
+        const r = await fetch(`${SB_URL}/rest/v1/puzzles?select=*&order=position.asc,id.asc`, { headers: H });
+        const rows = await r.json();
+        if (!r.ok) throw new Error(rows.message || r.status);
+        if (!rows.length) {
+            el.innerHTML = '<div class="empty">لا توجد ألغاز بعد.<br>اضغط «➕ لغز جديد» أو «⬇ استيراد الـ٣٠».</div>';
+            return;
+        }
+        el.innerHTML = rows.map((row, i) => `
+            <div class="card" data-id="${row.id}">
+                <div class="num-row">
+                    <div class="num-badge">${i+1}</div>
+                    <div style="flex:1">
+                        <label>الترتيب (الأصغر يظهر أولاً)</label>
+                        <input type="number" class="f-pos" value="${row.position ?? 0}">
+                    </div>
+                </div>
+                <label>❓ السؤال</label>
+                <textarea class="f-q">${esc(row.question)}</textarea>
+                <label>✅ الجواب الصحيح (عدة جوابات؟ افصل بـ | )</label>
+                <input type="text" class="f-a" value="${esc(row.answers)}">
+                <label>🎁 نص المكافأة (تظهر لها عند الحل)</label>
+                <textarea class="f-rw">${esc(row.reward_text)}</textarea>
+                <label>🖼️ صورة المكافأة (اختياري)</label>
+                <div class="actions" style="margin-top:4px">
+                    <button class="tbtn" onclick="pickImage(this)">📁 ${row.reward_image ? 'تغيير الصورة' : 'اختيار صورة'}</button>
+                    ${row.reward_image ? '<button class="tbtn" onclick="clearImage(this)">✕ بدون صورة</button>' : ''}
+                </div>
+                <img class="rimg" src="${esc(row.reward_image)}" style="display:${row.reward_image?'block':'none'}" onerror="this.style.display='none'">
+                <input type="hidden" class="f-img" value="${esc(row.reward_image)}">
+                <div class="actions">
+                    <button class="save" onclick="savePuzzle(this)">💾 حفظ</button>
+                    <button class="del" onclick="deletePuzzle(this)">🗑️ حذف نهائي</button>
+                </div>
+                <div class="status"></div>
+            </div>`).join('');
+    } catch (e) {
+        el.innerHTML = `<div class="empty">⚠️ خطأ في التحميل: ${esc(e.message)}</div>`;
+    }
+}
+
+function setStatus(card, msg, ok) {
+    const s = card.querySelector('.status');
+    s.textContent = msg;
+    s.className = 'status ' + (ok ? 'ok' : 'err');
+}
+
+async function savePuzzle(btn) {
+    const card = btn.closest('.card');
+    const id = card.dataset.id;
+    const data = {
+        position: parseInt(card.querySelector('.f-pos').value || '0'),
+        question: card.querySelector('.f-q').value.trim(),
+        answers: card.querySelector('.f-a').value.trim(),
+        reward_text: card.querySelector('.f-rw').value.trim(),
+        reward_image: card.querySelector('.f-img').value.trim()
+    };
+    if (!data.question) return setStatus(card, 'اكتب السؤال أولاً', false);
+    btn.disabled = true;
+    setStatus(card, '...جاري الحفظ', true);
+    try {
+        const isNew = id === 'new';
+        const r = await fetch(isNew ? `${SB_URL}/rest/v1/puzzles` : `${SB_URL}/rest/v1/puzzles?id=eq.${id}`, {
+            method: isNew ? 'POST' : 'PATCH',
+            headers: { ...H, Prefer: 'return=representation' },
+            body: JSON.stringify(data)
+        });
+        if (!r.ok) throw new Error((await r.json()).message || r.status);
+        setStatus(card, '✔ تم الحفظ!', true);
+        setTimeout(loadPuzzles, 500);
+    } catch (e) {
+        setStatus(card, '✕ فشل الحفظ: ' + e.message, false);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function deletePuzzle(btn) {
+    const card = btn.closest('.card');
+    const id = card.dataset.id;
+    if (id === 'new') { card.remove(); return; }
+    if (!confirm('حذف هذا اللغز نهائياً؟')) return;
+    btn.disabled = true;
+    setStatus(card, '...جاري الحذف', true);
+    try {
+        const r = await fetch(`${SB_URL}/rest/v1/puzzles?id=eq.${id}`, { method: 'DELETE', headers: H });
+        if (!r.ok) throw new Error((await r.json()).message || r.status);
+        card.style.opacity = '0.4';
+        setStatus(card, '✔ حُذف بنجاح', true);
+        setTimeout(() => { card.remove(); loadPuzzles(); }, 400);
+    } catch (e) {
+        setStatus(card, '✕ فشل الحذف: ' + e.message, false);
+        btn.disabled = false;
+    }
+}
+
+function newPuzzle() {
+    const div = document.createElement('div');
+    div.innerHTML = `
+        <div class="card" data-id="new">
+            <div class="num-row">
+                <div class="num-badge">+</div>
+                <div style="flex:1">
+                    <label>الترتيب</label>
+                    <input type="number" class="f-pos" value="999">
+                </div>
+            </div>
+            <label>❓ السؤال</label><textarea class="f-q"></textarea>
+            <label>✅ الجواب (أو عدّة مفصولة بـ | )</label><input type="text" class="f-a">
+            <label>🎁 نص المكافأة</label><textarea class="f-rw"></textarea>
+            <label>🖼️ صورة المكافأة (اختياري)</label>
+            <div class="actions" style="margin-top:4px"><button class="tbtn" onclick="pickImage(this)">📁 اختيار صورة</button></div>
+            <img class="rimg" style="display:none">
+            <input type="hidden" class="f-img" value="">
+            <div class="actions">
+                <button class="save" onclick="savePuzzle(this)">💾 إنشاء اللغز</button>
+                <button class="del" onclick="this.closest('.card').remove()">✕ إلغاء</button>
+            </div>
+            <div class="status"></div>
+        </div>`;
+    document.getElementById('plist').prepend(div);
+    div.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function seedDefaults() {
+    if (!confirm('إضافة ٣٠ لغزاً للقاعدة؟')) return;
+    const rows = DEFAULTS.map((p,i) => ({ position:i+1, question:p.q, answers:p.a, reward_text:p.rw, reward_image:'' }));
+    const r = await fetch(`${SB_URL}/rest/v1/puzzles`, {
+        method:'POST', headers:{ ...H, Prefer:'return=minimal' }, body: JSON.stringify(rows)
+    });
+    alert(r.ok ? 'تم استيراد ٣٠ لغزاً ✔' : 'خطأ: ' + await r.text());
+    loadPuzzles();
+}
+
+const DEFAULTS = [
+    {q:'انظري إلى كلمة «باريس»... ما الحرفُ الذي في وسطها؟',a:'حرف ر|الراء|r',rw:'أنتِ وسطُ عالمي.'},
+    {q:'يزنُ لا شيء لكنّ الأثقلين لا يستطيعون حمله دقيقتين؟',a:'النفس|نفس',rw:'خذيف نفس، أنا معك.'},
+    {q:'كلما أخذت منه كبر، ما هو؟',a:'الحفرة|حفرة|الثقب|الدين',rw:'كلما عرفتكِ كبر حبي.'},
+    {q:'له أسنان ولا يعض، ما هو؟',a:'المشط|مشط',rw:'ابتسامتُكِ الأجمل.'},
+    {q:'يمشي بلا أرجل ويبكي بلا عيون؟',a:'السحاب|سحاب|الغيوم|غيمة',rw:'أنا سحابتك وأنتِ مطري.'},
+    {q:'يُكسر قبل أن تتكلمي؟',a:'الصمت|صمت',rw:'صمتنا أحلى من الكلام.'},
+    {q:'يوضع في الماء ولا يبتل؟',a:'الظل|ظل|الضوء|نور',rw:'ظلك على قلبي لا يمحوه شيء.'},
+    {q:'بيت بلا نوافذ يسكنه أجمل إنسانة؟',a:'قلبي|قلب',rw:'سكنتيه دون إذن.'},
+    {q:'يُذكر بحرفين ويُرى بالعين؟',a:'العشق|عشق|الحب|حب',rw:'اسمك أول ما خطر ببالي.'},
+    {q:'أخوان يلتقيان يومياً بلا كلام؟',a:'العينان|عينان|العينين|عيون',rw:'عيناك تحدثني.'},
+    {q:'يعطيك ولا يفقر؟',a:'الكلمة الطيبة|الدعاء|الكلمة',rw:'كلماتك كنزي.'},
+    {q:'طويل عند الصغير قصير عند الكبير؟',a:'العمر|الأمل|الليل',rw:'عمري معك لم يكن قصيراً.'},
+    {q:'يحرق نفسه ليضيء للآخرين؟',a:'الشمعة|شمعة',rw:'احترقت لنورك.'},
+    {q:'يرتفع ولا ينخفض أبداً؟',a:'الأقوال|العمر|السن',rw:'مكانتك ترتفع كل يوم.'},
+    {q:'في السماء والقرآن وقلبي؟',a:'النور|نور|الضوء',rw:'نور عيني لقبك.'},
+    {q:'أخضر في الأرض أسود في السوق أحمر في البيت؟',a:'الشاي|شاي',rw:'شاهي معك أحلى باريس.'},
+    {q:'حامل يحمل ما ليس له؟',a:'الموت|الفنجان|الإبريق',rw:'صرت غنياً بلا مال.'},
+    {q:'تقرأه من الأمام أو الخلف نفس الشيء؟',a:'مستوى|كلمة',rw:'من أي جهة تبقين أجمل.'},
+    {q:'يتكلم كل اللغات بلا لسان؟',a:'صدى|الصدى',rw:'قلبي يصرخ باسمك.'},
+    {q:'زوج أختي وأخت زوجي، من أنا؟',a:'لا أحد|أنا|زوجها|الزوج',rw:'أنا. أنتِ كل شيء.'},
+    {q:'تكتبه ولا تقرؤه أبداً؟',a:'العريضة|الجرح|الوعد',rw:'وعودي محفورة.'},
+    {q:'تحبيه يحبك أكثر؟',a:'القلب|قلب|الإنسان|الحبيب',rw:'قلبك مرآتي.'},
+    {q:'له رأس لا عين له وذيل لا يتحرك؟',a:'الدبوس|دبوس|المفتاح|الدبابيس',rw:'أنتِ مفتاح أبوابي.'},
+    {q:'يزداد نقصاً كلما شاركته؟',a:'السر|سر',rw:'سرنا أجمل ما نملك.'},
+    {q:'ينام حياً ويستيقظ ميتاً؟',a:'البطارية|الهاتف|الشمعة',rw:'بطاريتي تمتلئ برؤيتك.'},
+    {q:'لا يشترى بالمال بل بالوقت؟',a:'الثقة|الحب|الوقت|الصداقة',rw:'وقتك معي أغلى هدية.'},
+    {q:'أضعه ممتلئاً وأصبحه فارغاً؟',a:'الوسادة|وسادة|العقل|الدماغ',rw:'أفكاري عنك حتى في المنام.'},
+    {q:'يجعلك تبكين بلا ألم وتضحكين بلا سبب؟',a:'الحب|الحنين|أنت|الاشتياق',rw:'الجواب: أنتِ.'},
+    {q:'يشبهكِ: نادر ثمين لا يتكرر؟',a:'الماس|الألماس|اللؤلؤ|ذهب',rw:'وجدت الكنز دون بحث.'},
+    {q:'من أحبك قبل أن تعري معنى الحب؟',a:'أنت|انت|حبيبي',rw:'كل الأسئلة أعذار لأسمع جوابك.\nأحبك يا هاجر ✦'}
+];
+
+// ---------- IMAGES ----------
+function pickImage(btn) {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*';
+    inp.onchange = () => inp.files[0] && uploadImg(inp.files[0], btn);
+    inp.click();
+}
+
+async function uploadImg(file, btn) {
+    const card = btn.closest('.card');
+    const st = card.querySelector('.status');
+    st.textContent = '...جاري رفع الصورة'; st.className = 'status ok';
+    try {
+        const ext = file.name.split('.').pop().toLowerCase();
+        const fname = `reward-${Date.now()}.${ext}`;
+        const r = await fetch(`${SB_URL}/storage/v1/object/rewards/${fname}`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${SB_KEY}`, apikey: SB_KEY, 'Content-Type': file.type },
+            body: file
+        });
+        if (!r.ok) throw new Error((await r.json()).message || r.status);
+        const url = `${SB_URL}/storage/v1/object/public/rewards/${fname}`;
+        card.querySelector('.f-img').value = url;
+        const img = card.querySelector('.rimg');
+        img.src = url; img.style.display = 'block';
+        setStatus(card, '✔ رُفعت — اضغط 💾 حفظ لتثبيتها', true);
+    } catch (e) {
+        setStatus(card, '✕ فشل الرفع: ' + e.message, false);
+    }
+}
+
+function clearImage(btn) {
+    const card = btn.closest('.card');
+    card.querySelector('.f-img').value = '';
+    card.querySelector('.rimg').style.display = 'none';
+    setStatus(card, 'ستُحذف الصورة بعد الضغط على حفظ', true);
+}
+
+// ---------- VOICES ----------
+function parseName(f) {
+    const m = f.match(/^puzzle-(\d+)-(.*)-(\d+)\./);
+    return m ? { n: +m[1]+1, who: m[2], ts: new Date(+m[3]) } : null;
+}
+
+async function loadVoices() {
+    const el = document.getElementById('vlist');
+    try {
+        const r = await fetch(`${SB_URL}/storage/v1/object/list/voices`, {
+            method: 'POST', headers: H,
+            body: JSON.stringify({ prefix:'', limit:200, sortBy:{ column:'created_at', order:'desc' } })
+        });
+        const files = (await r.json()).filter(f => f.name !== 'test-upload.webm');
+        document.getElementById('vcount').textContent = files.length + ' تسجيل';
+        if (!files.length) { el.innerHTML = '<div class="empty">لا رسائل صوتية بعد 🎙️</div>'; return; }
+        el.innerHTML = files.map(f => {
+            const info = parseName(f.name);
+            const url = `${SB_URL}/storage/v1/object/public/voices/${encodeURIComponent(f.name)}`;
+            const label = info ? `<b>${esc(info.who)}</b> — لغز رقم ${info.n}` : esc(f.name);
+            const when = info ? info.ts.toLocaleString('ar-DZ') : '';
+            return `<div class="voice-item">
+                <div class="voice-meta"><span>${label}</span><span>${when} · <a href="${url}" target="_blank" style="color:#c2255c">تحميل ⬇</a></span></div>
+                <audio controls preload="none" src="${url}"></audio>
+            </div>`;
+        }).join('');
+    } catch (e) {
+        el.innerHTML = `<div class="empty">⚠️ ${esc(e.message)}</div>`;
+    }
+}
+
+// ---------- TEXTS ----------
+async function loadTexts() {
+    const r = await fetch(`${SB_URL}/rest/v1/settings?select=*`, { headers: H });
+    const map = Object.fromEntries((await r.json()).map(x => [x.key, x.value]));
+    ta_daily.value = (map.dailyMessages||[]).join('\n');
+    ta_memory.value = (map.memoriesOfDay||[]).join('\n');
+    ta_reasons.value = (map.reasons||[]).join('\n');
+}
+
+async function saveTexts() {
+    const st = document.getElementById('text-status');
+    st.textContent = '...جاري الحفظ'; st.className = 'status ok';
+    try {
+        const payload = [
+            { key:'dailyMessages', value: ta_daily.value.split('\n').map(s=>s.trim()).filter(Boolean) },
+            { key:'memoriesOfDay', value: ta_memory.value.split('\n').map(s=>s.trim()).filter(Boolean) },
+            { key:'reasons', value: ta_reasons.value.split('\n').map(s=>s.trim()).filter(Boolean) }
         ];
-
-        function tryEnter() {
-            if (document.getElementById('pass').value === ADMIN_PASS) {
-                sessionStorage.setItem('adminOk', '1');
-                enter();
-            } else {
-                document.getElementById('pass').value = '';
-                document.getElementById('pass').placeholder = 'رمز خاطئ!';
-            }
-        }
-        document.getElementById('pass').addEventListener('keydown', e => { if (e.key === 'Enter') tryEnter(); });
-
-        function enter() {
-            document.getElementById('gate').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-            loadPuzzles();
-            loadTexts();
-        }
-
-        function showTab(t) {
-            ['puzzles', 'texts', 'voices'].forEach(x => {
-                document.getElementById('tab-' + x).style.display = x === t ? '' : 'none';
-            });
-            document.querySelectorAll('.tab-btn').forEach((b, i) =>
-                b.classList.toggle('active', ['puzzles', 'texts', 'voices'][i] === t));
-            if (t === 'voices') loadVoices();
-        }
-
-        // ===== VOICE RECORDINGS =====
-        function parseVoiceName(fname) {
-            const m = fname.match(/^puzzle-(\d+)-(.+)-(\d+)\./);
-            if (!m) return null;
-            return { riddle: parseInt(m[1]) + 1, who: m[2], ts: new Date(parseInt(m[3])) };
-        }
-
-        async function loadVoices() {
-            try {
-                const res = await fetch(`${SB_URL}/storage/v1/object/list/voices`, {
-                    method: 'POST',
-                    headers: { ...HEADERS },
-                    body: JSON.stringify({ prefix: '', limit: 200, sortBy: { column: 'created_at', order: 'desc' } })
-                });
-                const files = (await res.json()).filter(f => f.name !== 'test-upload.webm');
-                document.getElementById('voice-count').textContent = `${files.length} تسجيل`;
-                const el = document.getElementById('vlist');
-                if (!files.length) {
-                    el.innerHTML = '<div class="empty">لا توجد رسائل صوتية بعد 🎙️</div>';
-                    return;
-                }
-                el.innerHTML = files.map(f => {
-                    const info = parseVoiceName(f.name);
-                    const url = `${SB_URL}/storage/v1/object/public/voices/${encodeURIComponent(f.name)}`;
-                    const when = info && info.ts ? info.ts.toLocaleString('ar-DZ') : '';
-                    const label = info ? `${info.who} — لغز رقم ${info.riddle}` : f.name;
-                    return `<div class="pcard">
-                        <div class="meta" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-                            <span style="color:var(--gold-light);font-size:0.95rem">${label}</span>
-                            <span style="color:#77706a;font-size:0.78rem">${when} · <a href="${url}" target="_blank" style="color:#7da98c;text-decoration:none">تحميل ⬇</a></span>
-                        </div>
-                        <audio controls preload="none" src="${url}" style="width:100%;height:40px"></audio>
-                    </div>`;
-                }).join('');
-            } catch (e) {
-                document.getElementById('vlist').innerHTML =
-                    `<div class="empty">تعذّر تحميل التسجيلات: ${e.message}</div>`;
-            }
-        }
-
-        // ===== PUZZLES =====
-        async function loadPuzzles() {
-            const res = await fetch(`${SB_URL}/rest/v1/puzzles?select=*&order=position.asc,id.asc`, { headers: HEADERS });
-            const rows = await res.json();
-            renderList(rows);
-        }
-
-        function esc(s) { return String(s ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
-
-        function renderList(rows) {
-            const el = document.getElementById('plist');
-            if (!rows.length) {
-                el.innerHTML = '<div class="empty">لا ألغاز في قاعدة البيانات بعد.<br>اضغط «استيراد الألغاز الأصلية» أو «لغز جديد».</div>';
-                return;
-            }
-            el.innerHTML = rows.map(r => `
-                <div class="pcard" data-id="${r.id}">
-                    <div class="row">
-                        <div><label>الترتيب</label><input type="number" class="f-pos" value="${r.position ?? 0}"></div>
-                        <div style="flex:1"><label>السؤال</label><textarea class="f-q">${esc(r.question)}</textarea></div>
-                    </div>
-                    <label>الأجوبة المقبولة (افصل بينها بعلامة | )</label>
-                    <input type="text" class="f-a" value="${esc(r.answers)}">
-                    <label>نص المكافأة</label>
-                    <textarea class="f-rw">${esc(r.reward_text)}</textarea>
-                    <label>صورة المكافأة</label>
-                    <div class="actions" style="margin-top:6px">
-                        <button class="imgbtn" onclick="pickImage(this)">🖼️ ${r.reward_image ? 'تغيير الصورة' : 'رفع صورة'}</button>
-                        ${r.reward_image ? `<button class="imgbtn" onclick="clearImage(this)">✕ إزالة الصورة</button>` : ''}
-                    </div>
-                    <img class="rimg" src="${esc(r.reward_image)}" style="display:${r.reward_image ? 'block' : 'none'}" onerror="this.style.display='none'">
-                    <input type="hidden" class="f-img" value="${esc(r.reward_image)}">
-                    <div class="actions">
-                        <button class="save" onclick="savePuzzle(this)">💾 حفظ</button>
-                        <button class="del" onclick="deletePuzzle(this)">🗑️ حذف</button>
-                        <span class="status"></span>
-                    </div>
-                </div>`).join('');
-        }
-
-        function cardData(card) {
-            return {
-                position: parseInt(card.querySelector('.f-pos').value || '0'),
-                question: card.querySelector('.f-q').value.trim(),
-                answers: card.querySelector('.f-a').value.trim(),
-                reward_text: card.querySelector('.f-rw').value.trim(),
-                reward_image: card.querySelector('.f-img').value.trim()
-            };
-        }
-
-        async function savePuzzle(btn) {
-            const card = btn.closest('.pcard');
-            const id = card.dataset.id;
-            const st = card.querySelector('.status');
-            const body = JSON.stringify(cardData(card));
-            st.textContent = '...جاري الحفظ';
-            try {
-                const url = id === 'new'
-                    ? `${SB_URL}/rest/v1/puzzles`
-                    : `${SB_URL}/rest/v1/puzzles?id=eq.${id}`;
-                const method = id === 'new' ? 'POST' : 'PATCH';
-                const res = await fetch(url, { method, headers: { ...HEADERS, 'Prefer': 'return=representation' }, body });
-                if (!res.ok) throw new Error(await res.text());
-                st.textContent = '✔ تم الحفظ';
-                setTimeout(loadPuzzles, 600);
-            } catch (e) {
-                st.textContent = '✕ خطأ: ' + e.message;
-            }
-        }
-
-        async function deletePuzzle(btn) {
-            const card = btn.closest('.pcard');
-            const id = card.dataset.id;
-            if (id === 'new') { card.remove(); return; }
-            if (!confirm('حذف هذا اللغز نهائيًا؟')) return;
-            await fetch(`${SB_URL}/rest/v1/puzzles?id=eq.${id}`, { method: 'DELETE', headers: HEADERS });
-            card.remove();
-        }
-
-        function newPuzzle() {
-            const el = document.getElementById('plist');
-            const div = document.createElement('div');
-            div.innerHTML = `
-                <div class="pcard" data-id="new">
-                    <div class="row">
-                        <div><label>الترتيب</label><input type="number" class="f-pos" value="0"></div>
-                        <div style="flex:1"><label>السؤال</label><textarea class="f-q"></textarea></div>
-                    </div>
-                    <label>الأجوبة المقبولة (افصل بينها بـ | )</label>
-                    <input type="text" class="f-a">
-                    <label>نص المكافأة</label>
-                    <textarea class="f-rw"></textarea>
-                    <label>صورة المكافأة</label>
-                    <div class="actions" style="margin-top:6px">
-                        <button class="imgbtn" onclick="pickImage(this)">🖼️ رفع صورة</button>
-                    </div>
-                    <img class="rimg" style="display:none">
-                    <input type="hidden" class="f-img" value="">
-                    <div class="actions">
-                        <button class="save" onclick="savePuzzle(this)">💾 إنشاء</button>
-                        <button class="del" onclick="this.closest('.pcard').remove()">✕ إلغاء</button>
-                        <span class="status"></span>
-                    </div>
-                </div>`;
-            el.prepend(div);
-            div.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        async function seedDefaults() {
-            if (!confirm('سيتم إضافة ٣٠ لغزاً إلى قاعدة البيانات. متابعة؟')) return;
-            const rows = DEFAULT_PUZZLES.map((p, i) => ({
-                position: i + 1, question: p.q, answers: p.a, reward_text: p.rw, reward_image: ''
-            }));
-            const res = await fetch(`${SB_URL}/rest/v1/puzzles`, {
-                method: 'POST',
-                headers: { ...HEADERS, 'Prefer': 'return=minimal' },
-                body: JSON.stringify(rows)
-            });
-            alert(res.ok ? 'تم الاستيراد ✔' : 'خطأ: ' + await res.text());
-            loadPuzzles();
-        }
-
-        // ===== IMAGE UPLOAD =====
-        function pickImage(btn) {
-            const inp = document.createElement('input');
-            inp.type = 'file';
-            inp.accept = 'image/*';
-            inp.onchange = () => uploadRewardImage(inp.files[0], btn);
-            inp.click();
-        }
-
-        async function uploadRewardImage(file, btn) {
-            if (!file) return;
-            const card = btn.closest('.pcard');
-            const st = card.querySelector('.status');
-            st.textContent = '...جاري رفع الصورة';
-            try {
-                const ext = file.name.split('.').pop().toLowerCase();
-                const fname = `reward-${Date.now()}.${ext}`;
-                const res = await fetch(`${SB_URL}/storage/v1/object/rewards/${fname}`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${SB_KEY}`, 'apikey': SB_KEY, 'Content-Type': file.type },
-                    body: file
-                });
-                if (!res.ok) throw new Error(await res.text());
-                const url = `${SB_URL}/storage/v1/object/public/rewards/${fname}`;
-                card.querySelector('.f-img').value = url;
-                const img = card.querySelector('.rimg');
-                img.src = url;
-                img.style.display = 'block';
-                st.textContent = '✔ رُفعت الصورة — اضغط «حفظ» لتثبيتها';
-            } catch (e) {
-                st.textContent = '✕ فشل الرفع: ' + e.message;
-            }
-        }
-
-        function clearImage(btn) {
-            const card = btn.closest('.pcard');
-            card.querySelector('.f-img').value = '';
-            card.querySelector('.rimg').style.display = 'none';
-            card.querySelector('.status').textContent = 'ستُزال الصورة بعد الحفظ';
-        }
-
-        // ===== TEXTS =====
-        async function loadTexts() {
-            const res = await fetch(`${SB_URL}/rest/v1/settings?select=*`, { headers: HEADERS });
-            const rows = await res.json();
-            const map = Object.fromEntries(rows.map(r => [r.key, r.value]));
-            document.getElementById('ta-daily').value = (map.dailyMessages || []).join('\n');
-            document.getElementById('ta-memory').value = (map.memoriesOfDay || []).join('\n');
-            document.getElementById('ta-reasons').value = (map.reasons || []).join('\n');
-        }
-
-        async function saveTexts() {
-            const st = document.getElementById('text-status');
-            st.textContent = '...جاري الحفظ';
-            const payload = [
-                { key: 'dailyMessages', value: document.getElementById('ta-daily').value.split('\n').map(s => s.trim()).filter(Boolean) },
-                { key: 'memoriesOfDay', value: document.getElementById('ta-memory').value.split('\n').map(s => s.trim()).filter(Boolean) },
-                { key: 'reasons', value: document.getElementById('ta-reasons').value.split('\n').map(s => s.trim()).filter(Boolean) }
-            ];
-            try {
-                const res = await fetch(`${SB_URL}/rest/v1/settings`, {
-                    method: 'POST',
-                    headers: { ...HEADERS, 'Prefer': 'resolution=merge-duplicates' },
-                    body: JSON.stringify(payload)
-                });
-                if (!res.ok) throw new Error(await res.text());
-                st.textContent = '✔ حُفظت النصوص — ستظهر في الموقع عند التحديث القادم';
-            } catch (e) {
-                st.textContent = '✕ خطأ: ' + e.message;
-            }
-        }
-
-        if (sessionStorage.getItem('adminOk') === '1') enter();
-    </script>
+        const r = await fetch(`${SB_URL}/rest/v1/settings`, {
+            method: 'POST', headers: { ...H, Prefer:'resolution=merge-duplicates' },
+            body: JSON.stringify(payload)
+        });
+        if (!r.ok) throw new Error((await r.json()).message || r.status);
+        st.textContent = '✔ حُفظ — ستظهر في الموقع خلال ثوانٍ';
+    } catch (e) {
+        st.textContent = '✕ خطأ: ' + e.message; st.className = 'status err';
+    }
+}
+</script>
 </body>
 </html>
