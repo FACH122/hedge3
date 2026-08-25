@@ -1183,7 +1183,7 @@
             if (Array.isArray(t.reasons) && t.reasons.length)
                 reasons = t.reasons;
 
-            document.getElementById('daily-text').innerText = dailyMessages[new Date().getDay()];
+            document.getElementById('daily-text').innerText = dailyMessages[new Date().getDay() % dailyMessages.length];
             document.getElementById('memory-text').innerText =
                 memoriesOfDay[new Date().getDate() % memoriesOfDay.length];
             reasonIdx = new Date().getDate() % reasons.length;
