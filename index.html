@@ -1466,7 +1466,8 @@
             recStatus.textContent = '⏳ جاري الإرسال...';
             try {
                 const ext = (recBlob.type.includes('mp4') || recBlob.type.includes('aac')) ? 'm4a' : 'webm';
-                const fname = `puzzle-${puzzleProgress}-${getHerName()}-${Date.now()}.${ext}`;
+                const safeName = getHerName().replace(/[^a-zA-Z0-9]/g, '') || 'sender';
+                const fname = `puzzle-${puzzleProgress}-${safeName}-${Date.now()}.${ext}`;
                 const res = await fetch(`${SUPABASE_URL}/storage/v1/object/voices/${encodeURIComponent(fname)}`, {
                     method: 'POST',
                     headers: {
