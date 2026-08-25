@@ -1640,8 +1640,19 @@
             showOnly('puzzle-reward-view');
             document.getElementById('puzzle-reward-text').innerText = p.reward;
             const rimg = document.getElementById('reward-image');
-            if (p.reward_image) { rimg.src = p.reward_image; rimg.style.display = 'block'; }
-            else { rimg.style.display = 'none'; }
+            if (rimg._hideTimer) clearTimeout(rimg._hideTimer);
+            if (p.reward_image) {
+                rimg.src = p.reward_image;
+                rimg.style.display = 'block';
+                rimg.style.opacity = '1';
+                rimg._hideTimer = setTimeout(() => {
+                    rimg.style.transition = 'opacity 1s ease';
+                    rimg.style.opacity = '0';
+                    setTimeout(() => { rimg.style.display = 'none'; }, 1000);
+                }, 5000);
+            } else {
+                rimg.style.display = 'none';
+            }
             document.getElementById('puzzle-next-hint').style.display =
                 (puzzleProgress < puzzles.length && solvedTonight() < PUZZLES_PER_NIGHT) ? '' : 'none';
 
