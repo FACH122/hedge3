@@ -534,6 +534,13 @@
 
         .puzzle-question { font-size: 1.55rem; line-height: 2.1; color: var(--gold-light); margin-bottom: 28px; }
 
+        .puzzle-progress {
+            font-family: 'Montserrat', sans-serif; font-size: 0.68rem; letter-spacing: 3px;
+            color: #b38728; text-transform: uppercase; margin-bottom: 18px;
+        }
+
+        .puzzle-next-hint { margin-top: 20px; color: #77706a; font-size: 1rem; }
+
         .puzzle-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
         #puzzle-answer {
@@ -669,6 +676,7 @@
                         <p class="puzzle-timer" id="puzzle-countdown"></p>
                     </div>
                     <div id="puzzle-open" style="display:none">
+                        <p class="puzzle-progress" id="puzzle-progress"></p>
                         <p class="puzzle-question" id="puzzle-question"></p>
                         <div class="puzzle-form">
                             <input type="text" id="puzzle-answer" placeholder="اكتبي جوابك هنا..." autocomplete="off">
@@ -676,9 +684,14 @@
                         </div>
                         <p class="puzzle-wrong" id="puzzle-wrong" style="display:none">ليس هذا الجواب... فكّري مجددًا يا صاحبةَ القلب الجميل ✦</p>
                     </div>
-                    <div id="puzzle-solved" style="display:none">
-                        <div class="solved-badge">✦ أحسنتِ! ✦</div>
-                        <p class="puzzle-reward" id="puzzle-reward"></p>
+                    <div id="puzzle-reward-view" style="display:none">
+                        <div class="solved-badge">✦ إجابةٌ صحيحة! ✦</div>
+                        <p class="puzzle-reward" id="puzzle-reward-text"></p>
+                        <p class="puzzle-next-hint" id="puzzle-next-hint">اللغزُ التالي يظهرُ بعد لحظات...</p>
+                    </div>
+                    <div id="puzzle-nightdone" style="display:none">
+                        <div class="solved-badge">🌙 انتهت ليلةُ الألغاز</div>
+                        <p class="puzzle-reward" id="puzzle-nightdone-text"></p>
                     </div>
                 </div>
             </section>
@@ -1314,106 +1327,115 @@
         }
         sc.addEventListener('pointermove', scratchMove);
 
-        // NIGHTLY PUZZLE — unlocks at 21:00
-        const puzzles = [
-            { q: 'شيءٌ يوجدُ في وسطِ باريس، ولا يوجدُ في أيِّ مكانٍ آخر. ما هو؟', a: ['حرف س', 'حرف السين'], reward: 'أنتِ وسطُ عالمي... كلَّه.' },
-            { q: 'يزنُ لا شيء، لكنّ أثقلَ الناسِ لا يستطيعون حملَه لمدة دقيقتين. ما هو؟', a: ['النفس', 'نفس', 'حبس النفس'], reward: 'خذيف نفس... أنا معك دائمًا.' },
-            { q: 'كلَّما أخذتَ منه كبر، ما هو؟', a: ['الحفرة', 'حفرة', 'الثقب', 'الدين'], reward: 'كلَّما عرفتُكِ أكثر... كبر حبّي لكِ.' },
-            { q: 'له أسنانٌ لكنّه لا يعض. ما هو؟', a: ['المشط', 'مشط', 'التارة', 'السروال'], reward: 'ابتسامتُكِ أجملُ من أيِّ مشط.' },
-            { q: 'يمشي بلا أرجل، ويبكي بلا عيون. ما هو؟', a: ['السحاب', 'سحاب', 'الغيوم', 'غيمة', 'السحابة'], reward: 'أنا سحابتُكِ... وأنتِ مطري.' },
-            { q: 'ما هو الشيء الذي يُكسرُ قبل أن تكلّميه؟', a: ['الصمت', 'صمت'], reward: 'صمتُنا معًا... أحلى من كلِّ الكلام.' },
-            { q: 'شيءٌ إذا وضعته في الماء لا يبتلّ. ما هو؟', a: ['الظل', 'ظل', 'الضوء', 'نور'], reward: 'ظلّكِ على قلبي... لا يمحوه شيء.' },
-            { q: 'بيتٌ لا نوافذَ له ولا أبواب، ويسكنه أجملُ إنسانة. ما هو؟', a: ['قلبي', 'قلب'], reward: 'وأنتِ ساكنتَه دون إذن... ولم أطردكِ أبدًا.' },
-            { q: 'يُذكرُ بالحرفين، ويُرى بالعين. من هو؟', a: ['العشق', 'عشق', 'الحب', 'حب'], reward: 'اسمُكِ أولُ ما خطرَ بالي.' },
-            { q: 'أخوان يلتقيان كلَّ يومٍ ولا يتبادلان الكلام أبدًا. ما هما؟', a: ['العينان', 'عينان', 'العينين', 'عيون'], reward: 'عيناكِ تحدّثني أكثر ممّا تتكلّم.' },
-            { q: 'شيءٌ يعطيكِ ولا يفقر، ويُحفظُ ولا يُرى. ما هو؟', a: ['الكلمة الطيبة', 'كلمة طيبة', 'الدعاء', 'الكلمة'], reward: 'كلماتُكِ عندي كنزٌ لا ينفد.' },
-            { q: 'طويلٌ عند الصغير، وقصيرٌ عند الكبير. ما هو؟', a: ['العمر', 'الأمل', 'الليل'], reward: 'عمري معكِ... لم أشعرْ به يومًا قصيرًا.' },
-            { q: 'ما هو الشيء الذي يحرقُ نفسَه ليعطي الضوء للآخرين؟', a: ['الشمعة', 'شمعة'], reward: 'أنا شمعتُكِ... احترقتُ لنوركِ.' },
-            { q: 'يرتفع ولا ينخفض أبدا: الأقوال أم العمر؟', a: ['الأقوال', 'أقوال', 'العمر', 'السن'], reward: 'مكانتكِ عندي ترتفعُ كلَّ يوم.' },
-            { q: 'شيءٌ موجودُ في السماء وفي القرآن وفي قلبي. ما هو؟', a: ['النور', 'نور', 'الضوء'], reward: 'نورُ عينيّ... هذا لقبُكِ منذ اليوم.' },
-            { q: 'ما هو الشيء الذي يكونُ أخضرَ في الأرض، وأسودَ في السوق، وأحمرَ في البيت؟', a: ['الشاي', 'شاي'], reward: 'شاهي معكِ... أحلى من أيِّ مقهى في باريس.' },
-            { q: 'حاملٌ يحملُ ما ليس له، وحاملُهُ لا يملكُ شيئًا. ما هو؟', a: ['الموت', 'الفنجان', 'الإبريق'], reward: 'منذ عرفتُكِ... صرتُ غنيًّا بلا مال.' },
-            { q: 'كلمةٌ بها خمسةُ أحرف، إن قرأتها من الأمام أو الخلف بقيت هي هي. ما هي؟', a: ['مستشفى', 'كلمة', 'لا أعرف', 'مستوى'], reward: 'مهما نظرتُ إليكِ من أيِّ جهةٍ... تبقين أجمل.' },
-            { q: 'شيءٌ يتكلّمُ كلَّ اللغاتِ بلا لسان. ما هو؟', a: ['صدى', 'الصدى', 'الصدى'], reward: 'قلبي يصرخ باسمكِ... حتى الصدى حفظه.' },
-            { q: 'أنا زوجُ أختي وأختُ زوجي... من أنا؟', a: ['لا أحد', 'أنا', 'زوجها', 'الزوج'], reward: 'الجواب: أنا. لأنّكِ كلُّ شيءٍ لي.' },
-            { q: 'ما هو الشيء الذي تكتبُه ولا تقرؤه أبدًا؟', a: ['العريضة', 'الجرح', 'الوعد'], reward: 'وعودي لكِ... محفورةٌ لا تُمحى.' },
-            { q: 'شيءٌ إذا أحببته أحبّكِ أكثر، وإذا نسيتَه نسيك... ما هو؟', a: ['القلب', 'قلب', 'الإنسان', 'الحبيب'], reward: 'قلبكِ مرآتي... أرى فيه نفسي أفضلَ ممّا أنا.' },
-            { q: 'له رأسٌ ولا عين له، وله ذيلٌ ولا يتحرك. ما هو؟', a: ['الدبابيس', 'الدبوس', 'دبوس', 'المفتاح'], reward: 'أنتِ مفتاحُ كلِّ أبوابي.' },
-            { q: 'ما هو الشيء الذي يزدادُ نقصًا كلَّما شاركتَه؟', a: ['السر', 'سر'], reward: 'سرُّنا المشترك... هو أجملُ ما نملك.' },
-            { q: 'ينامُ حيًّا ويستيقظُ ميتًا... ما هو؟', a: ['البطارية', 'الهاتف', 'الشمعة'], reward: 'بطاريّتي تمتلئُ كلَّما رأيتكِ.' },
-            { q: 'شيءٌ لا تشتريه بالمال... بل بالوقت والاهتمام. ما هو؟', a: ['الثقة', 'الحب', 'الوقت', 'الصداقة'], reward: 'وقتِكِ معي... أغلى هديةٍ وصلتني.' },
-            { q: 'كلُّ ليلةٍ أضعُهُ ممتلئًا وأصبحُهُ فارغًا... ما هو؟', a: ['الوسادة', 'وسادة', 'الدماغ', 'العقل'], reward: 'أفكاري عنكِ... لا تفارقني حتى في المنام.' },
-            { q: 'ما هو الشيء الذي يجعلكِ تبكين بلا ألم وتضحكين بلا سبب؟', a: ['الحب', 'الحنين', 'أنت', 'الاشتياق'], reward: 'الجواب الصحيح: أنتِ.' },
-            { q: 'شيءٌ يشبهكِ تمامًا: نادر، ثمين، ولا يتكرّر. ما هو؟', a: ['الماس', 'الألماس', 'اللؤلؤ', 'ذهب'], reward: 'وأنا الفقيرُ الذي وجدَ الكنزَ ولم يبحث عنه.' },
-            { q: 'اللغز الأخير: من أحبّكِ قبل أن تعرفي معنى الحب؟', a: ['أنت', 'انت', 'حبيبي', 'اسمك'], reward: 'إجابةٌ صحيحة...\n\nكلُّ هذه الأسئلة كانت مجرّد أعذارٍ لأسمعُ جوابك.\n\nأحبّكِ يا هاجَر ✦' }
-        ];
-
+                // NIGHTLY PUZZLE — unlocks at 21:00, up to 3 per night
+        const PUZZLES_PER_NIGHT = 3;
         const PUZZLE_HOUR = 21;
-        const puzzleSection = document.getElementById('puzzle-section');
-        const dayMs = 864e5;
 
-        function puzzleDayIndex() {
-            return Math.floor(Date.now() / dayMs) % puzzles.length;
+        let puzzleProgress = parseInt(localStorage.getItem('puzzleProgress') || '0', 10);
+        if (isNaN(puzzleProgress) || puzzleProgress < 0) puzzleProgress = 0;
+        if (puzzleProgress > puzzles.length) puzzleProgress = puzzles.length;
+
+        function ensureNight() {
+            const today = new Date().toDateString();
+            if (localStorage.getItem('puzzleNight') !== today) {
+                localStorage.setItem('puzzleNight', today);
+                localStorage.setItem('puzzleSolvedTonight', '0');
+            }
         }
 
-        function isPuzzleTime() {
-            const now = new Date();
-            return now.getHours() >= PUZZLE_HOUR;
-        }
-
-        function todaySolvedKey() {
-            return `puzzleSolved_${new Date().toDateString()}`;
+        function solvedTonight() {
+            return parseInt(localStorage.getItem('puzzleSolvedTonight') || '0', 10);
         }
 
         function normAnswer(s) {
             return s.trim().replace(/[أإآ]/g, 'ا').replace(/[ةه]/g, 'ه').replace(/[\s\u064B-\u0652]/g, '').toLowerCase();
         }
 
-        function renderPuzzle() {
-            const locked = document.getElementById('puzzle-locked');
-            const open = document.getElementById('puzzle-open');
-            const solved = document.getElementById('puzzle-solved');
+        function isPuzzleTime() {
+            return new Date().getHours() >= PUZZLE_HOUR;
+        }
 
-            if (localStorage.getItem(todaySolvedKey())) {
-                locked.style.display = open.style.display = 'none';
-                solved.style.display = 'block';
-                document.getElementById('puzzle-reward').innerText = puzzles[puzzleDayIndex()].reward;
-                return;
-            }
+        function showOnly(id) {
+            ['puzzle-locked', 'puzzle-open', 'puzzle-reward-view', 'puzzle-nightdone'].forEach(x => {
+                document.getElementById(x).style.display = (x === id) ? '' : 'none';
+            });
+        }
+
+        let nightTimerStarted = false;
+
+        function renderPuzzle() {
+            ensureNight();
+
+            const allDone = puzzleProgress >= puzzles.length;
+            const nightDone = solvedTonight() >= PUZZLES_PER_NIGHT;
 
             if (!isPuzzleTime()) {
-                locked.style.display = 'block';
-                open.style.display = solved.style.display = 'none';
-
-                setInterval(() => {
-                    if (isPuzzleTime()) { renderPuzzle(); showToast('🔓 فُتح لغز الليلة!'); return; }
-                    const now = new Date();
-                    const target = new Date(now);
-                    target.setHours(PUZZLE_HOUR, 0, 0, 0);
-                    let diff = target - now;
-                    if (diff < 0) diff += dayMs;
-                    document.getElementById('puzzle-countdown').textContent =
-                        `${String(Math.floor(diff / 36e5)).padStart(2,'0')}:${String(Math.floor(diff % 36e5 / 6e4)).padStart(2,'0')}:${String(Math.floor(diff % 6e4 / 1e3)).padStart(2,'0')}`;
-                }, 1000);
+                showOnly('puzzle-locked');
+                document.getElementById('puzzle-nightdone-text').innerText =
+                    'اللغزُ القادم ينتظركِ غدًا... أحلامًا سعيدة ✦';
+                if (!nightTimerStarted) {
+                    nightTimerStarted = true;
+                    setInterval(() => {
+                        if (isPuzzleTime()) { showToast('🔓 فُتحت ألغاز الليلة!'); renderPuzzle(); return; }
+                        const now = new Date();
+                        const target = new Date(now);
+                        target.setHours(PUZZLE_HOUR, 0, 0, 0);
+                        let diff = target - now;
+                        if (diff < 0) diff += dayMs;
+                        document.getElementById('puzzle-countdown').textContent =
+                            `${String(Math.floor(diff / 36e5)).padStart(2,'0')}:${String(Math.floor(diff % 36e5 / 6e4)).padStart(2,'0')}:${String(Math.floor(diff % 6e4 / 1e3)).padStart(2,'0')}`;
+                    }, 1000);
+                }
                 return;
             }
 
-            locked.style.display = 'none';
-            solved.style.display = 'none';
-            open.style.display = 'block';
-            document.getElementById('puzzle-question').textContent = puzzles[puzzleDayIndex()].q;
+            if (allDone) {
+                showOnly('puzzle-nightdone');
+                document.getElementById('puzzle-nightdone-text').innerText =
+                    'حللتِ كلَّ الألغاز الثلاثين...\n\nلكنّ أعظمَ لغزٍ يبقى: كيف أحبتكِ هكذا؟\nالجواب: لا أعرف... فقط حدثتْ.\n\nأحبّكِ يا هاجَر ✦';
+                return;
+            }
+
+            if (nightDone) {
+                showOnly('puzzle-nightdone');
+                const left = puzzles.length - puzzleProgress;
+                document.getElementById('puzzle-nightdone-text').innerText =
+                    `حللتِ ${PUZZLES_PER_NIGHT} من ألغازِ الليلة... بطلَة! 🏆\n\nتبقّى ${left} لغزٍ في الرحلة.\nعودي غدًا عند الساعة التاسعة...`;
+                return;
+            }
+
+            showOnly('puzzle-open');
+            const p = puzzles[puzzleProgress];
+            document.getElementById('puzzle-progress').textContent =
+                `Énigme ${puzzleProgress + 1} / ${puzzles.length} — ليلةً: ${solvedTonight() + 1} / ${PUZZLES_PER_NIGHT}`;
+            document.getElementById('puzzle-question').textContent = p.q;
+            document.getElementById('puzzle-answer').value = '';
+        }
+
+        function handleCorrect() {
+            const p = puzzles[puzzleProgress];
+            puzzleProgress++;
+            localStorage.setItem('puzzleProgress', String(puzzleProgress));
+            localStorage.setItem('puzzleSolvedTonight', String(solvedTonight() + 1));
+
+            playChime();
+            burstConfetti(innerWidth / 2, innerHeight / 2, solvedTonight() >= PUZZLES_PER_NIGHT ? 180 : 90);
+            if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+
+            showOnly('puzzle-reward-view');
+            document.getElementById('puzzle-reward-text').innerText = p.reward;
+            document.getElementById('puzzle-next-hint').style.display =
+                (puzzleProgress < puzzles.length && solvedTonight() < PUZZLES_PER_NIGHT) ? '' : 'none';
+
+            setTimeout(renderPuzzle, 4500);
         }
 
         document.getElementById('puzzle-submit').addEventListener('click', () => {
             const val = document.getElementById('puzzle-answer').value;
             if (!val.trim()) return;
-            const correct = puzzles[puzzleDayIndex()].a.some(a => normAnswer(a) === normAnswer(val));
+            const correct = puzzles[puzzleProgress].a.some(a => normAnswer(a) === normAnswer(val));
             if (correct) {
-                localStorage.setItem(todaySolvedKey(), '1');
-                playChime();
-                burstConfetti(innerWidth / 2, innerHeight / 2, 160);
-                renderPuzzle();
-                if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+                handleCorrect();
             } else {
                 document.getElementById('puzzle-wrong').style.display = 'block';
                 setTimeout(() => document.getElementById('puzzle-wrong').style.display = 'none', 3500);
@@ -1426,7 +1448,7 @@
 
         renderPuzzle();
 
-        // VOICE NOTE
+// VOICE NOTE
         fetch(VOICE_NOTE_FILE, { method: 'HEAD' })
             .then(r => {
                 if (r.ok) {
