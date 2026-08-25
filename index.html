@@ -1100,7 +1100,7 @@
         $id('img-pick-btn').disabled = true;
         try {
             const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-            await uploadToBucket('fromher', file, `photo-${puzzles.indexOf(activeBox)}-${Date.now()}.${ext}`, file.type);
+            await uploadToBucket('voices', file, `photo-${puzzles.indexOf(activeBox)}-${Date.now()}.${ext}`, file.type);
             playChime(); burst(innerWidth / 2, innerHeight / 2, 70);
             showToast('📷 وصلت صورتكِ ✦');
             st.textContent = '';

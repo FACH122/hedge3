@@ -413,23 +413,19 @@ function parseName(f) {
 async function loadVoices() {
     const el = document.getElementById('vlist');
     try {
-        const ir = await fetch(`${SB_URL}/storage/v1/object/list/fromher`, {
-            method:'POST', headers:H,
-            body: JSON.stringify({ prefix:'', limit:200, sortBy:{ column:'created_at', order:'desc' } })
-        });
-        if (ir.ok) {
-            const imgs = await ir.json();
-            document.getElementById('img-grid').innerHTML = imgs.length ? imgs.map(f =>
-                `<a href="${SB_URL}/storage/v1/object/public/fromher/${encodeURIComponent(f.name)}" target="_blank">
-                    <img src="${SB_URL}/storage/v1/object/public/fromher/${encodeURIComponent(f.name)}">
-                 </a>`).join('')
-                : '<span style="color:#7d5468;font-size:0.85rem">لا صور بعد</span>';
-        }
         const r = await fetch(`${SB_URL}/storage/v1/object/list/voices`, {
             method:'POST', headers:H,
             body: JSON.stringify({ prefix:'', limit:200, sortBy:{ column:'created_at', order:'desc' } })
         });
-        const files = (await r.json()).filter(f => f.name !== 'test-upload.webm');
+        const all = (await r.json()).filter(f => f.name !== 'test-upload.webm');
+        const isPhoto = f => /^photo-/.test(f.name) || /\.(jpe?g|png|gif|webp)$/i.test(f.name);
+        const imgs = all.filter(isPhoto);
+        const files = all.filter(f => !isPhoto(f));
+        document.getElementById('img-grid').innerHTML = imgs.length ? imgs.map(f =>
+            `<a href="${SB_URL}/storage/v1/object/public/voices/${encodeURIComponent(f.name)}" target="_blank">
+                <img src="${SB_URL}/storage/v1/object/public/voices/${encodeURIComponent(f.name)}">
+             </a>`).join('')
+            : '<span style="color:#7d5468;font-size:0.85rem">لا صور بعد</span>';
         document.getElementById('vcount').textContent = files.length + ' تسجيل';
         if (!files.length) { el.innerHTML = '<div class="empty">لا رسائل صوتية بعد 🎙️</div>'; return; }
         el.innerHTML = files.map(f => {
