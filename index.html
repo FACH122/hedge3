@@ -554,6 +554,51 @@
 
         .puzzle-wrong { margin-top: 20px; color: #c98a7a; font-size: 1.05rem; }
 
+        .puzzle-voice { margin-top: 30px; }
+
+        .pv-divider {
+            display: block; color: #6e6862; font-size: 0.9rem; letter-spacing: 4px;
+            margin-bottom: 18px;
+        }
+
+        #recorder-box { text-align: center; }
+
+        .btn-rec {
+            background: rgba(212,175,55,0.08); border: 1px solid var(--border-gold);
+            color: var(--gold-light); font-family: 'Amiri', serif; font-size: 1.2rem;
+            padding: 16px 34px; border-radius: 40px; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-rec:hover { background: rgba(212,175,55,0.2); transform: translateY(-2px); }
+        .btn-rec.stop { border-color: rgba(201,138,122,0.5); color: #e8b8aa; padding: 10px 22px; font-size: 1rem; }
+        .btn-rec.send { border-color: rgba(37,211,102,0.4); color: #b8e6c8; }
+        .btn-rec.redo { border-color: var(--border-gold); color: #b5aea4; padding: 10px 22px; font-size: 1rem; }
+
+        #rec-active {
+            display: flex; align-items: center; justify-content: center; gap: 16px;
+        }
+
+        .rec-dot {
+            width: 14px; height: 14px; border-radius: 50%; background: #e05d44;
+            animation: blink 1s steps(1) infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.15; } }
+
+        .rec-timer {
+            font-family: 'Montserrat', sans-serif; font-size: 1.3rem; color: var(--gold-light);
+            min-width: 56px;
+        }
+
+        .rec-player { width: min(340px, 100%); margin-bottom: 16px; height: 44px; }
+
+        .rec-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        .rec-status { margin-top: 14px; font-size: 1rem; color: #b38728; }
+
+
+
         .solved-badge {
             font-family: 'Cinzel', serif; font-size: 1.6rem; letter-spacing: 3px; margin-bottom: 22px;
             background: var(--gold-gradient);
@@ -683,6 +728,25 @@
                             <button class="btn-gold" id="puzzle-submit">تحقّقي</button>
                         </div>
                         <p class="puzzle-wrong" id="puzzle-wrong" style="display:none">ليس هذا الجواب... فكّري مجددًا يا صاحبةَ القلب الجميل ✦</p>
+                        <div class="puzzle-voice">
+                            <span class="pv-divider">— أو —</span>
+                            <div id="recorder-box">
+                                <button class="btn-rec" id="rec-start">🎤 اضغطي للتسجيل</button>
+                                <div id="rec-active" style="display:none">
+                                    <span class="rec-dot"></span>
+                                    <span class="rec-timer" id="rec-timer">0:00</span>
+                                    <button class="btn-rec stop" id="rec-stop">■ أوقفي</button>
+                                </div>
+                                <div id="rec-review" style="display:none">
+                                    <audio controls id="rec-player" class="rec-player"></audio>
+                                    <div class="rec-actions">
+                                        <button class="btn-rec send" id="rec-send">✦ إرسالي الصوت</button>
+                                        <button class="btn-rec redo" id="rec-redo">↺ أعيدي التسجيل</button>
+                                    </div>
+                                    <p class="rec-status" id="rec-status"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="puzzle-reward-view" style="display:none">
                         <div class="solved-badge">✦ إجابةٌ صحيحة! ✦</div>
@@ -1327,7 +1391,105 @@
         }
         sc.addEventListener('pointermove', scratchMove);
 
-                // NIGHTLY PUZZLE
+                        // IN-APP VOICE RECORDER (Supabase upload)
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+        let mediaRecorder = null;
+        let recChunks = [];
+        let recBlob = null;
+        let recInterval = null;
+        let recSeconds = 0;
+
+        const recStart = document.getElementById('rec-start');
+        const recActive = document.getElementById('rec-active');
+        const recReview = document.getElementById('rec-review');
+        const recStopBtn = document.getElementById('rec-stop');
+        const recSend = document.getElementById('rec-send');
+        const recRedo = document.getElementById('rec-redo');
+        const recPlayer = document.getElementById('rec-player');
+        const recStatus = document.getElementById('rec-status');
+
+        function resetRecorder() {
+            clearInterval(recInterval);
+            recBlob = null;
+            recChunks = [];
+            recSeconds = 0;
+            document.getElementById('rec-timer').textContent = '0:00';
+            recActive.style.display = 'none';
+            recReview.style.display = 'none';
+            recStart.style.display = '';
+            recStatus.textContent = '';
+        }
+
+        recStart.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                recChunks = [];
+                mediaRecorder.ondataavailable = e => recChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    stream.getTracks().forEach(t => t.stop());
+                    recBlob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+                    recPlayer.src = URL.createObjectURL(recBlob);
+                    recActive.style.display = 'none';
+                    recReview.style.display = 'block';
+                };
+                mediaRecorder.start();
+                recSeconds = 0;
+                recStart.style.display = 'none';
+                recActive.style.display = 'flex';
+                recInterval = setInterval(() => {
+                    recSeconds++;
+                    document.getElementById('rec-timer').textContent =
+                        `${Math.floor(recSeconds / 60)}:${String(recSeconds % 60).padStart(2, '0')}`;
+                    if (recSeconds >= 120) mediaRecorder.state !== 'inactive' && mediaRecorder.stop();
+                }, 1000);
+            } catch (err) {
+                showToast('🎤 اسمحِ بالوصول إلى الميكروفون أولاً');
+            }
+        });
+
+        recStopBtn.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+        });
+
+        recRedo.addEventListener('click', resetRecorder);
+
+        recSend.addEventListener('click', async () => {
+            if (!recBlob) return;
+            if (SUPABASE_URL.includes('YOUR_')) {
+                recStatus.textContent = '⚠️ التخزين غير مُعدّ بعد — قول لي "جهّزت Supabase" مع المفاتيح';
+                return;
+            }
+            recSend.disabled = true;
+            recStatus.textContent = '⏳ جاري الإرسال...';
+            try {
+                const ext = (recBlob.type.includes('mp4') || recBlob.type.includes('aac')) ? 'm4a' : 'webm';
+                const fname = `puzzle-${puzzleProgress}-${getHerName()}-${Date.now()}.${ext}`;
+                const res = await fetch(`${SUPABASE_URL}/storage/v1/object/voices/${encodeURIComponent(fname)}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Content-Type': recBlob.type || 'audio/webm'
+                    },
+                    body: recBlob
+                });
+                if (!res.ok) throw new Error(await res.text());
+                playChime();
+                burstConfetti(innerWidth / 2, innerHeight / 2, 80);
+                showToast('✦ وصلني صوتكِ... انتظري تلميحي');
+                resetRecorder();
+            } catch (err) {
+                console.error(err);
+                recStatus.textContent = 'تعذّر الإرسال... حاولي مرة أخرى';
+            } finally {
+                recSend.disabled = false;
+            }
+        });
+
+        // NIGHTLY PUZZLE
 
         const puzzles = [
             { q: 'انظري إلى كلمة «باريس» جيدًا... ما هو الحرفُ الذي يقبعُ في وسطِها؟', a: ['حرف ر', 'حرف الراء', 'الراء', 'ر'], reward: 'أنتِ وسطُ عالمي... كلَّه.' },
