@@ -127,22 +127,7 @@
         }
         #reason-text { font-size: 1.35rem; line-height: 2; color: var(--accent); margin: 0; }
 
-        /* PRIZE SCRATCH */
-        .scratch-wrap {
-            position: relative; width: min(480px, 100%); height: 210px;
-            margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid var(--border);
-        }
-        .scratch-prize {
-            position: absolute; inset: 0; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; gap: 10px;
-            background: radial-gradient(circle at 50% 40%, rgba(255,182,213,0.35), #fff0f7);
-            font-size: 1.4rem; color: var(--accent); line-height: 1.9;
-        }
-        .scratch-prize small {
-            font-family: 'Montserrat', sans-serif; font-size: 0.62rem; letter-spacing: 4px;
-            color: #8a6076; text-transform: uppercase;
-        }
-        #scratch-canvas, #reason-canvas { touch-action: none; }
+        #reason-canvas { touch-action: none; }
 
         /* BUTTONS */
         .btn {
@@ -391,17 +376,6 @@
         </div>
         <div style="text-align:center;margin:-10px 0 26px">
             <button class="btn btn-ghost" id="reason-btn">✦ سببٌ آخر ✦</button>
-        </div>
-
-        <div class="card">
-            <span class="label">✦ بطاقة السحر ✦</span>
-            <div class="scratch-wrap">
-                <div class="scratch-prize">
-                    <small>Votre Surprise</small>
-                    <span id="prize-text">عشائةٌ تحت النجوم...<br>تاريخُها سرٌّ بيني وبينكِ ✦</span>
-                </div>
-                <canvas id="scratch-canvas"></canvas>
-            </div>
         </div>
 
         <div class="card" style="padding-bottom:22px">
@@ -839,46 +813,6 @@
         rOpen = false;
         initReasonFoil();
     });
-
-    // PRIZE SCRATCH
-    const sc = document.getElementById('scratch-canvas');
-    const scx = sc.getContext('2d');
-    let sDown = false, sOpen = false;
-    function initPrizeFoil() {
-        sc.width = sc.offsetWidth || 480; sc.height = sc.offsetHeight || 210;
-        scx.globalCompositeOperation = 'source-over';
-        const g = scx.createLinearGradient(0, 0, sc.width, sc.height);
-        g.addColorStop(0, '#e78ab5'); g.addColorStop(0.5, '#f9cfe3'); g.addColorStop(1, '#e78ab5');
-        scx.fillStyle = g; scx.fillRect(0, 0, sc.width, sc.height);
-        scx.fillStyle = 'rgba(255,255,255,0.9)';
-        scx.font = '16px Montserrat, sans-serif'; scx.textAlign = 'center';
-        scx.fillText('✦ اكتشفي مفاجأتك بيدكِ ✦', sc.width / 2, sc.height / 2);
-    }
-    initPrizeFoil();
-    addEventListener('resize', () => { if (!sOpen) initPrizeFoil(); });
-    sc.addEventListener('pointerdown', e => { if (sOpen) return; sDown = true; sc.setPointerCapture(e.pointerId); pScratch(e); });
-    sc.addEventListener('pointerup', () => sDown = false);
-    sc.addEventListener('pointerleave', () => sDown = false);
-    function pScratch(e) {
-        if (!sDown || sOpen) return;
-        const rect = sc.getBoundingClientRect();
-        scx.globalCompositeOperation = 'destination-out';
-        scx.beginPath();
-        scx.arc(e.clientX - rect.left, e.clientY - rect.top, 28, 0, 6.283);
-        scx.fill();
-        const d = scx.getImageData(0, 0, sc.width, sc.height).data;
-        let clear = 0;
-        for (let i = 3; i < d.length; i += 40) if (d[i] === 0) clear++;
-        if (clear / (d.length / 40) > 0.45) {
-            sOpen = true;
-            scx.clearRect(0, 0, sc.width, sc.height);
-            playChime();
-            burst(innerWidth / 2, innerHeight / 2, 140);
-            showToast('🎉 وجدتِ مفاجأتك!');
-            if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
-        }
-    }
-    sc.addEventListener('pointermove', pScratch);
 
     // ================= PUZZLE BOXES =================
     function todayStr() {
