@@ -686,6 +686,11 @@
                             <span class="pv-divider">— أو —</span>
                             <div id="recorder-box">
                                 <button class="btn-rec" id="rec-start">🎤 اضغطي للتسجيل</button>
+                                <div style="margin-top:14px">
+                                    <button class="btn-rec" id="img-pick-btn" style="font-size:1rem;padding:12px 26px">📷 أو أرسلي صورة</button>
+                                    <input type="file" id="img-input" accept="image/*" style="display:none">
+                                    <p class="rec-status" id="img-status"></p>
+                                </div>
                                 <div id="rec-active" style="display:none">
                                     <span class="rec-dot"></span>
                                     <span class="rec-timer" id="rec-timer">0:00</span>
@@ -1374,38 +1379,7 @@
 
         // NIGHTLY PUZZLE
 
-        let puzzles = [
-            { q: 'انظري إلى كلمة «باريس» جيدًا... ما هو الحرفُ الذي يقبعُ في وسطِها؟', a: ['حرف ر', 'حرف الراء', 'الراء', 'ر'], reward: 'أنتِ وسطُ عالمي... كلَّه.' },
-            { q: 'يزنُ لا شيء، لكنّ أثقلَ الناسِ لا يستطيعون حملَه لمدة دقيقتين. ما هو؟', a: ['النفس', 'نفس'], reward: 'خذيف نفس... أنا معك دائمًا.' },
-            { q: 'كلَّما أخذتَ منه كبر، ما هو؟', a: ['الحفرة', 'حفرة', 'الثقب', 'الدين'], reward: 'كلَّما عرفتُكِ أكثر... كبر حبّي لكِ.' },
-            { q: 'له أسنانٌ لكنّه لا يعض. ما هو؟', a: ['المشط', 'مشط'], reward: 'ابتسامتُكِ أجملُ من أيِّ مشط.' },
-            { q: 'يمشي بلا أرجل، ويبكي بلا عيون. ما هو؟', a: ['السحاب', 'سحاب', 'الغيوم', 'غيمة', 'السحابة'], reward: 'أنا سحابتُكِ... وأنتِ مطري.' },
-            { q: 'ما هو الشيء الذي يُكسرُ قبل أن تكلّميه؟', a: ['الصمت', 'صمت'], reward: 'صمتُنا معًا... أحلى من كلِّ الكلام.' },
-            { q: 'شيءٌ إذا وضعته في الماء لا يبتلّ. ما هو؟', a: ['الظل', 'ظل', 'الضوء', 'نور'], reward: 'ظلّكِ على قلبي... لا يمحوه شيء.' },
-            { q: 'بيتٌ لا نوافذَ له ولا أبواب، ويسكنه أجملُ إنسانة. ما هو؟', a: ['قلبي', 'قلب'], reward: 'وأنتِ ساكنتَه دون إذن... ولم أطردكِ أبدًا.' },
-            { q: 'يُذكرُ بالحرفين، ويُرى بالعين. من هو؟', a: ['العشق', 'عشق', 'الحب', 'حب'], reward: 'اسمُكِ أولُ ما خطرَ بالي.' },
-            { q: 'أخوان يلتقيان كلَّ يومٍ ولا يتبادلان الكلام أبدًا. ما هما؟', a: ['العينان', 'عينان', 'العينين', 'عيون'], reward: 'عيناكِ تحدّثني أكثر ممّا تتكلّم.' },
-            { q: 'شيءٌ يعطيكِ ولا يفقر، ويُحفظُ ولا يُرى. ما هو؟', a: ['الكلمة الطيبة', 'كلمة طيبة', 'الدعاء', 'الكلمة'], reward: 'كلماتُكِ عندي كنزٌ لا ينفد.' },
-            { q: 'طويلٌ عند الصغير، وقصيرٌ عند الكبير. ما هو؟', a: ['العمر', 'الأمل', 'الليل'], reward: 'عمري معكِ... لم أشعرْ به يومًا قصيرًا.' },
-            { q: 'ما هو الشيء الذي يحرقُ نفسَه ليعطي الضوء للآخرين؟', a: ['الشمعة', 'شمعة'], reward: 'أنا شمعتُكِ... احترقتُ لنوركِ.' },
-            { q: 'يرتفع ولا ينخفض أبدا: الأقوال أم العمر؟', a: ['الأقوال', 'أقوال', 'العمر', 'السن'], reward: 'مكانتكِ عندي ترتفعُ كلَّ يوم.' },
-            { q: 'شيءٌ موجودُ في السماء وفي القرآن وفي قلبي. ما هو؟', a: ['النور', 'نور', 'الضوء'], reward: 'نورُ عينيّ... هذا لقبُكِ منذ اليوم.' },
-            { q: 'ما هو الشيء الذي يكونُ أخضرَ في الأرض، وأسودَ في السوق، وأحمرَ في البيت؟', a: ['الشاي', 'شاي'], reward: 'شاهي معكِ... أحلى من أيِّ مقهى في باريس.' },
-            { q: 'حاملٌ يحملُ ما ليس له، وحاملُهُ لا يملكُ شيئًا. ما هو؟', a: ['الموت', 'الفنجان', 'الإبريق'], reward: 'منذ عرفتُكِ... صرتُ غنيًّا بلا مال.' },
-            { q: 'كلمةٌ إذا قرأتها من الأمام أو الخلف بقيت هي هي. ما هي؟', a: ['مستوى', 'كلمة'], reward: 'مهما نظرتُ إليكِ من أيِّ جهةٍ... تبقين أجمل.' },
-            { q: 'شيءٌ يتكلّمُ كلَّ اللغاتِ بلا لسان. ما هو؟', a: ['صدى', 'الصدى'], reward: 'قلبي يصرخ باسمكِ... حتى الصدى حفظه.' },
-            { q: 'أنا زوجُ أختي وأختُ زوجي... من أنا؟', a: ['لا أحد', 'أنا', 'زوجها', 'الزوج'], reward: 'الجواب: أنا. لأنّكِ كلُّ شيءٍ لي.' },
-            { q: 'ما هو الشيء الذي تكتبُه ولا تقرؤه أبدًا؟', a: ['العريضة', 'الجرح', 'الوعد'], reward: 'وعودي لكِ... محفورةٌ لا تُمحى.' },
-            { q: 'شيءٌ إذا أحببته أحبّكِ أكثر، وإذا نسيتَه نسيك... ما هو؟', a: ['القلب', 'قلب', 'الإنسان', 'الحبيب'], reward: 'قلبكِ مرآتي... أرى فيه نفسي أفضلَ ممّا أنا.' },
-            { q: 'له رأسٌ ولا عين له، وله ذيلٌ ولا يتحرك. ما هو؟', a: ['الدبابيس', 'الدبوس', 'دبوس', 'المفتاح'], reward: 'أنتِ مفتاحُ كلِّ أبوابي.' },
-            { q: 'ما هو الشيء الذي يزدادُ نقصًا كلَّما شاركتَه؟', a: ['السر', 'سر'], reward: 'سرُّنا المشترك... هو أجملُ ما نملك.' },
-            { q: 'ينامُ حيًّا ويستيقظُ ميتًا... ما هو؟', a: ['البطارية', 'الهاتف', 'الشمعة'], reward: 'بطاريّتي تمتلئُ كلَّما رأيتكِ.' },
-            { q: 'شيءٌ لا تشتريه بالمال... بل بالوقت والاهتمام. ما هو؟', a: ['الثقة', 'الحب', 'الوقت', 'الصداقة'], reward: 'وقتِكِ معي... أغلى هديةٍ وصلتني.' },
-            { q: 'كلُّ ليلةٍ أضعُهُ ممتلئًا وأصبحُهُ فارغًا... ما هو؟', a: ['الوسادة', 'وسادة', 'الدماغ', 'العقل'], reward: 'أفكاري عنكِ... لا تفارقني حتى في المنام.' },
-            { q: 'ما هو الشيء الذي يجعلكِ تبكين بلا ألم وتضحكين بلا سبب؟', a: ['الحب', 'الحنين', 'أنت', 'الاشتياق'], reward: 'الجواب الصحيح: أنتِ.' },
-            { q: 'شيءٌ يشبهكِ تمامًا: نادر، ثمين، ولا يتكرّر. ما هو؟', a: ['الماس', 'الألماس', 'اللؤلؤ', 'ذهب'], reward: 'وأنا الفقيرُ الذي وجدَ الكنزَ ولم يبحث عنه.' },
-            { q: 'اللغز الأخير: من أحبّكِ قبل أن تعرفي معنى الحب؟', a: ['أنت', 'انت', 'حبيبي'], reward: 'إجابةٌ صحيحة...\n\nكلُّ هذه الأسئلة كانت مجرّد أعذارٍ لأسمعُ جوابك.\n\nأحبّكِ يا هاجَر ✦' }
-        ];
+        let puzzles = [];
 
         const dayMs = 864e5;
         const PUZZLES_PER_NIGHT = Infinity;
@@ -1448,8 +1422,15 @@
         function renderPuzzle() {
             ensureNight();
 
-            const allDone = puzzleProgress >= puzzles.length;
-            const nightDone = solvedTonight() >= PUZZLES_PER_NIGHT;
+            const allDone = puzzleProgress >= puzzles.length && puzzles.length > 0;
+            const nightDone = solvedTonight() >= PUZZLES_PER_NIGHT && puzzles.length > 0;
+
+            if (!puzzles.length) {
+                showOnly('puzzle-nightdone');
+                document.getElementById('puzzle-nightdone-text').innerText =
+                    '🌱 الحديقة تُزرع بألغاز جديدة... عودي قريباً يا فلّة قلبي';
+                return;
+            }
 
             if (!isPuzzleTime()) {
                 showOnly('puzzle-locked');
@@ -1595,7 +1576,42 @@
                 .subscribe();
         } catch (e) {}
 
-        // VOICE NOTE
+        // HER IMAGE UPLOAD
+        const imgPickBtn = document.getElementById('img-pick-btn');
+        const imgInput = document.getElementById('img-input');
+        imgPickBtn.addEventListener('click', () => imgInput.click());
+        imgInput.addEventListener('change', async () => {
+            const file = imgInput.files[0];
+            if (!file) return;
+            const st = document.getElementById('img-status');
+            st.textContent = '⏳ جاري إرسال الصورة...';
+            imgPickBtn.disabled = true;
+            try {
+                const ext = file.name.split('.').pop().toLowerCase();
+                const fname = `photo-${puzzleProgress}-${Date.now()}.${ext}`;
+                const r = await fetch(`${SUPABASE_URL}/storage/v1/object/fromher/${fname}`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                        apikey: SUPABASE_ANON_KEY,
+                        'Content-Type': file.type
+                    },
+                    body: file
+                });
+                if (!r.ok) throw new Error((await r.json()).message || r.status);
+                playChime();
+                burstConfetti(innerWidth / 2, innerHeight / 2, 70);
+                showToast('📷 وصلت صورتكِ ✦');
+                st.textContent = '';
+                imgInput.value = '';
+            } catch (err) {
+                st.textContent = 'تعذّر الإرسال: ' + err.message;
+            } finally {
+                imgPickBtn.disabled = false;
+            }
+        });
+
+// VOICE NOTE
         fetch(VOICE_NOTE_FILE, { method: 'HEAD' })
             .then(r => {
                 if (r.ok) {

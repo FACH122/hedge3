@@ -86,7 +86,6 @@
         <div id="tab-puzzles">
             <div class="toolbar">
                 <button class="tbtn" onclick="newPuzzle()">➕ لغز جديد</button>
-                <button class="tbtn" onclick="seedDefaults()">⬇ استيراد الـ٣٠</button>
                 <button class="tbtn" onclick="loadPuzzles()">↺ تحديث</button>
             </div>
             <div id="plist"><div class="loading">...جاري التحميل</div></div>
@@ -98,6 +97,9 @@
                 <span class="tbtn" id="vcount" style="cursor:default;border:none;background:none;color:#7d5468"></span>
                 <button class="tbtn" onclick="loadVoices()">↺ تحديث</button>
             </div>
+            <label class="lbl">📷 صورها المرسلة</label>
+            <div id="img-grid" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px"></div>
+            <label class="lbl">🎙️ تسجيلاتها الصوتية</label>
             <div id="vlist"><div class="loading">...جاري التحميل</div></div>
         </div>
 
@@ -158,7 +160,7 @@ async function loadPuzzles() {
         const rows = await r.json();
         if (!r.ok) throw new Error(rows.message || r.status);
         if (!rows.length) {
-            el.innerHTML = '<div class="empty">لا توجد ألغاز بعد.<br>اضغط «➕ لغز جديد» أو «⬇ استيراد الـ٣٠».</div>';
+            el.innerHTML = '<div class="empty">لا توجد ألغاز بعد.<br>اضغط «➕ لغز جديد» لإضافة أول لغز.</div>';
             return;
         }
         el.innerHTML = rows.map((row, i) => `
@@ -277,49 +279,6 @@ function newPuzzle() {
     div.scrollIntoView({ behavior: 'smooth' });
 }
 
-async function seedDefaults() {
-    if (!confirm('إضافة ٣٠ لغزاً للقاعدة؟')) return;
-    const rows = DEFAULTS.map((p,i) => ({ position:i+1, question:p.q, answers:p.a, reward_text:p.rw, reward_image:'' }));
-    const r = await fetch(`${SB_URL}/rest/v1/puzzles`, {
-        method:'POST', headers:{ ...H, Prefer:'return=minimal' }, body: JSON.stringify(rows)
-    });
-    alert(r.ok ? 'تم استيراد ٣٠ لغزاً ✔' : 'خطأ: ' + await r.text());
-    loadPuzzles();
-}
-
-const DEFAULTS = [
-    {q:'انظري إلى كلمة «باريس»... ما الحرفُ الذي في وسطها؟',a:'حرف ر|الراء|r',rw:'أنتِ وسطُ عالمي.'},
-    {q:'يزنُ لا شيء لكنّ الأثقلين لا يستطيعون حمله دقيقتين؟',a:'النفس|نفس',rw:'خذيف نفس، أنا معك.'},
-    {q:'كلما أخذت منه كبر، ما هو؟',a:'الحفرة|حفرة|الثقب|الدين',rw:'كلما عرفتكِ كبر حبي.'},
-    {q:'له أسنان ولا يعض، ما هو؟',a:'المشط|مشط',rw:'ابتسامتُكِ الأجمل.'},
-    {q:'يمشي بلا أرجل ويبكي بلا عيون؟',a:'السحاب|سحاب|الغيوم|غيمة',rw:'أنا سحابتك وأنتِ مطري.'},
-    {q:'يُكسر قبل أن تتكلمي؟',a:'الصمت|صمت',rw:'صمتنا أحلى من الكلام.'},
-    {q:'يوضع في الماء ولا يبتل؟',a:'الظل|ظل|الضوء|نور',rw:'ظلك على قلبي لا يمحوه شيء.'},
-    {q:'بيت بلا نوافذ يسكنه أجمل إنسانة؟',a:'قلبي|قلب',rw:'سكنتيه دون إذن.'},
-    {q:'يُذكر بحرفين ويُرى بالعين؟',a:'العشق|عشق|الحب|حب',rw:'اسمك أول ما خطر ببالي.'},
-    {q:'أخوان يلتقيان يومياً بلا كلام؟',a:'العينان|عينان|العينين|عيون',rw:'عيناك تحدثني.'},
-    {q:'يعطيك ولا يفقر؟',a:'الكلمة الطيبة|الدعاء|الكلمة',rw:'كلماتك كنزي.'},
-    {q:'طويل عند الصغير قصير عند الكبير؟',a:'العمر|الأمل|الليل',rw:'عمري معك لم يكن قصيراً.'},
-    {q:'يحرق نفسه ليضيء للآخرين؟',a:'الشمعة|شمعة',rw:'احترقت لنورك.'},
-    {q:'يرتفع ولا ينخفض أبداً؟',a:'الأقوال|العمر|السن',rw:'مكانتك ترتفع كل يوم.'},
-    {q:'في السماء والقرآن وقلبي؟',a:'النور|نور|الضوء',rw:'نور عيني لقبك.'},
-    {q:'أخضر في الأرض أسود في السوق أحمر في البيت؟',a:'الشاي|شاي',rw:'شاهي معك أحلى باريس.'},
-    {q:'حامل يحمل ما ليس له؟',a:'الموت|الفنجان|الإبريق',rw:'صرت غنياً بلا مال.'},
-    {q:'تقرأه من الأمام أو الخلف نفس الشيء؟',a:'مستوى|كلمة',rw:'من أي جهة تبقين أجمل.'},
-    {q:'يتكلم كل اللغات بلا لسان؟',a:'صدى|الصدى',rw:'قلبي يصرخ باسمك.'},
-    {q:'زوج أختي وأخت زوجي، من أنا؟',a:'لا أحد|أنا|زوجها|الزوج',rw:'أنا. أنتِ كل شيء.'},
-    {q:'تكتبه ولا تقرؤه أبداً؟',a:'العريضة|الجرح|الوعد',rw:'وعودي محفورة.'},
-    {q:'تحبيه يحبك أكثر؟',a:'القلب|قلب|الإنسان|الحبيب',rw:'قلبك مرآتي.'},
-    {q:'له رأس لا عين له وذيل لا يتحرك؟',a:'الدبوس|دبوس|المفتاح|الدبابيس',rw:'أنتِ مفتاح أبوابي.'},
-    {q:'يزداد نقصاً كلما شاركته؟',a:'السر|سر',rw:'سرنا أجمل ما نملك.'},
-    {q:'ينام حياً ويستيقظ ميتاً؟',a:'البطارية|الهاتف|الشمعة',rw:'بطاريتي تمتلئ برؤيتك.'},
-    {q:'لا يشترى بالمال بل بالوقت؟',a:'الثقة|الحب|الوقت|الصداقة',rw:'وقتك معي أغلى هدية.'},
-    {q:'أضعه ممتلئاً وأصبحه فارغاً؟',a:'الوسادة|وسادة|العقل|الدماغ',rw:'أفكاري عنك حتى في المنام.'},
-    {q:'يجعلك تبكين بلا ألم وتضحكين بلا سبب؟',a:'الحب|الحنين|أنت|الاشتياق',rw:'الجواب: أنتِ.'},
-    {q:'يشبهكِ: نادر ثمين لا يتكرر؟',a:'الماس|الألماس|اللؤلؤ|ذهب',rw:'وجدت الكنز دون بحث.'},
-    {q:'من أحبك قبل أن تعري معنى الحب؟',a:'أنت|انت|حبيبي',rw:'كل الأسئلة أعذار لأسمع جوابك.\nأحبك يا هاجر ✦'}
-];
-
 // ---------- IMAGES ----------
 function pickImage(btn) {
     const inp = document.createElement('input');
@@ -366,6 +325,23 @@ function parseName(f) {
 
 async function loadVoices() {
     const el = document.getElementById('vlist');
+    try {
+        const ir = await fetch(`${SB_URL}/storage/v1/object/list/fromher`, {
+            method: 'POST', headers: H,
+            body: JSON.stringify({ prefix:'', limit:200, sortBy:{ column:'created_at', order:'desc' } })
+        });
+        if (ir.ok) {
+            const imgs = await ir.json();
+            const grid = document.getElementById('img-grid');
+            grid.innerHTML = imgs.length ? imgs.map(f =>
+                `<a href="${SB_URL}/storage/v1/object/public/fromher/${encodeURIComponent(f.name)}" target="_blank">
+                    <img src="${SB_URL}/storage/v1/object/public/fromher/${encodeURIComponent(f.name)}"
+                         style="width:110px;height:110px;object-fit:cover;border-radius:10px;border:1px solid #f3d3e1">
+                 </a>`).join('')
+                : '<span style="color:#7d5468;font-size:0.85rem">لا صور بعد</span>';
+        }
+    } catch (e) {}
+
     try {
         const r = await fetch(`${SB_URL}/storage/v1/object/list/voices`, {
             method: 'POST', headers: H,
