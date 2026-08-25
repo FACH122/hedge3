@@ -268,8 +268,10 @@ async function savePuzzle(btn) {
     btn.disabled = true;
     setStatus(card, '...جاري الحفظ', true);
     try {
+        P = P.filter(p => p.q && p.q.trim());
         await saveKey('puzzles', P);
         setStatus(card, '✔ حُفظ — ظهرت في الموقع!', true);
+        setTimeout(renderPuzzleList, 300);
     } catch (e) {
         setStatus(card, '✕ فشل: ' + e.message, false);
     } finally { btn.disabled = false; }
@@ -283,7 +285,7 @@ async function deletePuzzle(btn) {
     btn.disabled = true;
     try {
         P.splice(i, 1);
-        await saveKey('puzzles', P);
+        await saveKey('puzzles', P.filter(p => p.q && p.q.trim()));
         setStatus(card, '✔ حُذف بنجاح', true);
         setTimeout(loadPuzzlesQuiet, 300);
     } catch (e) {

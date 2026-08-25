@@ -1074,14 +1074,16 @@
             const rows = await r.json();
             rows.forEach(row => {
                 if (row.key === 'puzzles' && Array.isArray(row.value)) {
-                    puzzles = row.value.map((p, i) => ({
-                        qid: p.qid || ('q' + i),
-                        q: p.q || '',
-                        a: Array.isArray(p.a) ? p.a : String(p.a || '').split('|').map(s => s.trim()).filter(Boolean),
-                        reward: p.reward || '',
-                        reward_image: p.reward_image || '',
-                        unlock: p.unlock || ''
-                    }));
+                    puzzles = row.value
+                        .filter(p => p && p.q && String(p.q).trim())
+                        .map((p, i) => ({
+                            qid: p.qid || ('q' + i),
+                            q: p.q || '',
+                            a: Array.isArray(p.a) ? p.a : String(p.a || '').split('|').map(s => s.trim()).filter(Boolean),
+                            reward: p.reward || '',
+                            reward_image: p.reward_image || '',
+                            unlock: p.unlock || ''
+                        }));
                     if (activeBox && !puzzles.some(x => x.qid === activeBox.qid)) closeDetail();
                 } else if (row.key === 'texts' && row.value) {
                     texts = row.value;
