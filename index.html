@@ -606,6 +606,11 @@
             display: block;
             border: 1px solid var(--border-gold);
             box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            pointer-events: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
         }
 
         .solved-badge {
@@ -759,7 +764,7 @@
                     </div>
                     <div id="puzzle-reward-view" style="display:none">
                         <div class="solved-badge">✦ إجابةٌ صحيحة! ✦</div>
-                        <img id="reward-image" class="reward-image" alt="" style="display:none">
+                        <img id="reward-image" class="reward-image" alt="" draggable="false" style="display:none">
                         <p class="puzzle-reward" id="puzzle-reward-text"></p>
                         <p class="puzzle-next-hint" id="puzzle-next-hint">اللغزُ التالي يظهرُ بعد لحظات...</p>
                     </div>
@@ -1640,6 +1645,7 @@
             showOnly('puzzle-reward-view');
             document.getElementById('puzzle-reward-text').innerText = p.reward;
             const rimg = document.getElementById('reward-image');
+            rimg.addEventListener('contextmenu', e => e.preventDefault());
             if (rimg._hideTimer) clearTimeout(rimg._hideTimer);
             if (p.reward_image) {
                 rimg.src = p.reward_image;
