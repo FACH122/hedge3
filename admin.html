@@ -8,7 +8,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body { background: #fdf2f7; color: #44263b; min-height: 100vh; padding: 24px 14px 60px; }
         h1 { text-align: center; font-size: 1.25rem; margin-bottom: 20px; color: #c2255c; }
-
         .gate { max-width: 340px; margin: 14vh auto 0; background: #fff; border: 1px solid #f3d3e1;
             border-radius: 16px; padding: 36px 26px; text-align: center; box-shadow: 0 10px 30px rgba(214,51,108,.08); }
         .gate input { width: 100%; padding: 13px; border-radius: 10px; margin-bottom: 12px;
@@ -16,18 +15,15 @@
         .gate input:focus { border-color: #e64980; }
         .btn-main { width: 100%; padding: 13px; border: none; border-radius: 10px; cursor: pointer;
             background: linear-gradient(135deg,#f783ac,#c2255c); color: #fff; font-weight: 700; font-size: 1rem; }
-
         .wrap { max-width: 780px; margin: 0 auto; }
         .tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 22px; flex-wrap: wrap; }
-        .tab-btn { padding: 10px 22px; border-radius: 24px; cursor: pointer; font-size: 0.92rem;
+        .tab-btn { padding: 10px 20px; border-radius: 24px; cursor: pointer; font-size: 0.9rem;
             background: #fff; border: 1px solid #f3d3e1; color: #7d5468; }
         .tab-btn.active { background: linear-gradient(135deg,#f783ac,#c2255c); color: #fff; border-color: transparent; font-weight: 700; }
-
-        .toolbar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; }
+        .toolbar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; align-items: center; }
         .tbtn { background: #fff; border: 1px solid #f3d3e1; color: #c2255c;
             padding: 9px 18px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; }
         .tbtn:hover { background: #fff0f6; }
-
         .card { background: #fff; border: 1px solid #f3d3e1; border-radius: 14px;
             padding: 18px; margin-bottom: 14px; direction: rtl; }
         .card label { display: block; font-size: 0.78rem; font-weight: 700; color: #c2255c; margin: 12px 0 5px; }
@@ -37,7 +33,7 @@
         }
         .card textarea:focus, .card input:focus { border-color: #e64980; }
         .card textarea { resize: vertical; min-height: 50px; }
-        .num-row { display: flex; gap: 10px; align-items: center; margin-bottom: 4px; }
+        .num-row { display: flex; gap: 12px; align-items: center; margin-bottom: 4px; }
         .num-badge { background: #ffe9f3; color: #c2255c; font-weight: 700; border-radius: 50%;
             width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
@@ -49,22 +45,20 @@
         .status.ok { color: #2b8a3e; } .status.err { color: #e03131; }
         .rimg { max-width: 170px; max-height: 120px; border-radius: 10px; margin-top: 8px;
             border: 1px solid #f3d3e1; display: block; }
-
-        .big-ta { width: 100%; min-height: 180px; border: 1px solid #f3d3e1; border-radius: 12px;
+        .big-ta { width: 100%; min-height: 170px; border: 1px solid #f3d3e1; border-radius: 12px;
             padding: 14px; font-family: inherit; font-size: 1rem; line-height: 2; resize: vertical;
             outline: none; direction: rtl; color: #44263b; background: #fffbfd; }
-        .hint { color: #7d5468; font-size: 0.82rem; margin: 6px 0 18px; }
-        .lbl { font-size: 0.85rem; font-weight: 700; color: #c2255c; display: block; margin: 18px 0 6px; }
-
+        .hint { color: #7d5468; font-size: 0.8rem; margin: 6px 0 18px; line-height: 1.9; }
+        .lbl { font-size: 0.88rem; font-weight: 700; color: #c2255c; display: block; margin: 18px 0 6px; }
         .voice-item { background: #fff; border: 1px solid #f3d3e1; border-radius: 12px;
             padding: 14px; margin-bottom: 10px; direction: rtl; }
         .voice-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
             font-size: 0.85rem; margin-bottom: 8px; }
         .voice-meta b { color: #c2255c; }
-        .voice-meta span { color: #7d5468; font-size: 0.78rem; }
         audio { width: 100%; height: 38px; }
         .empty { text-align: center; color: #7d5468; padding: 40px 0; line-height: 2; }
         .loading { text-align: center; color: #c2255c; padding: 30px; font-weight: 700; }
+        #img-grid img { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; border: 1px solid #f3d3e1; }
     </style>
 </head>
 <body>
@@ -78,20 +72,59 @@
         <h1>✦ إدارة الحديقة ✦</h1>
         <div class="tabs">
             <button class="tab-btn active" data-t="puzzles" onclick="showTab('puzzles')">🧩 الألغاز</button>
-            <button class="tab-btn" data-t="voices" onclick="showTab('voices')">🎙️ الرسائل الصوتية</button>
             <button class="tab-btn" data-t="texts" onclick="showTab('texts')">💬 النصوص</button>
+            <button class="tab-btn" data-t="poem" onclick="showTab('poem')">📜 القصيدة</button>
+            <button class="tab-btn" data-t="voices" onclick="showTab('voices')">🎙️ رسائلها</button>
         </div>
 
-        <!-- PUZZLES -->
         <div id="tab-puzzles">
             <div class="toolbar">
                 <button class="tbtn" onclick="newPuzzle()">➕ لغز جديد</button>
                 <button class="tbtn" onclick="loadPuzzles()">↺ تحديث</button>
+                <span style="color:#7d5468;font-size:0.82rem">التغييرات تظهر لها خلال ثوانٍ</span>
             </div>
             <div id="plist"><div class="loading">...جاري التحميل</div></div>
         </div>
 
-        <!-- VOICES -->
+        <div id="tab-texts" style="display:none">
+            <label class="lbl">💬 رسالة اليوم (سطر لكل يوم)</label>
+            <textarea class="big-ta" id="ta-daily"></textarea>
+
+            <label class="lbl">🌸 ذكرى اليوم (سطر لكل ذكرى)</label>
+            <textarea class="big-ta" id="ta-memory"></textarea>
+
+            <label class="lbl">💗 أسباب الحب (سبب في كل سطر)</label>
+            <textarea class="big-ta" id="ta-reasons"></textarea>
+
+            <label class="lbl">🎫 نص بطاقة السحر (تحت الطلاء الفضي)</label>
+            <textarea class="big-ta" id="ta-scratch"></textarea>
+
+            <label class="lbl">🔒 الرسالة السرّية (٥ ضغطات على الشعار) — استخدمي {name} لاسمها</label>
+            <textarea class="big-ta" id="ta-letter"></textarea>
+
+            <label class="lbl">✍️ رسالة الآلة الكاتبة (تظهر قبل القصيدة) — استخدمي {name}</label>
+            <textarea class="big-ta" id="ta-typed"></textarea>
+
+            <div class="toolbar" style="margin-top:16px">
+                <button class="save" onclick="saveTexts()">💾 حفظ النصوص</button>
+                <button class="tbtn" onclick="loadAll()">↺ استعادة المحفوظ</button>
+            </div>
+            <p class="status" id="text-status" style="text-align:center"></p>
+        </div>
+
+        <div id="tab-poem" style="display:none">
+            <p class="hint" style="text-align:right">
+                • سطر فارغ = بين كل مقطع والآخر<br>
+                • اكتبي **قبل أي كلمة ليجعلها ذهبية مثل: **كلمة مميزة
+            </p>
+            <textarea class="big-ta" id="ta-poem" style="min-height:320px"></textarea>
+            <div class="toolbar" style="margin-top:16px">
+                <button class="save" onclick="savePoem()">💾 حفظ القصيدة</button>
+                <button class="tbtn" onclick="loadAll()">↺ استعادة المحفوظ</button>
+            </div>
+            <p class="status" id="poem-status" style="text-align:center"></p>
+        </div>
+
         <div id="tab-voices" style="display:none">
             <div class="toolbar">
                 <span class="tbtn" id="vcount" style="cursor:default;border:none;background:none;color:#7d5468"></span>
@@ -101,26 +134,6 @@
             <div id="img-grid" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px"></div>
             <label class="lbl">🎙️ تسجيلاتها الصوتية</label>
             <div id="vlist"><div class="loading">...جاري التحميل</div></div>
-        </div>
-
-        <!-- TEXTS -->
-        <div id="tab-texts" style="display:none">
-            <label class="lbl">💬 رسالة اليوم (كل سطر = يوم)</label>
-            <textarea class="big-ta" id="ta-daily"></textarea>
-            <p class="hint">٧ أسطر = رسالة لكل يوم من أيام الأسبوع</p>
-
-            <label class="lbl">🌸 ذكرى اليوم</label>
-            <textarea class="big-ta" id="ta-memory"></textarea>
-            <p class="hint">تتغير كل عدة أيام بالترتيب</p>
-
-            <label class="lbl">💗 أسباب الحب (سبب في كل سطر)</label>
-            <textarea class="big-ta" id="ta-reasons"></textarea>
-
-            <div class="toolbar" style="margin-top:16px">
-                <button class="save" onclick="saveTexts()">💾 حفظ النصوص</button>
-                <button class="tbtn" onclick="loadTexts()">↺ استعادة</button>
-            </div>
-            <p class="status" id="text-status" style="text-align:center"></p>
         </div>
     </div>
 
@@ -133,118 +146,113 @@ const H = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': '
 
 function tryEnter() {
     if (pass.value === ADMIN_PASS) { sessionStorage.setItem('ok','1'); enter(); }
-    else { pass.value=''; pass.placeholder='رمز خاطئ!'; pass.focus(); }
+    else { pass.value=''; pass.placeholder='رمز خاطئ!'; }
 }
 document.getElementById('pass').addEventListener('keydown', e => { if (e.key==='Enter') tryEnter(); });
 
-function enter() {
-    gate.style.display='none'; app.style.display='block';
-    loadPuzzles();
-}
+function enter() { gate.style.display='none'; app.style.display='block'; loadAll(); showTab('puzzles'); }
 if (sessionStorage.getItem('ok')==='1') enter();
 
 function showTab(t) {
-    ['puzzles','voices','texts'].forEach(x => document.getElementById('tab-'+x).style.display = x===t ? '' : 'none');
+    ['puzzles','texts','poem','voices'].forEach(x =>
+        document.getElementById('tab-'+x).style.display = x===t ? '' : 'none');
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.t===t));
     if (t==='voices') loadVoices();
 }
 
 const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-
-// ---------- PUZZLES ----------
-async function loadPuzzles() {
-    const el = document.getElementById('plist');
-    el.innerHTML = '<div class="loading">...جاري التحميل</div>';
-    try {
-        const r = await fetch(`${SB_URL}/rest/v1/puzzles?select=*&order=position.asc,id.asc`, { headers: H });
-        const rows = await r.json();
-        if (!r.ok) throw new Error(rows.message || r.status);
-        if (!rows.length) {
-            el.innerHTML = '<div class="empty">لا توجد ألغاز بعد.<br>اضغط «➕ لغز جديد» لإضافة أول لغز.</div>';
-            return;
-        }
-        el.innerHTML = rows.map((row, i) => `
-            <div class="card" data-id="${row.id}">
-                <div class="num-row">
-                    <div class="num-badge">${i+1}</div>
-                    <div style="flex:1">
-                        <label>الترتيب (الأصغر يظهر أولاً)</label>
-                        <input type="number" class="f-pos" value="${row.position ?? 0}">
-                    </div>
-                </div>
-                <label>❓ السؤال</label>
-                <textarea class="f-q">${esc(row.question)}</textarea>
-                <label>✅ الجواب الصحيح (عدة جوابات؟ افصل بـ | )</label>
-                <input type="text" class="f-a" value="${esc(row.answers)}">
-                <label>🎁 نص المكافأة (تظهر لها عند الحل)</label>
-                <textarea class="f-rw">${esc(row.reward_text)}</textarea>
-                <label>🖼️ صورة المكافأة (اختياري)</label>
-                <div class="actions" style="margin-top:4px">
-                    <button class="tbtn" onclick="pickImage(this)">📁 ${row.reward_image ? 'تغيير الصورة' : 'اختيار صورة'}</button>
-                    ${row.reward_image ? '<button class="tbtn" onclick="clearImage(this)">✕ بدون صورة</button>' : ''}
-                </div>
-                <img class="rimg" src="${esc(row.reward_image)}" style="display:${row.reward_image?'block':'none'}" onerror="this.style.display='none'">
-                <input type="hidden" class="f-img" value="${esc(row.reward_image)}">
-                <div class="actions">
-                    <button class="save" onclick="savePuzzle(this)">💾 حفظ</button>
-                    <button class="del" onclick="deletePuzzle(this)">🗑️ حذف نهائي</button>
-                </div>
-                <div class="status"></div>
-            </div>`).join('');
-    } catch (e) {
-        el.innerHTML = `<div class="empty">⚠️ خطأ في التحميل: ${esc(e.message)}</div>`;
-    }
+async function saveKey(key, value) {
+    const r = await fetch(`${SB_URL}/rest/v1/content`, {
+        method: 'POST',
+        headers: { ...H, Prefer: 'resolution=merge-duplicates' },
+        body: JSON.stringify({ key, value })
+    });
+    if (!r.ok) throw new Error((await r.json()).message || r.status);
 }
 
-function setStatus(card, msg, ok) {
-    const s = card.querySelector('.status');
-    s.textContent = msg;
-    s.className = 'status ' + (ok ? 'ok' : 'err');
+// ================= PUZZLES =================
+let P = [];
+
+async function loadAll() {
+    const r = await fetch(`${SB_URL}/rest/v1/content?select=*`, { headers: H });
+    const rows = await r.json();
+    const map = Object.fromEntries(rows.map(x => [x.key, x.value]));
+    P = Array.isArray(map.puzzles) ? map.puzzles : [];
+    T = map.texts || {};
+    renderPuzzleList();
+    fillTexts();
+}
+
+function renderPuzzleList() {
+    const el = document.getElementById('plist');
+    if (!P.length) {
+        el.innerHTML = '<div class="empty">لا ألغاز بعد — اضغط «➕ لغز جديد».<br>الموقع يعرض فقط ما تضيفينه هنا.</div>';
+        return;
+    }
+    el.innerHTML = P.map((p, i) => `
+        <div class="card" data-i="${i}">
+            <div class="num-row">
+                <div class="num-badge">${i+1}</div>
+                <div style="flex:1;font-size:0.78rem;color:#7d5468">معرّف: ${esc(p.qid||'')}</div>
+            </div>
+            <label>❓ السؤال</label>
+            <textarea class="f-q">${esc(p.q)}</textarea>
+            <label>✅ الجواب الصحيح (عدة جوابات؟ افصل بـ | )</label>
+            <input type="text" class="f-a" value="${esc((p.a||[]).join(' | '))}">
+            <label>🎁 المكافأة النصية (تظهر عند حلّها)</label>
+            <textarea class="f-rw">${esc(p.reward)}</textarea>
+            <label>🖼️ صورة المكافأة (تظهر ٥ ثوانٍ)</label>
+            <div class="actions" style="margin-top:4px">
+                <button class="tbtn" onclick="pickImage(this)">📁 ${p.reward_image ? 'تغيير الصورة' : 'اختيار صورة'}</button>
+                ${p.reward_image ? '<button class="tbtn" onclick="clearImage(this)">✕ بدون صورة</button>' : ''}
+            </div>
+            <img class="rimg" src="${esc(p.reward_image)}" style="display:${p.reward_image?'block':'none'}" onerror="this.style.display='none'">
+            <input type="hidden" class="f-img" value="${esc(p.reward_image)}">
+            <div class="actions">
+                <button class="save" onclick="savePuzzle(this)">💾 حفظ</button>
+                <button class="del" onclick="deletePuzzle(this)">🗑️ حذف نهائي</button>
+            </div>
+            <div class="status"></div>
+        </div>`).join('');
+}
+
+function cardData(card) {
+    return {
+        qid: P[+card.dataset.i].qid,
+        q: card.querySelector('.f-q').value.trim(),
+        a: card.querySelector('.f-a').value.split('|').map(s=>s.trim()).filter(Boolean),
+        reward: card.querySelector('.f-rw').value.trim(),
+        reward_image: card.querySelector('.f-img').value.trim()
+    };
 }
 
 async function savePuzzle(btn) {
     const card = btn.closest('.card');
-    const id = card.dataset.id;
-    const data = {
-        position: parseInt(card.querySelector('.f-pos').value || '0'),
-        question: card.querySelector('.f-q').value.trim(),
-        answers: card.querySelector('.f-a').value.trim(),
-        reward_text: card.querySelector('.f-rw').value.trim(),
-        reward_image: card.querySelector('.f-img').value.trim()
-    };
-    if (!data.question) return setStatus(card, 'اكتب السؤال أولاً', false);
+    const i = +card.dataset.i;
+    P[i] = cardData(card);
+    if (!P[i].q) return setStatus(card, 'اكتب السؤال أولاً', false);
     btn.disabled = true;
     setStatus(card, '...جاري الحفظ', true);
     try {
-        const isNew = id === 'new';
-        const r = await fetch(isNew ? `${SB_URL}/rest/v1/puzzles` : `${SB_URL}/rest/v1/puzzles?id=eq.${id}`, {
-            method: isNew ? 'POST' : 'PATCH',
-            headers: { ...H, Prefer: 'return=representation' },
-            body: JSON.stringify(data)
-        });
-        if (!r.ok) throw new Error((await r.json()).message || r.status);
-        setStatus(card, '✔ تم الحفظ!', true);
-        setTimeout(loadPuzzles, 500);
+        await saveKey('puzzles', P);
+        setStatus(card, '✔ حُفظ — ظهرت في الموقع!', true);
+        setTimeout(loadPuzzlesQuiet, 400);
     } catch (e) {
-        setStatus(card, '✕ فشل الحفظ: ' + e.message, false);
-    } finally {
-        btn.disabled = false;
-    }
+        setStatus(card, '✕ فشل: ' + e.message, false);
+    } finally { btn.disabled = false; }
 }
+function loadPuzzlesQuiet(){ loadAll().then(renderPuzzleList); }
 
 async function deletePuzzle(btn) {
     const card = btn.closest('.card');
-    const id = card.dataset.id;
-    if (id === 'new') { card.remove(); return; }
-    if (!confirm('حذف هذا اللغز نهائياً؟')) return;
+    const i = +card.dataset.i;
+    if (!confirm(`حذف اللغز رقم ${i+1} نهائياً؟`)) return;
     btn.disabled = true;
-    setStatus(card, '...جاري الحذف', true);
     try {
-        const r = await fetch(`${SB_URL}/rest/v1/puzzles?id=eq.${id}`, { method: 'DELETE', headers: H });
-        if (!r.ok) throw new Error((await r.json()).message || r.status);
-        card.style.opacity = '0.4';
+        P.splice(i, 1);
+        await saveKey('puzzles', P);
         setStatus(card, '✔ حُذف بنجاح', true);
-        setTimeout(() => { card.remove(); loadPuzzles(); }, 400);
+        setTimeout(loadPuzzlesQuiet, 300);
     } catch (e) {
         setStatus(card, '✕ فشل الحذف: ' + e.message, false);
         btn.disabled = false;
@@ -252,37 +260,61 @@ async function deletePuzzle(btn) {
 }
 
 function newPuzzle() {
-    const div = document.createElement('div');
-    div.innerHTML = `
-        <div class="card" data-id="new">
-            <div class="num-row">
-                <div class="num-badge">+</div>
-                <div style="flex:1">
-                    <label>الترتيب</label>
-                    <input type="number" class="f-pos" value="999">
-                </div>
-            </div>
-            <label>❓ السؤال</label><textarea class="f-q"></textarea>
-            <label>✅ الجواب (أو عدّة مفصولة بـ | )</label><input type="text" class="f-a">
-            <label>🎁 نص المكافأة</label><textarea class="f-rw"></textarea>
-            <label>🖼️ صورة المكافأة (اختياري)</label>
-            <div class="actions" style="margin-top:4px"><button class="tbtn" onclick="pickImage(this)">📁 اختيار صورة</button></div>
-            <img class="rimg" style="display:none">
-            <input type="hidden" class="f-img" value="">
-            <div class="actions">
-                <button class="save" onclick="savePuzzle(this)">💾 إنشاء اللغز</button>
-                <button class="del" onclick="this.closest('.card').remove()">✕ إلغاء</button>
-            </div>
-            <div class="status"></div>
-        </div>`;
-    document.getElementById('plist').prepend(div);
-    div.scrollIntoView({ behavior: 'smooth' });
+    P.push({ qid: crypto.randomUUID(), q:'', a:[], reward:'', reward_image:'' });
+    renderPuzzleList();
+    const first = document.getElementById('plist').querySelector('.card');
+    first.scrollIntoView({ behavior:'smooth' });
 }
 
-// ---------- IMAGES ----------
+// ================= TEXTS =================
+let T = {};
+
+function fillTexts() {
+    ta_daily.value = (T.dailyMessages||[]).join('\n');
+    ta_memory.value = (T.memoriesOfDay||[]).join('\n');
+    ta_reasons.value = (T.reasons||[]).join('\n');
+    ta_scratch.value = T.scratchPrize || '';
+    ta_letter.value = T.hiddenLetter || '';
+    ta_typed.value = T.typedLetter || '';
+}
+
+async function saveTexts() {
+    const st = document.getElementById('text-status');
+    st.textContent = '...جاري الحفظ'; st.className = 'status ok';
+    try {
+        await saveKey('texts', {
+            dailyMessages: ta_daily.value.split('\n').map(s=>s.trim()).filter(Boolean),
+            memoriesOfDay: ta_memory.value.split('\n').map(s=>s.trim()).filter(Boolean),
+            reasons: ta_reasons.value.split('\n').map(s=>s.trim()).filter(Boolean),
+            scratchPrize: ta_scratch.value.trim(),
+            hiddenLetter: ta_letter.value.trim(),
+            typedLetter: ta_typed.value.trim()
+        });
+        st.textContent = '✔ حُفظ — الموقع تحدث تلقائياً!';
+    } catch (e) {
+        st.textContent = '✕ خطأ: ' + e.message; st.className = 'status err';
+    }
+}
+
+// ================= POEM =================
+async function savePoem() {
+    const st = document.getElementById('poem-status');
+    st.textContent = '...جاري الحفظ'; st.className = 'status ok';
+    try {
+        const stanzas = ta_poem.value.split(/\n\s*\n/).map(block =>
+            block.split('\n').map(s=>s.trim()).filter(Boolean)
+        ).filter(b => b.length);
+        await saveKey('poem', stanzas);
+        st.textContent = '✔ حُفظت القصيدة!';
+    } catch (e) {
+        st.textContent = '✕ خطأ: ' + e.message; st.className = 'status err';
+    }
+}
+
+// ================= IMAGES =================
 function pickImage(btn) {
     const inp = document.createElement('input');
-    inp.type = 'file'; inp.accept = 'image/*';
+    inp.type='file'; inp.accept='image/*';
     inp.onchange = () => inp.files[0] && uploadImg(inp.files[0], btn);
     inp.click();
 }
@@ -295,15 +327,15 @@ async function uploadImg(file, btn) {
         const ext = file.name.split('.').pop().toLowerCase();
         const fname = `reward-${Date.now()}.${ext}`;
         const r = await fetch(`${SB_URL}/storage/v1/object/rewards/${fname}`, {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${SB_KEY}`, apikey: SB_KEY, 'Content-Type': file.type },
+            method:'POST',
+            headers:{ Authorization:`Bearer ${SB_KEY}`, apikey:SB_KEY, 'Content-Type':file.type },
             body: file
         });
         if (!r.ok) throw new Error((await r.json()).message || r.status);
         const url = `${SB_URL}/storage/v1/object/public/rewards/${fname}`;
         card.querySelector('.f-img').value = url;
         const img = card.querySelector('.rimg');
-        img.src = url; img.style.display = 'block';
+        img.src = url; img.style.display='block';
         setStatus(card, '✔ رُفعت — اضغط 💾 حفظ لتثبيتها', true);
     } catch (e) {
         setStatus(card, '✕ فشل الرفع: ' + e.message, false);
@@ -312,39 +344,34 @@ async function uploadImg(file, btn) {
 
 function clearImage(btn) {
     const card = btn.closest('.card');
-    card.querySelector('.f-img').value = '';
-    card.querySelector('.rimg').style.display = 'none';
-    setStatus(card, 'ستُحذف الصورة بعد الضغط على حفظ', true);
+    card.querySelector('.f-img').value='';
+    card.querySelector('.rimg').style.display='none';
+    setStatus(card, 'ستُحذف بعد الضغط على حفظ', true);
 }
 
-// ---------- VOICES ----------
+// ================= VOICES & HER PHOTOS =================
 function parseName(f) {
     const m = f.match(/^puzzle-(\d+)-(.*)-(\d+)\./);
-    return m ? { n: +m[1]+1, who: m[2], ts: new Date(+m[3]) } : null;
+    return m ? { n:+m[1]+1, who:m[2], ts:new Date(+m[3]) } : null;
 }
 
 async function loadVoices() {
     const el = document.getElementById('vlist');
     try {
         const ir = await fetch(`${SB_URL}/storage/v1/object/list/fromher`, {
-            method: 'POST', headers: H,
+            method:'POST', headers:H,
             body: JSON.stringify({ prefix:'', limit:200, sortBy:{ column:'created_at', order:'desc' } })
         });
         if (ir.ok) {
             const imgs = await ir.json();
-            const grid = document.getElementById('img-grid');
-            grid.innerHTML = imgs.length ? imgs.map(f =>
+            document.getElementById('img-grid').innerHTML = imgs.length ? imgs.map(f =>
                 `<a href="${SB_URL}/storage/v1/object/public/fromher/${encodeURIComponent(f.name)}" target="_blank">
-                    <img src="${SB_URL}/storage/v1/object/public/fromher/${encodeURIComponent(f.name)}"
-                         style="width:110px;height:110px;object-fit:cover;border-radius:10px;border:1px solid #f3d3e1">
+                    <img src="${SB_URL}/storage/v1/object/public/fromher/${encodeURIComponent(f.name)}">
                  </a>`).join('')
                 : '<span style="color:#7d5468;font-size:0.85rem">لا صور بعد</span>';
         }
-    } catch (e) {}
-
-    try {
         const r = await fetch(`${SB_URL}/storage/v1/object/list/voices`, {
-            method: 'POST', headers: H,
+            method:'POST', headers:H,
             body: JSON.stringify({ prefix:'', limit:200, sortBy:{ column:'created_at', order:'desc' } })
         });
         const files = (await r.json()).filter(f => f.name !== 'test-upload.webm');
@@ -353,7 +380,7 @@ async function loadVoices() {
         el.innerHTML = files.map(f => {
             const info = parseName(f.name);
             const url = `${SB_URL}/storage/v1/object/public/voices/${encodeURIComponent(f.name)}`;
-            const label = info ? `<b>${esc(info.who)}</b> — لغز رقم ${info.n}` : esc(f.name);
+            const label = info ? `<b>${esc(info.who)}</b> — بعد اللغز رقم ${info.n}` : esc(f.name);
             const when = info ? info.ts.toLocaleString('ar-DZ') : '';
             return `<div class="voice-item">
                 <div class="voice-meta"><span>${label}</span><span>${when} · <a href="${url}" target="_blank" style="color:#c2255c">تحميل ⬇</a></span></div>
@@ -362,35 +389,6 @@ async function loadVoices() {
         }).join('');
     } catch (e) {
         el.innerHTML = `<div class="empty">⚠️ ${esc(e.message)}</div>`;
-    }
-}
-
-// ---------- TEXTS ----------
-async function loadTexts() {
-    const r = await fetch(`${SB_URL}/rest/v1/settings?select=*`, { headers: H });
-    const map = Object.fromEntries((await r.json()).map(x => [x.key, x.value]));
-    ta_daily.value = (map.dailyMessages||[]).join('\n');
-    ta_memory.value = (map.memoriesOfDay||[]).join('\n');
-    ta_reasons.value = (map.reasons||[]).join('\n');
-}
-
-async function saveTexts() {
-    const st = document.getElementById('text-status');
-    st.textContent = '...جاري الحفظ'; st.className = 'status ok';
-    try {
-        const payload = [
-            { key:'dailyMessages', value: ta_daily.value.split('\n').map(s=>s.trim()).filter(Boolean) },
-            { key:'memoriesOfDay', value: ta_memory.value.split('\n').map(s=>s.trim()).filter(Boolean) },
-            { key:'reasons', value: ta_reasons.value.split('\n').map(s=>s.trim()).filter(Boolean) }
-        ];
-        const r = await fetch(`${SB_URL}/rest/v1/settings`, {
-            method: 'POST', headers: { ...H, Prefer:'resolution=merge-duplicates' },
-            body: JSON.stringify(payload)
-        });
-        if (!r.ok) throw new Error((await r.json()).message || r.status);
-        st.textContent = '✔ حُفظ — ستظهر في الموقع خلال ثوانٍ';
-    } catch (e) {
-        st.textContent = '✕ خطأ: ' + e.message; st.className = 'status err';
     }
 }
 </script>

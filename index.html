@@ -747,62 +747,8 @@
             <p id="typed-text"></p>
         </div>
 
-        <article class="stanza">
-            <span class="verse-line">حينَ تُغمِضينَ العالم</span>
-            <span class="verse-line">كلُّ مساءٍ...</span>
-            <span class="verse-line">تُعلِّمينَ العيونَ</span>
-            <span class="verse-line">كيف تُغمِضُ خوفَها،</span>
-            <span class="verse-line">ثم تعودينَ</span>
-            <span class="verse-line">وعيناكِ...</span>
-            <span class="verse-line">لا تعرفانِ النوم.</span>
-            <span class="verse-line">أفكِّرُ أحيانًا...</span>
-            <span class="verse-line">حينَ يسلِّمُ الناسُ</span>
-            <span class="verse-line">أحلامَهم</span>
-            <span class="verse-line">إلى يديكِ،</span>
-            <span class="verse-line">إلى مَن</span>
-            <span class="verse-line highlight">تُسلِّمينَ تعبَكِ؟</span>
-        </article>
+        <div id="stanza-list"></div>
 
-        <article class="stanza">
-            <span class="verse-line">رأيتُ المطرَ</span>
-            <span class="verse-line">يسقطُ ألفَ مرَّة،</span>
-            <span class="verse-line">لكنِّي</span>
-            <span class="verse-line">لم أرَهُ يومًا</span>
-            <span class="verse-line">يختارُ وردةً بعينِها.</span>
-            <span class="verse-line highlight">إلَّا قلبي...</span>
-            <span class="verse-line highlight">منذُ رآكِ.</span>
-        </article>
-
-        <article class="stanza">
-            <span class="verse-line">غريبٌ...</span>
-            <span class="verse-line">أنَّ امرأةً</span>
-            <span class="verse-line">تجعلُ الآخرينَ</span>
-            <span class="verse-line">ينسونَ الألم،</span>
-            <span class="verse-line">كانتْ</span>
-            <span class="verse-line highlight">أجملَ ألمٍ</span>
-            <span class="verse-line">عرفتُهُ أنا.</span>
-            <span class="verse-line">ليسَ لأنَّها أوجعتني...</span>
-            <span class="verse-line">بل لأنَّها</span>
-            <span class="verse-line">جعلتْ قلبي</span>
-            <span class="verse-line">يعرفُ</span>
-            <span class="verse-line">أنَّه كانَ نائمًا</span>
-            <span class="verse-line">قبلَها.</span>
-        </article>
-
-        <article class="stanza">
-            <span class="verse-line">لو سألوكِ يومًا:</span>
-            <span class="verse-line">كم حياةً أنقذتِ؟</span>
-            <span class="verse-line">ربَّما</span>
-            <span class="verse-line">لن تعرفي العدد.</span>
-            <span class="verse-line">أمَّا أنا...</span>
-            <span class="verse-line">فسأقولُ:</span>
-            <span class="verse-line highlight">واحدة.</span>
-            <span class="verse-line">حياتي...</span>
-            <span class="verse-line">حينَ دخلتِها</span>
-            <span class="verse-line highlight">دونَ أن تطرقي الباب...</span>
-            <br>
-            <span class="name-reveal her-name">يا هاجَر</span>
-        </article>
 
         <footer class="poem-footer">
             <p>✦ Pour Toujours <span class="her-name-inline her-name">حبيبتي هاجَر</span> ✦</p>
@@ -821,7 +767,7 @@
     <div class="modal-overlay" id="letter-modal">
         <div class="modal-card">
             <h4>رسالةٌ سرِّيّة</h4>
-            <p>وجدتِها...
+            <p id="hidden-letter-text">وجدتِها...
 
 لم أضعْ هذه الرسالة هنا عبثًا، وضعتُها لمن تبحثُ عن الأسرار كما أبحثُ أنا عن وجهكِ في كلِّ حشد.
 
@@ -854,8 +800,12 @@
         const VOICE_NOTE_FILE = 'voice.mp3';
 
         if (location.search.includes('reset')) {
-            ['puzzleProgress', 'puzzleSolvedTonight', 'puzzleNight'].forEach(k => localStorage.removeItem(k));
+            ['puzzleProgress', 'puzzleSolvedTonight', 'puzzleNight', 'solvedIds'].forEach(k => localStorage.removeItem(k));
         }
+
+        let CONTENT = { puzzles: [], texts: {}, poem: null };
+        let solvedIds = JSON.parse(localStorage.getItem('solvedIds') || '[]');
+        if (!Array.isArray(solvedIds)) solvedIds = [];
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -1124,19 +1074,23 @@
             document.querySelectorAll('.her-name').forEach(el => {
                 el.textContent = el.classList.contains('her-name-inline') ? `حبيبتي ${n}` : `يا ${n}`;
             });
-            typedLetterText = `إلى ${n}...\n\nقبل أن تقرئي القصيدة، اعلمي أنّ كلَّ كلمةٍ فيها\nكُتبتْ مرتين: مرةً بالحبر، ومرةً بالاشتياق.`;
         }
 
+        function typedLetterFor(n) {
+            const tpl = CONTENT.texts.typedLetter ||
+                'إلى {name}...\n\nقبل أن تقرئي القصيدة، اعلمي أنّ كلَّ كلمةٍ فيها\nكُتبتْ مرتين: مرةً بالحبر، ومرةً بالاشتياق.';
+            return tpl.split('{name}').join(n);
+        }
         let typedLetterText = '';
         function startTypewriter() {
-            if (typedStarted) return;
+            typedLetterText = typedLetterFor(getHerName());
             typedStarted = true;
             typedText.classList.remove('done');
             typedText.textContent = '';
             let i = 0;
             const timer = setInterval(() => {
                 typedText.textContent = typedLetterText.slice(0, ++i);
-                if (i >= typedLetterText.length) {
+                if (typedLetterText && i >= typedLetterText.length) {
                     clearInterval(timer);
                     typedText.classList.add('done');
                 }
@@ -1204,11 +1158,50 @@
         reasonText.innerText = reasons[reasonIdx];
 
         function applyTexts() {
+            const t = CONTENT.texts || {};
+            if (Array.isArray(t.dailyMessages) && t.dailyMessages.length)
+                dailyMessages = t.dailyMessages;
+            if (Array.isArray(t.memoriesOfDay) && t.memoriesOfDay.length)
+                memoriesOfDay = t.memoriesOfDay;
+            if (Array.isArray(t.reasons) && t.reasons.length)
+                reasons = t.reasons;
+
             document.getElementById('daily-text').innerText = dailyMessages[new Date().getDay()];
             document.getElementById('memory-text').innerText =
                 memoriesOfDay[new Date().getDate() % memoriesOfDay.length];
-            if (reasonIdx >= reasons.length) reasonIdx = reasonIdx % reasons.length;
+            reasonIdx = new Date().getDate() % reasons.length;
             reasonText.innerText = reasons[reasonIdx];
+
+            const prize = document.getElementById('prize-text');
+            if (prize && t.scratchPrize) prize.innerHTML = t.scratchPrize.split('\n').join('<br>');
+
+            const hl = document.getElementById('hidden-letter-text');
+            if (hl && t.hiddenLetter) hl.innerText = t.hiddenLetter.split('{name}').join(getHerName());
+        }
+
+        // DEFAULT POEM (fallback when DB has no poem yet)
+        const DEFAULT_POEM = [
+            ['حينَ تُغمِضينَ العالم','كلُّ مساءٍ...','تُعلِّمينَ العيونَ','كيف تُغمِضُ خوفَها،','ثم تعودينَ','وعيناكِ...','لا تعرفانِ النوم.','أفكِّرُ أحيانًا...','حينَ يسلِّمُ الناسُ','أحلامَهم','إلى يديكِ،','إلى مَن','**تُسلِّمينَ تعبَكِ؟'],
+            ['رأيتُ المطرَ','يسقطُ ألفَ مرَّة،','لكنِّي','لم أرَهُ يومًا','يختارُ وردةً بعينِها.','**إلَّا قلبي...','**منذُ رآكِ.'],
+            ['غريبٌ...','أنَّ امرأةً','تجعلُ الآخرينَ','ينسونَ الألم،','كانتْ','**أجملَ ألمٍ','عرفتُهُ أنا.','ليسَ لأنَّها أوجعتني...','بل لأنَّها','جعلتْ قلبي','يعرفُ','أنَّه كانَ نائمًا','قبلَها.'],
+            ['لو سألوكِ يومًا:','كم حياةً أنقذتِ؟','ربَّما','لن تعرفي العدد.','أمَّا أنا...','فسأقولُ:','**واحدة.','حياتي...','حينَ دخلتِها','**دونَ أن تطرقي الباب...']
+        ];
+
+        function buildPoem() {
+            const stanzas = CONTENT.poem && CONTENT.poem.length ? CONTENT.poem : DEFAULT_POEM;
+            const list = document.getElementById('stanza-list');
+            list.innerHTML = stanzas.map(lines => {
+                const html = lines.map(line => {
+                    const hl = line.startsWith('**');
+                    const text = hl ? line.slice(2) : line;
+                    return `<span class="verse-line ${hl ? 'highlight' : ''}">${text}</span>`;
+                }).join('');
+                return `<article class="stanza">${html}</article>`;
+            }).join('');
+            const last = list.lastElementChild;
+            if (last) last.insertAdjacentHTML('beforeend',
+                '<br><span class="name-reveal her-name"></span>');
+            applyName();
         }
 
         document.getElementById('reason-btn').addEventListener('click', () => {
@@ -1377,38 +1370,9 @@
             }
         });
 
-        // NIGHTLY PUZZLE
-
-        let puzzles = [];
-
-        const dayMs = 864e5;
-        const PUZZLES_PER_NIGHT = Infinity;
-        const PUZZLE_HOUR = 21;
-
-        let puzzleProgress = parseInt(localStorage.getItem('puzzleProgress') || '0', 10);
-        if (isNaN(puzzleProgress) || puzzleProgress < 0) puzzleProgress = 0;
-        if (puzzleProgress > puzzles.length) puzzleProgress = puzzles.length;
-
-        function ensureNight() {
-            const today = new Date().toDateString();
-            if (localStorage.getItem('puzzleNight') !== today) {
-                localStorage.setItem('puzzleNight', today);
-                localStorage.setItem('puzzleSolvedTonight', '0');
-            }
-        }
-
-        function solvedTonight() {
-            return parseInt(localStorage.getItem('puzzleSolvedTonight') || '0', 10);
-        }
-
+        // PUZZLE ENGINE — ID-based progress, immune to edits/reorders
         function normAnswer(s) {
             return s.trim().replace(/[أإآ]/g, 'ا').replace(/[ةه]/g, 'ه').replace(/[\s\u064B-\u0652]/g, '').toLowerCase();
-        }
-
-        const PUZZLE_TEST_MODE = location.search.includes('test');
-
-        function isPuzzleTime() {
-            return true;
         }
 
         function showOnly(id) {
@@ -1417,14 +1381,11 @@
             });
         }
 
-        let nightTimerStarted = false;
+        function currentPuzzle() {
+            return puzzles.find(p => !solvedIds.includes(p.qid));
+        }
 
         function renderPuzzle() {
-            ensureNight();
-
-            const allDone = puzzleProgress >= puzzles.length && puzzles.length > 0;
-            const nightDone = solvedTonight() >= PUZZLES_PER_NIGHT && puzzles.length > 0;
-
             if (!puzzles.length) {
                 showOnly('puzzle-nightdone');
                 document.getElementById('puzzle-nightdone-text').innerText =
@@ -1432,61 +1393,34 @@
                 return;
             }
 
-            if (!isPuzzleTime()) {
-                showOnly('puzzle-locked');
-                document.getElementById('puzzle-nightdone-text').innerText =
-                    'اللغزُ القادم ينتظركِ غدًا... أحلامًا سعيدة ✦';
-                if (!nightTimerStarted) {
-                    nightTimerStarted = true;
-                    setInterval(() => {
-                        if (isPuzzleTime()) { showToast('🔓 فُتحت ألغاز الليلة!'); renderPuzzle(); return; }
-                        const now = new Date();
-                        const target = new Date(now);
-                        target.setHours(PUZZLE_HOUR, 0, 0, 0);
-                        let diff = target - now;
-                        if (diff < 0) diff += dayMs;
-                        document.getElementById('puzzle-countdown').textContent =
-                            `${String(Math.floor(diff / 36e5)).padStart(2,'0')}:${String(Math.floor(diff % 36e5 / 6e4)).padStart(2,'0')}:${String(Math.floor(diff % 6e4 / 1e3)).padStart(2,'0')}`;
-                    }, 1000);
-                }
-                return;
-            }
-
-            if (allDone) {
+            const p = currentPuzzle();
+            if (!p) {
                 showOnly('puzzle-nightdone');
                 document.getElementById('puzzle-nightdone-text').innerText =
-                    'حللتِ كلَّ الألغاز الثلاثين...\n\nلكنّ أعظمَ لغزٍ يبقى: كيف أحبتكِ هكذا؟\nالجواب: لا أعرف... فقط حدثتْ.\n\nأحبّكِ يا هاجَر ✦';
-                return;
-            }
-
-            if (nightDone) {
-                showOnly('puzzle-nightdone');
-                const left = puzzles.length - puzzleProgress;
-                document.getElementById('puzzle-nightdone-text').innerText =
-                    `حللتِ ${PUZZLES_PER_NIGHT} من ألغازِ الليلة... بطلَة! 🏆\n\nتبقّى ${left} لغزٍ في الرحلة.\nعودي غدًا عند الساعة التاسعة...`;
+                    'حليتِ كل الألغاز يا بطلة...\n\nلكن أعظم لغز يبقى: كيف أحبتك هكذا؟\nالجواب: لا أعرف... فقط حدث.\n\nأحبك يا ' + getHerName() + ' ✦';
                 return;
             }
 
             showOnly('puzzle-open');
-            const p = puzzles[puzzleProgress];
+            const done = solvedIds.filter(id => puzzles.some(x => x.qid === id)).length;
             document.getElementById('puzzle-progress').textContent =
-                `Énigme ${puzzleProgress + 1} / ${puzzles.length} — ليلةً: ${solvedTonight() + 1} / ${PUZZLES_PER_NIGHT}`;
+                `اللغز ${done + 1} من ${puzzles.length}`;
             document.getElementById('puzzle-question').textContent = p.q;
             document.getElementById('puzzle-answer').value = '';
         }
 
         function handleCorrect() {
-            const p = puzzles[puzzleProgress];
-            puzzleProgress++;
-            localStorage.setItem('puzzleProgress', String(puzzleProgress));
-            localStorage.setItem('puzzleSolvedTonight', String(solvedTonight() + 1));
+            const p = currentPuzzle();
+            if (!p) return;
+            solvedIds.push(p.qid);
+            localStorage.setItem('solvedIds', JSON.stringify(solvedIds));
 
             playChime();
-            burstConfetti(innerWidth / 2, innerHeight / 2, solvedTonight() >= PUZZLES_PER_NIGHT ? 180 : 90);
+            burstConfetti(innerWidth / 2, innerHeight / 2, 110);
             if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
 
             showOnly('puzzle-reward-view');
-            document.getElementById('puzzle-reward-text').innerText = p.reward;
+            document.getElementById('puzzle-reward-text').innerText = p.reward || '';
             const rimg = document.getElementById('reward-image');
             rimg.addEventListener('contextmenu', e => e.preventDefault());
             if (rimg._hideTimer) clearTimeout(rimg._hideTimer);
@@ -1503,16 +1437,17 @@
                 rimg.style.display = 'none';
             }
             document.getElementById('puzzle-next-hint').style.display =
-                (puzzleProgress < puzzles.length && solvedTonight() < PUZZLES_PER_NIGHT) ? '' : 'none';
+                currentPuzzle() ? '' : 'none';
 
             setTimeout(renderPuzzle, 4500);
         }
 
         document.getElementById('puzzle-submit').addEventListener('click', () => {
+            const p = currentPuzzle();
+            if (!p) return;
             const val = document.getElementById('puzzle-answer').value;
             if (!val.trim()) return;
-            const correct = puzzles[puzzleProgress].a.some(a => normAnswer(a) === normAnswer(val));
-            if (correct) {
+            if ((p.a || []).some(a => normAnswer(a) === normAnswer(val))) {
                 handleCorrect();
             } else {
                 document.getElementById('puzzle-wrong').style.display = 'block';
@@ -1526,39 +1461,35 @@
 
         renderPuzzle();
 
-// LOAD CONTENT FROM SUPABASE (admin edits)
+// LOAD CONTENT FROM SUPABASE — everything from the database
         async function loadRemoteContent() {
             const H = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
             try {
-                const r = await fetch(`${SUPABASE_URL}/rest/v1/puzzles?select=*&order=position.asc,id.asc`, { headers: H });
+                const r = await fetch(`${SUPABASE_URL}/rest/v1/content?select=*`, { headers: H });
                 if (r.ok) {
                     const rows = await r.json();
-                    if (rows && rows.length) {
-                        puzzles = rows.map(row => ({
-                            q: row.question || '',
-                            a: String(row.answers || '').split('|').map(s => s.trim()).filter(Boolean),
-                            reward: row.reward_text || '',
-                            reward_image: row.reward_image || ''
-                        }));
-                        puzzleProgress = Math.min(puzzleProgress, Math.max(0, puzzles.length - 1));
-                    }
-                }
-                const s = await fetch(`${SUPABASE_URL}/rest/v1/settings?select=*`, { headers: H });
-                if (s.ok) {
-                    const rows = await s.json();
                     rows.forEach(row => {
-                        if (!Array.isArray(row.value) || !row.value.length) return;
-                        if (row.key === 'dailyMessages') dailyMessages = row.value;
-                        else if (row.key === 'memoriesOfDay') memoriesOfDay = row.value;
-                        else if (row.key === 'reasons') reasons = row.value;
+                        if (row.key === 'puzzles' && Array.isArray(row.value)) {
+                            puzzles = row.value.map((p, i) => ({
+                                qid: p.qid || ('q' + i + '-' + String(p.q || '').length),
+                                q: p.q || p.question || '',
+                                a: Array.isArray(p.a) ? p.a : String(p.a || p.answers || '').split('|').map(s => s.trim()).filter(Boolean),
+                                reward: p.reward || p.reward_text || '',
+                                reward_image: p.reward_image || ''
+                            }));
+                        } else if (row.key === 'texts' && row.value && typeof row.value === 'object') {
+                            CONTENT.texts = row.value;
+                        } else if (row.key === 'poem' && Array.isArray(row.value)) {
+                            CONTENT.poem = row.value;
+                        }
                     });
                 }
             } catch (e) {}
-            const sig = JSON.stringify([puzzles.map(p => [p.q, p.a, p.reward, p.reward_image]),
-                dailyMessages, memoriesOfDay, reasons]);
+            const sig = JSON.stringify([puzzles, CONTENT.texts, CONTENT.poem]);
             if (sig !== loadRemoteContent._lastSig) {
                 loadRemoteContent._lastSig = sig;
                 applyTexts();
+                buildPoem();
                 renderPuzzle();
             }
         }
