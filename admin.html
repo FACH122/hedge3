@@ -161,6 +161,7 @@ function showTab(t) {
 }
 
 const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const $id = id => document.getElementById(id);
 async function saveKey(key, value) {
     if (!DB_OK) throw new Error('جدول content غير موجود — شغّلي أمر SQL أولاً');
     const r = await fetch(`${SB_URL}/rest/v1/content`, {
@@ -289,12 +290,12 @@ function newPuzzle() {
 let T = {};
 
 function fillTexts() {
-    ta_daily.value = (T.dailyMessages||[]).join('\n');
-    ta_memory.value = (T.memoriesOfDay||[]).join('\n');
-    ta_reasons.value = (T.reasons||[]).join('\n');
-    ta_scratch.value = T.scratchPrize || '';
-    ta_letter.value = T.hiddenLetter || '';
-    ta_typed.value = T.typedLetter || '';
+    $id('ta-daily').value = (T.dailyMessages||[]).join('\n');
+    $id('ta-memory').value = (T.memoriesOfDay||[]).join('\n');
+    $id('ta-reasons').value = (T.reasons||[]).join('\n');
+    $id('ta-scratch').value = T.scratchPrize || '';
+    $id('ta-letter').value = T.hiddenLetter || '';
+    $id('ta-typed').value = T.typedLetter || '';
 }
 
 async function saveTexts() {
@@ -302,12 +303,12 @@ async function saveTexts() {
     st.textContent = '...جاري الحفظ'; st.className = 'status ok';
     try {
         await saveKey('texts', {
-            dailyMessages: ta_daily.value.split('\n').map(s=>s.trim()).filter(Boolean),
-            memoriesOfDay: ta_memory.value.split('\n').map(s=>s.trim()).filter(Boolean),
-            reasons: ta_reasons.value.split('\n').map(s=>s.trim()).filter(Boolean),
-            scratchPrize: ta_scratch.value.trim(),
-            hiddenLetter: ta_letter.value.trim(),
-            typedLetter: ta_typed.value.trim()
+            dailyMessages: $id('ta-daily').value.split('\n').map(s=>s.trim()).filter(Boolean),
+            memoriesOfDay: $id('ta-memory').value.split('\n').map(s=>s.trim()).filter(Boolean),
+            reasons: $id('ta-reasons').value.split('\n').map(s=>s.trim()).filter(Boolean),
+            scratchPrize: $id('ta-scratch').value.trim(),
+            hiddenLetter: $id('ta-letter').value.trim(),
+            typedLetter: $id('ta-typed').value.trim()
         });
         st.textContent = '✔ حُفظ — الموقع تحدث تلقائياً!';
     } catch (e) {
@@ -320,7 +321,7 @@ async function savePoem() {
     const st = document.getElementById('poem-status');
     st.textContent = '...جاري الحفظ'; st.className = 'status ok';
     try {
-        const stanzas = ta_poem.value.split(/\n\s*\n/).map(block =>
+        const stanzas = $id('ta-poem').value.split(/\n\s*\n/).map(block =>
             block.split('\n').map(s=>s.trim()).filter(Boolean)
         ).filter(b => b.length);
         await saveKey('poem', stanzas);
