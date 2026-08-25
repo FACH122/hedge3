@@ -1,0 +1,31 @@
+{
+    "name": "Maison de L'Éternité — Haute Parfumerie & Joaillerie",
+    "short_name": "L'Éternité",
+    "description": "Maison de L'Éternité — Haute Parfumerie & Joaillerie",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#050608",
+    "theme_color": "#050608",
+    "lang": "ar",
+    "dir": "rtl",
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
