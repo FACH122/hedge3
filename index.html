@@ -1473,7 +1473,7 @@
                     headers: {
                         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
                         'apikey': SUPABASE_ANON_KEY,
-                        'Content-Type': recBlob.type || 'audio/webm'
+                        'Content-Type': (recBlob.type || 'audio/webm').split(';')[0]
                     },
                     body: recBlob
                 });
@@ -1484,7 +1484,7 @@
                 resetRecorder();
             } catch (err) {
                 console.error(err);
-                recStatus.textContent = 'تعذّر الإرسال... حاولي مرة أخرى';
+                recStatus.textContent = 'تعذّر الإرسال: ' + (err.message || err);
             } finally {
                 recSend.disabled = false;
             }
